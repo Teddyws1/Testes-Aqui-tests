@@ -1,0 +1,386 @@
+/* [-028Rs] RESPONSIVIDADE GERAL */
+
+html,
+body {
+    width: 100%;
+    min-width: 0;
+    overflow-x: hidden;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+
+/* [-029Rs] SMARTPHONES — 360px */
+
+@media (max-width: 374px) {
+
+    #app-container {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .app-header {
+        padding: 12px 12px;
+    }
+
+    .header-title {
+        font-size: 1.05rem;
+    }
+
+    .header-title-container,
+    .header-actions {
+        gap: 6px;
+    }
+
+    .icon-btn {
+        width: 38px;
+        height: 38px;
+        padding: 5px;
+        font-size: 1.35rem;
+    }
+
+    .month-navigator {
+        padding: 9px 12px;
+    }
+
+    .month-display {
+        font-size: 1rem;
+    }
+
+    .search-bar-container {
+        padding: 10px 12px;
+    }
+
+    .search-input-wrapper {
+        padding: 9px 11px;
+    }
+
+    .main-content {
+        padding: 12px;
+        gap: 10px;
+    }
+
+    .debt-card {
+        padding: 12px;
+        gap: 8px;
+    }
+
+    .debt-info {
+        max-width: 58%;
+    }
+
+    .debt-title {
+        font-size: 0.9rem;
+    }
+
+    .debt-amount {
+        font-size: 1rem;
+    }
+
+    .debt-date {
+        font-size: 0.78rem;
+    }
+
+    .debt-tag-id,
+    .debt-company-badge {
+        font-size: 0.68rem;
+    }
+
+    .app-footer {
+        padding: 12px;
+    }
+
+    .stat-box .stat-label {
+        font-size: 0.62rem;
+    }
+
+    .stat-box .stat-val {
+        font-size: 0.85rem;
+    }
+
+    .footer-row {
+        font-size: 0.82rem;
+    }
+
+    .footer-row.total-bold {
+        font-size: 0.98rem;
+    }
+
+    .sidebar {
+        width: min(320px, 88vw);
+    }
+
+    .sidebar-header {
+        padding: 18px 14px;
+    }
+
+    .sidebar-header h2 {
+        font-size: 1.15rem;
+    }
+
+    .sidebar-logo-btn,
+    .sidebar-logo {
+        width: 46px;
+        height: 46px;
+    }
+
+    .menu-item {
+        padding: 13px 16px;
+        font-size: 0.88rem;
+    }
+
+    .modal-overlay {
+        padding: 10px;
+    }
+
+    .modal-card {
+        max-height: 92vh;
+        border-radius: 14px;
+    }
+
+    .modal-body {
+        padding: 16px;
+    }
+
+}
+
+
+/* [-030Rs] SMARTPHONES — 375px */
+
+@media (min-width: 375px) and (max-width: 411px) {
+
+    #app-container {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .app-header {
+        padding: 13px 15px;
+    }
+
+    .header-title {
+        font-size: 1.12rem;
+    }
+
+    .main-content {
+        padding: 14px;
+    }
+
+    .debt-card {
+        padding: 13px 14px;
+    }
+
+    .debt-info {
+        max-width: 60%;
+    }
+
+    .modal-card {
+        max-width: 100%;
+    }
+
+}
+
+
+/* [-031Rs] SMARTPHONES — 412px / 414px */
+
+@media (min-width: 412px) and (max-width: 767px) {
+
+    #app-container {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .app-header {
+        padding: 14px 18px;
+    }
+
+    .header-title {
+        font-size: 1.18rem;
+    }
+
+    .main-content {
+        padding: 16px;
+    }
+
+    .debt-card {
+        padding: 14px 16px;
+    }
+
+    .debt-info {
+        max-width: 62%;
+    }
+
+    .modal-card {
+        width: 100%;
+        max-width: 480px;
+    }
+
+}
+
+
+/* [-032Rs] TABLETS — 768px */
+
+@media (min-width: 768px) and (max-width: 1279px) {
+
+    body {
+        background-color: var(--bg-main);
+    }
+
+    #app-container {
+        width: 100%;
+        max-width: 720px;
+        min-height: 100vh;
+    }
+
+    .app-header {
+        padding: 16px 22px;
+    }
+
+    .header-title {
+        font-size: 1.35rem;
+    }
+
+    .main-content {
+        padding: 20px;
+        gap: 14px;
+    }
+
+    .debt-card {
+        padding: 16px 18px;
+    }
+
+    .debt-title {
+        font-size: 1.05rem;
+    }
+
+    .debt-amount {
+        font-size: 1.15rem;
+    }
+
+    .sidebar {
+        width: min(360px, 75vw);
+    }
+
+    .modal-card {
+        max-width: 520px;
+    }
+
+}
+
+
+/* [-033Rs] TELAS PADRÃO — 1280px */
+
+@media (min-width: 1280px) and (max-width: 1919px) {
+
+    body {
+        background-color: var(--bg-main);
+    }
+
+    #app-container {
+        max-width: 600px;
+        min-height: 100vh;
+    }
+
+    .main-content {
+        padding: 18px;
+    }
+
+}
+
+
+/* [-034Rs] TELAS GRANDES — 1920px+ */
+
+@media (min-width: 1920px) {
+
+    body {
+        background-color: var(--bg-main);
+    }
+
+    #app-container {
+        max-width: 640px;
+        min-height: 100vh;
+    }
+
+    .app-header {
+        padding: 16px 20px;
+    }
+
+    .header-title {
+        font-size: 1.35rem;
+    }
+
+    .main-content {
+        padding: 20px;
+        gap: 14px;
+    }
+
+    .debt-card {
+        padding: 16px 18px;
+    }
+
+}
+
+
+/* [-035Rs] ALTURA PEQUENA */
+
+@media (max-height: 760px) and (max-width: 767px) {
+
+    .app-header {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    .month-navigator {
+        padding-top: 7px;
+        padding-bottom: 7px;
+    }
+
+    .search-bar-container {
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+
+    .main-content {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    .modal-card {
+        max-height: 94vh;
+    }
+
+    .modal-body {
+        max-height: calc(94vh - 65px);
+    }
+
+}
+
+
+/* [-036Rs] TOQUE EM DISPOSITIVOS MÓVEIS */
+
+@media (hover: none) and (pointer: coarse) {
+
+    .icon-btn,
+    .menu-item,
+    .sort-option,
+    .btn-primary,
+    .btn-share,
+    .btn-danger,
+    .social-btn,
+    .sidebar-logo-btn {
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .debt-card:hover {
+        border-color: var(--border-color);
+    }
+
+    .icon-btn {
+        min-width: 40px;
+        min-height: 40px;
+    }
+
+}

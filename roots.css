@@ -1,0 +1,35 @@
+/* 1.1 VARIÁVEIS DE TEMA E RESET [-003Tr] */
+:root {
+  --primary-color: #00a86b;
+  --primary-dark: #007a4d;
+  --header-bg: #0f172a;
+  --accent-orange: #00a86b;
+  --color-titulo:#ea580c;
+  --accent-orange-hover: #ea580c;
+  --bg-main: #f1f5f9;
+  --bg-card: #ffffff;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
+  --shadow-color: rgba(15, 23, 42, 0.08);
+  --danger-color: #ef4444;
+  --share-color: #2563eb;
+  --success-color: #10b981;
+  --sidebar-width: 290px;
+  --fubdo-do-theme:#F5F5F5;
+}
+
+.theme-dark {
+  --accent-orange: #ea580c;
+  --color-titulo:#FFFFFF;
+  --primary-color: #059669;
+  --fubdo-do-theme:#0f172a;
+  --primary-dark: #047857;
+  --header-bg: #020617;
+  --bg-main: #090d16;
+  --bg-card: #1e293b;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --border-color: #334155;
+  --shadow-color: rgba(0, 0, 0, 0.6);
+}

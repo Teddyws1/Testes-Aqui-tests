@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html lang="pt-PT" class="theme-light">
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    >
+
+    <title>DívidaZero - Gestão Inteligente de Dívidas</title>
+
+    <link
+        rel="icon"
+        type="image/png"
+        href="https://i.postimg.cc/1XBThB5s/Picsart-26-08-16-10-16-48-167.jpg"
+    >
+
+    <link
+        rel="apple-touch-icon"
+        href="https://i.postimg.cc/1XBThB5s/Picsart-26-08-16-10-16-48-167.jpg"
+    >
+
+    <link rel="stylesheet" href="style.css?v=02">
+    <link rel="stylesheet" href="roots.css?v=02">
+
+ <link rel="stylesheet" href="responsivo.css?v=02">
+
+    <link rel="manifest" href="manifest.json">
+
+    <meta name="theme-color" content="#0f172a">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta
+        name="apple-mobile-web-app-status-bar-style"
+        content="default"
+    >
+
+    <script
+        type="module"
+        src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+    ></script>
+
+    <script
+        nomodule
+        src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+    ></script>
+</head>
+
+<body>
+
+    <div id="app-container">
+
+        <!-- [-006Hd] CABEÇALHO -->
+
+        <header class="app-header">
+
+            <div class="header-title-container">
+
+                <button
+                    type="button"
+                    class="icon-btn"
+                    id="btn-open-sidebar"
+                    title="Menu Lateral"
+                    aria-label="Abrir menu lateral"
+                >
+                    <ion-icon name="menu-outline"></ion-icon>
+                </button>
+
+                <h1 class="header-title">
+                    Minhas Despesas
+                </h1>
+
+            </div>
+
+            <div class="header-actions">
+
+                <button
+                    type="button"
+                    class="icon-btn"
+                    id="btn-open-add-modal"
+                    title="Adicionar Despesa"
+                    aria-label="Adicionar despesa"
+                >
+                    <ion-icon name="add-outline"></ion-icon>
+                </button>
+
+                <button
+                    type="button"
+                    class="icon-btn"
+                    id="btn-sort-menu"
+                    title="Ordenar Dívidas"
+                    aria-label="Ordenar dívidas"
+                >
+                    <ion-icon name="ellipsis-vertical-outline"></ion-icon>
+                </button>
+
+
+                <!-- [-008Sd] DROPDOWN DE ORDENAÇÃO -->
+
+                <div
+                    class="sort-dropdown"
+                    id="sort-dropdown"
+                >
+
+                    <button
+                        type="button"
+                        class="sort-option selected"
+                        data-sort="recent"
+                    >
+                        <ion-icon name="time-outline"></ion-icon>
+                        <span>Mais Recentes</span>
+                    </button>
+
+                    <button
+                        type="button"
+                        class="sort-option"
+                        data-sort="oldest"
+                    >
+                        <ion-icon name="hourglass-outline"></ion-icon>
+                        <span>Mais Antigos</span>
+                    </button>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- [-009Mn] NAVEGADOR DE MESES -->
+
+        <nav class="month-navigator">
+
+            <button
+                type="button"
+                class="icon-btn"
+                id="btn-prev-month"
+                aria-label="Mês anterior"
+            >
+                <ion-icon name="chevron-back-outline"></ion-icon>
+            </button>
+
+            <div
+                class="month-display"
+                id="current-month-display"
+            >
+                agosto / 2026
+            </div>
+
+            <button
+                type="button"
+                class="icon-btn"
+                id="btn-next-month"
+                aria-label="Próximo mês"
+            >
+                <ion-icon name="chevron-forward-outline"></ion-icon>
+            </button>
+
+        </nav>
+
+
+        <!-- [-010Sb] BARRA DE PESQUISA -->
+
+        <div class="search-bar-container">
+
+            <div class="search-input-wrapper">
+
+                <ion-icon name="search-outline"></ion-icon>
+
+<input
+    type="text"
+    id="search-input"
+    class="search-input"
+    placeholder="Buscar por descrição, código ID ou empresa..."
+>
+
+            </div>
+
+        </div>
+
+
+        <!-- [-011Mc] CONTAINER DE DÍVIDAS -->
+
+        <main
+            class="main-content"
+            id="debts-container"
+        >
+            <!-- Cards gerados via JS -->
+        </main>
+
+
+     <!-- •088Fd ÁREA DO FOOTER ARRASTÁVEL -->
+
+<div class="footer-drawer" id="footer-drawer">
+
+    <div
+        class="footer-drag-handle"
+        id="footer-drag-handle"
+        aria-label="Arrastar resumo"
+    >
+        <span></span>
+    </div>
+
+<!--- -294pq CICLO DO FOOTER — ARRASTE VERTICAL --->
+    <footer class="app-footer">
+
+        <div class="stats-grid">
+
+            <div class="stat-box">
+                <span class="stat-label">
+                    Total Dívidas
+                </span>
+
+                <span
+                    class="stat-val total-color"
+                    id="stat-count-total"
+                >
+                    0
+                </span>
+            </div>
+
+            <div class="stat-box">
+                <span class="stat-label">
+                    Pagas
+                </span>
+
+                <span
+                    class="stat-val paid-color"
+                    id="stat-count-paid"
+                >
+                    0
+                </span>
+            </div>
+
+            <div class="stat-box">
+                <span class="stat-label">
+                    Para Pagar
+                </span>
+
+                <span
+                    class="stat-val pending-color"
+                    id="stat-count-pending"
+                >
+                    0
+                </span>
+            </div>
+
+        </div>
+
+        <div class="footer-summary">
+
+            <div class="footer-row">
+                <span>Já Pago:</span>
+
+                <span
+                    id="footer-paid-value"
+                    style="color: #4ade80; font-weight: 700;"
+                >
+                    R$ 0,00
+                </span>
+            </div>
+
+            <div class="footer-row">
+                <span>Falta Pagar:</span>
+
+                <span
+                    id="footer-balance"
+                    style="color: #fbbf24; font-weight: 700;"
+                >
+                    R$ 0,00
+                </span>
+            </div>
+
+            <div class="footer-row total-bold">
+                <span>Total de Dívidas:</span>
+
+                <span id="footer-total">
+                    R$ 0,00
+                </span>
+            </div>
+
+        </div>
+
+    </footer>
+
+</div>
+
+    </div>
+
+
+    <!-- [-013Sb] ABA LATERAL -->
+
+    <div
+        class="sidebar-overlay"
+        id="sidebar-overlay"
+    ></div>
+
+    <aside
+        class="sidebar"
+        id="sidebar"
+    >
+
+        <div class="sidebar-header">
+            <!---420ka titulos--->
+            <ion-icon name="wallet-outline"></ion-icon>
+<h2>Dívida<span>Zero</span></h2>
+
+        </div>
+
+
+        <div class="sidebar-menu">
+
+            <button
+                type="button"
+                class="menu-item"
+                id="menu-item-history"
+            >
+                <ion-icon name="time-outline"></ion-icon>
+
+                <span>
+                    Histórico de Atividades
+                </span>
+            </button>
+            <br>
+
+            <button
+                type="button"
+                class="menu-item"
+                id="menu-item-updates"
+            >
+                <ion-icon name="gift-outline"></ion-icon>
+
+                <span>
+                    Novidades & Atualizações
+                </span>
+            </button>
+            <br>
+            
+            <button
+                type="button"
+                class="menu-item"
+                id="menu-item-theme"
+            >
+                <ion-icon
+                    name="moon-outline"
+                    id="theme-icon"
+                ></ion-icon>
+
+                <span id="theme-text">
+                    Modo Escuro
+                </span>
+            </button>
+            <br>
+            <button type="button" class="menu-item" id="menu-item-clean">
+    <ion-icon name="trash-bin-outline"></ion-icon>
+    <span id="label-clean-dividas">Clean</span>
+</button>
+
+            <br>
+            <button
+                type="button"
+                class="menu-item"
+                id="menu-item-export"
+            >
+                <ion-icon name="download-outline"></ion-icon>
+
+                <span>
+                    Exportar Dados (JSON)
+                </span>
+            </button>
+            <br>
+        
+            <button
+                type="button"
+                class="menu-item"
+                id="menu-item-import"
+            >
+                <ion-icon name="cloud-upload-outline"></ion-icon>
+
+                <span>
+                    Importar Dados (JSON)
+                </span>
+
+                <input
+                    type="file"
+                    id="import-file-input"
+                    accept=".json"
+                    hidden
+                >
+            </button>
+            <br>
+<!--- -113wz Sobre o Desenvolvedor--->
+        
+            <button
+                type="button"
+                class="menu-item"
+                id="menu-item-developer"
+            >
+                <ion-icon name="code-slash-outline"></ion-icon>
+
+                <span>
+                    Sobre o Desenvolvedor
+                </span>
+            </button>
+<!--- -fim  Sobre o Desenvolvedor--->
+        </div>
+
+
+        <div class="sidebar-footer">
+            desenvolvido por Teddy machado 2026™
+        </div>
+
+    </aside>
+
+
+    <!-- [-014Md] MODAL DE CADASTRO -->
+
+    <div
+        class="modal-overlay"
+        id="modal-add-expense"
+    >
+
+        <div class="modal-card">
+
+            <div class="modal-header">
+
+                <button
+                    type="button"
+                    class="icon-btn"
+                    id="btn-close-modal-expense"
+                    aria-label="Fechar"
+                >
+                    <ion-icon name="arrow-back-outline"></ion-icon>
+                </button>
+
+                <h3>
+                    Nova Despesa
+                </h3>
+
+                <div style="width: 24px;"></div>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                <form id="form-expense">
+
+                    <div class="form-group">
+
+                        <label>
+                            Empresa / Categoria
+                        </label>
+
+                        <select
+                            id="expense-company"
+                            class="form-control"
+                            required
+                        >
+                            <option value="Outros">
+                        Outras Origens
+                       <option value="custom">
+                            Nova empresa...
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div
+                        class="form-group"
+                        id="custom-company-group"
+                        style="display: none;"
+                    >
+
+                        <label>
+                            Nome da Empresa Customizada
+                        </label>
+
+                        <input
+                            type="text"
+                            id="expense-custom-company"
+                            class="form-control"
+                            placeholder="Digite o nome da empresa..."
+                            autocomplete="off"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Descrição da Dívida / Observações
+                        </label>
+
+                        <textarea
+                            id="expense-description"
+                            class="form-control"
+                            placeholder="Informe a descrição completa (suporta mais de 500 caracteres)..."
+                            required
+                            autocomplete="off"
+                        ></textarea>
+
+                        <div
+                            class="char-counter"
+                            id="char-counter"
+                        >
+                            0 caracteres
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Valor (R$)
+                        </label>
+
+                        <input
+                            type="number"
+                            step="0.01"
+                            id="expense-value"
+                            class="form-control"
+                            placeholder="Informe o valor"
+                            required
+                            autocomplete="off"
+                        >
+
+                    </div>
+
+
+                    <div
+                        class="form-group"
+                        style="text-align: center;"
+                    >
+
+                        <label
+                            style="font-size: 0.85rem; color: var(--text-muted);"
+                        >
+                            Data de vencimento
+                        </label>
+
+                        <input
+                            type="date"
+                            id="expense-date"
+                            class="form-control"
+                            style="text-align: center; border-bottom: 2px solid var(--border-color);"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <div
+                            class="radio-group"
+                            style="justify-content: center;"
+                        >
+
+                            <label class="radio-option">
+
+                                <input
+                                    type="radio"
+                                    name="repeat"
+                                    value="no"
+                                    checked
+                                >
+
+                                <span>
+                                    Não repetir
+                                </span>
+
+                            </label>
+
+
+                            <label class="radio-option">
+
+                                <input
+                                    type="radio"
+                                    name="repeat"
+                                    value="yes"
+                                >
+
+                                <span>
+                                    Repetir
+                                </span>
+
+                            </label>
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="btn-primary"
+                        style="margin-top: 15px;"
+                    >
+                        Salvar Dívida
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- [-014Mde] MODAL DE EDIÇÃO E DETALHES -->
+
+    <div
+        class="modal-overlay"
+        id="modal-edit-expense"
+    >
+
+        <div class="modal-card">
+
+            <div class="modal-header">
+
+                <button
+                    type="button"
+                    class="icon-btn"
+                    id="btn-close-modal-edit"
+                    aria-label="Fechar"
+                >
+                    <ion-icon name="arrow-back-outline"></ion-icon>
+                </button>
+
+                <h3 id="edit-modal-title">
+                    Editar Dívida
+                </h3>
+
+                <div style="width: 24px;"></div>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                <form id="form-edit-expense">
+
+                    <input
+                        type="hidden"
+                        id="edit-expense-id"
+                    >
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Empresa / Categoria
+                        </label>
+
+                        <select
+                            id="edit-expense-company"
+                            class="form-control"
+                            required
+                        >
+
+                            <option value="Outros">
+                                Outros / Geral
+                            </option>
+
+                            <option value="Vivo">
+                                Vivo
+                            </option>
+
+                            <option value="Claro">
+                                Claro
+                            </option>
+
+                            <option value="TIM">
+                                TIM
+                            </option>
+
+                            <option value="Nubank">
+                                Nubank
+                            </option>
+
+                            <option value="Itaú">
+                                Itaú
+                            </option>
+
+                            <option value="Bradesco">
+                                Bradesco
+                            </option>
+
+                            <option value="Santander">
+                                Santander
+                            </option>
+
+                            <option value="Caixa">
+                                Caixa
+                            </option>
+
+                            <option value="Energia (Enel/Equatorial)">
+                                Energia (Enel/Equatorial)
+                            </option>
+
+                            <option value="Água / Saneamento">
+                                Água / Saneamento
+                            </option>
+
+                            <option value="Internet / Fibra">
+                                Internet / Fibra
+                            </option>
+
+                            <option value="Supermercado">
+                                Supermercado
+                            </option>
+
+                            <option value="Aluguel / Condomínio">
+                                Aluguel / Condomínio
+                            </option>
+
+                            <option value="custom">
+                                + Digitar outra empresa...
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div
+                        class="form-group"
+                        id="edit-custom-company-group"
+                        style="display: none;"
+                    >
+
+                        <label>
+                            Nome da Empresa Customizada
+                        </label>
+
+                        <input
+                            type="text"
+                            id="edit-expense-custom-company"
+                            class="form-control"
+                            placeholder="Digite o nome da empresa..."
+                            autocomplete="off"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Descrição da Dívida / Observações
+                        </label>
+
+                        <textarea
+                            id="edit-expense-description"
+                            class="form-control"
+                            required
+                            autocomplete="off"
+                        ></textarea>
+
+                        <div
+                            class="char-counter"
+                            id="edit-char-counter"
+                        >
+                            0 caracteres
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Valor (R$)
+                        </label>
+
+                        <input
+                            type="number"
+                            step="0.01"
+                            id="edit-expense-value"
+                            class="form-control"
+                            required
+                            autocomplete="off"
+                        >
+
+                    </div>
+
+
+                    <div
+                        class="form-group"
+                        style="text-align: center;"
+                    >
+
+                        <label
+                            style="font-size: 0.85rem; color: var(--text-muted);"
+                        >
+                            Data de vencimento
+                        </label>
+
+                        <input
+                            type="date"
+                            id="edit-expense-date"
+                            class="form-control"
+                            style="text-align: center;"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Status do Pagamento
+                        </label>
+
+                        <div
+                            class="radio-group"
+                            style="justify-content: center;"
+                        >
+
+                            <label class="radio-option">
+
+                                <input
+                                    type="radio"
+                                    name="edit-paid"
+                                    value="false"
+                                    id="edit-paid-false"
+                                >
+
+                                <span>
+                                    Pendente
+                                </span>
+
+                            </label>
+
+
+                            <label class="radio-option">
+
+                                <input
+                                    type="radio"
+                                    name="edit-paid"
+                                    value="true"
+                                    id="edit-paid-true"
+                                >
+
+                                <span>
+                                    Pago
+                                </span>
+
+                            </label>
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="btn-primary"
+                        style="margin-top: 15px;"
+                    >
+                        Atualizar Dívida
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="btn-share"
+                        id="btn-share-expense"
+                    >
+                        <ion-icon name="share-social-outline"></ion-icon>
+                        <span>Compartilhar Dívida</span>
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="btn-danger"
+                        id="btn-delete-expense"
+                    >
+                        <ion-icon name="trash-outline"></ion-icon>
+                        <span>Excluir Dívida</span>
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- [-014Mdh] MODAL HISTÓRICO -->
+
+    <div
+        class="modal-overlay"
+        id="modal-history"
+    >
+
+        <div class="modal-card">
+
+            <div class="modal-header">
+
+                <h3>
+                    <ion-icon name="time-outline"></ion-icon>
+                    Histórico de Ações
+                </h3>
+
+                <button
+                    type="button"
+                    class="icon-btn"
+                    id="btn-close-modal-history"
+                    aria-label="Fechar histórico"
+                >
+                    <ion-icon name="close-outline"></ion-icon>
+                </button>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                <button
+                    type="button"
+                    class="btn-danger"
+                    id="btn-clear-logs"
+                    style="margin-bottom: 12px;"
+                >
+                    <ion-icon name="trash-bin-outline"></ion-icon>
+                    <span>Limpar Histórico de Ações</span>
+                </button>
+
+
+                <div
+                    class="history-list"
+                    id="history-list-container"
+                >
+                    <!-- Logs inseridos por script -->
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- [-014Mdu] MODAL ATUALIZAÇÕES -->
+
+    <div
+        class="modal-overlay"
+        id="modal-updates"
+    >
+
+        <div class="modal-card">
+
+            <div class="modal-header">
+
+                <h3>
+                    <ion-icon name="sparkles-outline"></ion-icon>
+                    Atualizações do Sistema
+                </h3>
+
+                <button
+                    type="button"
+                    class="icon-btn"
+                    id="btn-close-modal-updates"
+                    aria-label="Fechar atualizações"
+                >
+                    <ion-icon name="close-outline"></ion-icon>
+                </button>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                <div
+                    class="updates-list"
+                    id="updates-list"
+                ></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+<!-- [-014Mdd] MODAL DESENVOLVEDOR -->
+
+<div
+    class="modal-overlay"
+    id="modal-developer"
+>
+
+    <div class="modal-card">
+
+        <div class="modal-header">
+
+            <h3>
+                <ion-icon name="code-slash-outline"></ion-icon>
+                Sobre o Desenvolvedor
+            </h3>
+
+            <button
+                type="button"
+                class="icon-btn"
+                id="btn-close-modal-developer"
+                aria-label="Fechar desenvolvedor"
+            >
+                <ion-icon name="close-outline"></ion-icon>
+            </button>
+
+        </div>
+
+
+        <div class="modal-body">
+
+            <div class="developer-card">
+
+                <div class="developer-avatar">
+                    <ion-icon name="person-outline"></ion-icon>
+                </div>
+
+
+                <h2 class="developer-name">
+                    Teddy Machado
+                </h2>
+
+
+                <p class="developer-description">
+                    Desenvolvedor & Criador do DívidaZero.
+                    <br>
+                    Especialista em Aplicações Web & Mobile.
+                </p>
+
+
+                <div class="developer-links">
+
+                    <!-- [-032Ig] INSTAGRAM -->
+
+                    <a
+                        href="https://www.instagram.com/teddy_machado007?igsh=MmtjdTF4ZGlqdjVl"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="social-btn instagram"
+                    >
+                        <ion-icon name="logo-instagram"></ion-icon>
+
+                        <span>
+                            Instagram
+                        </span>
+                    </a>
+
+
+                    <!-- [-033Gh] GITHUB -->
+
+                    <a
+                        href="https://github.com/Teddyws1"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="social-btn github"
+                    >
+                        <ion-icon name="logo-github"></ion-icon>
+
+                        <span>
+                            Mais projetos no GitHub
+                        </span>
+                    </a>
+
+
+                    <!-- [-034Sh] COMPARTILHAR SITE -->
+
+                    <button
+                        type="button"
+                        class="social-btn share-site"
+                        id="btn-share-site"
+                    >
+                        <ion-icon name="share-social-outline"></ion-icon>
+
+                        <span>
+                            Compartilhar DívidaZero
+                        </span>
+                    </button>
+
+
+                    <!-- [-035Cp] COPIAR CONTATO -->
+
+                    <button
+                        type="button"
+                        class="social-btn copy-contact"
+                        id="btn-copy-dev-contact"
+                    >
+                        <ion-icon name="copy-outline"></ion-icon>
+
+                        <span>
+                            Copiar Contato
+                        </span>
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- //////////////////////////////////////// -->
+<!-- -->
+<!-- [-036Ms] MODAL COMPARTILHAR DÍVIDAZERO -->
+<!-- -->
+<!-- //////////////////////////////////////// -->
+
+<div
+    class="modal-overlay"
+    id="modal-share-site"
+>
+
+    <div class="modal-card share-modal-card">
+
+        <div class="modal-header">
+
+            <h3>
+                <ion-icon name="share-social-outline"></ion-icon>
+                Compartilhar DívidaZero
+            </h3>
+
+
+            <button
+                type="button"
+                class="icon-btn"
+                id="btn-close-modal-share"
+                aria-label="Fechar compartilhamento"
+            >
+                <ion-icon name="close-outline"></ion-icon>
+            </button>
+
+        </div>
+
+
+        <div class="modal-body">
+
+            <div class="share-content">
+
+                <!-- [-037Si] ÍCONE DO SISTEMA -->
+
+                <div class="share-icon">
+                    <ion-icon name="wallet-outline"></ion-icon>
+                </div>
+
+
+                <h2>
+                    Compartilhe o DívidaZero
+                </h2>
+
+
+                <p>
+                    Ajude outras pessoas a organizar
+                    e controlar suas dívidas.
+                </p>
+
+
+                <!-- [-038So] OPÇÕES DE COMPARTILHAMENTO -->
+
+                <div class="share-options">
+
+
+                    <!-- WhatsApp -->
+
+                    <button
+                        type="button"
+                        class="share-option whatsapp"
+                        id="share-whatsapp"
+                    >
+                        <ion-icon name="logo-whatsapp"></ion-icon>
+
+                        <span>
+                            WhatsApp
+                        </span>
+                    </button>
+
+
+                    <!-- Facebook -->
+
+                    <button
+                        type="button"
+                        class="share-option facebook"
+                        id="share-facebook"
+                    >
+                        <ion-icon name="logo-facebook"></ion-icon>
+
+                        <span>
+                            Facebook
+                        </span>
+                    </button>
+
+
+                    <!-- Instagram -->
+
+                    <button
+                        type="button"
+                        class="share-option instagram-share"
+                        id="share-instagram"
+                    >
+                        <ion-icon name="logo-instagram"></ion-icon>
+
+                        <span>
+                            Instagram
+                        </span>
+                    </button>
+
+
+                    <!-- Copiar -->
+
+                    <button
+                        type="button"
+                        class="share-option copy-link"
+                        id="share-copy-link"
+                    >
+                        <ion-icon name="copy-outline"></ion-icon>
+
+                        <span>
+                            Copiar link
+                        </span>
+                    </button>
+
+                </div>
+
+
+                <!-- [-039Ur] URL DO SITE -->
+
+                <div
+                    class="share-link-box"
+                    id="share-link-box"
+                >
+
+                    <ion-icon name="link-outline"></ion-icon>
+
+                    <span>
+                        https://teddyws1.github.io/DividaZero/
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+    <!-- [-015Js] SCRIPTS -->
+
+<script src="Script.js?v=14" defer></script>
+
+<script src="versoes.js?v=02" defer></script>
+
+<script src="js-das-versoes.js?v=02" defer></script>
+
+<script src="style.js?v=02" defer></script>
+
+</body>
+</html>
