@@ -1,6 +1,6 @@
 {
-    "name": "DívidaZero",
-    "short_name": "DívidaZero",
+    "name": "testes DívidaZero",
+    "short_name": "testesDívidaZero",
     "description": "Aplicativo web instalável.",
     "start_url": "./index.html",
 
