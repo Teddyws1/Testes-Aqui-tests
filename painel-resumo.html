@@ -2,7 +2,8 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <!-- Meta Viewport atualizada para bloquear o Zoom em Mobile/Tablet -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>DívidaZero - Resumo de Meses</title>
     <!-- Ícones Ionicons -->
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
@@ -32,11 +33,11 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             -webkit-tap-highlight-color: transparent;
             
-            /* Sistema Anti-Seleção (CSS Universal para PC, Tablet e Mobile) */
-            -webkit-user-select: none;   /* Safari / iOS / Android */
-            -moz-user-select: none;      /* Firefox */
-            -ms-user-select: none;       /* Internet Explorer/Edge */
-            user-select: none;           /* Padrão moderno */
+            /* Sistema Anti-Seleção */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
 
         button, a, input, div {
@@ -50,9 +51,8 @@
             display: flex;
             flex-direction: column;
             padding: calc(16px + env(safe-area-inset-top)) 20px calc(20px + env(safe-area-inset-bottom)) 20px;
-            
-            /* Evita comportamento de toque longo para selecionar texto no mobile/tablet */
             -webkit-touch-callout: none;
+            touch-action: pan-x pan-y; /* Permite rolar a página verticalmente, mas evita gestos de pinça para zoom */
         }
 
         /* Header Principal */
@@ -148,7 +148,7 @@
             color: var(--accent-orange);
         }
 
-        /* Gráfico em Pizza / Donut Container Interativo */
+        /* Gráfico em Pizza / Donut Container Interativo (Sem Scroll Lateral) */
         .pie-chart-container {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
@@ -157,6 +157,7 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
+            overflow: hidden; /* Evita qualquer transbordamento ou scroll lateral */
         }
 
         .pie-chart-wrapper {
@@ -164,14 +165,14 @@
             align-items: center;
             justify-content: space-around;
             flex-wrap: wrap;
-            gap: 16px;
-            padding: 10px 0;
+            gap: 12px;
+            padding: 6px 0;
         }
 
         /* Donut Chart Dinâmico */
         .donut-chart {
-            width: 140px;
-            height: 140px;
+            width: 130px;
+            height: 130px;
             border-radius: 50%;
             background: conic-gradient(var(--conic-data));
             position: relative;
@@ -179,13 +180,14 @@
             align-items: center;
             justify-content: center;
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            flex-shrink: 0;
         }
 
-        /* Centro do Donut onde exibe os detalhes ao interagir */
+        /* Centro do Donut */
         .donut-center {
             position: absolute;
-            width: 90px;
-            height: 90px;
+            width: 82px;
+            height: 82px;
             background-color: var(--bg-card);
             border-radius: 50%;
             display: flex;
@@ -193,13 +195,13 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 6px;
+            padding: 4px;
             box-shadow: inset 0 2px 6px rgba(0,0,0,0.3);
             pointer-events: none;
         }
 
         .donut-center-title {
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             font-weight: 700;
             color: var(--text-muted);
             text-transform: uppercase;
@@ -210,55 +212,58 @@
         }
 
         .donut-center-value {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 800;
             color: var(--accent-orange);
             margin-top: 2px;
         }
 
+        /* Legenda compacta sem barra de rolagem lateral */
         .donut-legend {
             display: flex;
             flex-direction: column;
-            gap: 6px;
-            max-height: 150px;
-            overflow-y: auto;
+            gap: 4px;
             flex: 1;
-            min-width: 200px;
-            padding-right: 4px;
+            min-width: 170px;
+            max-width: 100%;
+            overflow: hidden; /* Remove barras de rolagem */
         }
 
-        /* Itens da Legenda com Efeito de Separação / Destaque */
         .legend-item {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            font-size: 0.82rem;
+            font-size: 0.78rem;
             color: var(--text-muted);
-            padding: 6px 10px;
+            padding: 4px 8px;
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid transparent;
-            border-radius: 8px;
+            border-radius: 6px;
             cursor: pointer;
-            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.2s ease;
         }
 
         .legend-item:hover, .legend-item.active {
             background: rgba(249, 115, 22, 0.1);
             border-color: var(--accent-orange);
             color: var(--text-main);
-            transform: translateX(6px);
+            transform: translateX(4px);
         }
 
         .legend-left {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .legend-color-box {
-            width: 12px;
-            height: 12px;
-            border-radius: 4px;
+            width: 10px;
+            height: 10px;
+            border-radius: 3px;
+            flex-shrink: 0;
         }
 
         /* Container em Grade (3 colunas / 🔲🔲🔲) */
@@ -462,19 +467,17 @@
 
     <script>
         /* =========================================================
-           Sistema Anti-Cópia e Anti-Seleção (JavaScript)
+           Sistema Anti-Cópia, Anti-Seleção e Anti-Zoom (JavaScript)
            ========================================================= */
-        // Bloqueia menu de contexto (botão direito do mouse em PC)
         document.addEventListener('contextmenu', (e) => e.preventDefault());
-
-        // Bloqueia tentativas de copiar (Ctrl+C, Cmd+C, menu de contexto de cópia)
         document.addEventListener('copy', (e) => e.preventDefault());
         document.addEventListener('cut', (e) => e.preventDefault());
+        document.addEventListener('selectstart', (e) => e.preventDefault());
 
-        // Bloqueia atalhos de teclado comuns para inspeção e cópia (Ctrl+C, Ctrl+U, Ctrl+Shift+I, etc.)
+        // Bloqueio de atalhos de teclado (Ctrl+C, Ctrl+U, F12, Inspecionar e Zoom via Teclado)
         document.addEventListener('keydown', (e) => {
             if (
-                (e.ctrlKey && (e.key === 'c' || e.key === 'C' || e.key === 'u' || e.key === 'U' || e.key === 's' || e.key === 'S')) ||
+                (e.ctrlKey && (e.key === 'c' || e.key === 'C' || e.key === 'u' || e.key === 'U' || e.key === 's' || e.key === 'S' || e.key === '+' || e.key === '-' || e.key === '=')) ||
                 e.key === 'F12' ||
                 (e.ctrlKey && e.shiftKey && (e.key === 'i' || e.key === 'I' || e.key === 'j' || e.key === 'J' || e.key === 'c' || e.key === 'C'))
             ) {
@@ -483,8 +486,12 @@
             }
         });
 
-        // Bloqueia seleção de texto via script em qualquer elemento criado dinamicamente
-        document.addEventListener('selectstart', (e) => e.preventDefault());
+        // Bloqueia o zoom por movimento de rolagem com a tecla Ctrl (PC)
+        document.addEventListener('wheel', (e) => {
+            if (e.ctrlKey) {
+                e.preventDefault();
+            }
+        }, { passive: false });
 
 
         const safeFormatCurrency = (val) => 
@@ -552,7 +559,6 @@
                 }
             });
 
-            // Ordem cronológica real (Janeiro até Dezembro)
             const keys = Object.keys(groupedMonths).sort((a, b) => a.localeCompare(b));
 
             if (keys.length === 0) {
@@ -595,7 +601,6 @@
                 `;
             }
 
-            // Cores para o gráfico em pizza
             const chartColors = ['#f97316', '#3b82f6', '#22c55e', '#eab308', '#a855f7', '#ec4899', '#06b6d4', '#84cc16', '#f43f5e', '#6366f1', '#14b8a6', '#d946ef'];
             
             let totalSumAllMonths = 0;
