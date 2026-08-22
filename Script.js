@@ -1,3 +1,6 @@
+// Variável global para manter o arquivo único sincronizado e permitir sobrescrever
+let exportFileHandle = null;
+
 document.addEventListener('DOMContentLoaded', () => {
 
     // [-021St] Estado Global
@@ -679,35 +682,51 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // EXPORTAÇÃO INTELIGENTE (Exporta a primeira vez com ID único e atualiza o estado)
-    dom.menuItemExport.addEventListener('click', () => {
-        let fileId = localStorage.getItem('dz_export_file_id');
-        
-        if (!fileId) {
-            fileId = `DividaZero_Backup_${new Date().toISOString().slice(0, 10)}.json`;
-            localStorage.setItem('dz_export_file_id', fileId);
+    // SISTEMA DE EXPORTAÇÃO (SOBRESCREVE O MESMO ARQUIVO NAS PRÓXIMAS EXPORTAÇÕES)
+    dom.menuItemExport.addEventListener('click', async () => {
+        const dataString = JSON.stringify(state, null, 2);
+
+        // Verifica suporte à File System Access API
+        if ('showSaveFilePicker' in window) {
+            try {
+                // Seleciona o arquivo na 1ª vez; nas próximas, reutiliza o mesmo arquivo
+                if (!exportFileHandle) {
+                    exportFileHandle = await window.showSaveFilePicker({
+                        suggestedName: 'DividaZero_Dados.json',
+                        types: [{
+                            description: 'Arquivo JSON',
+                            accept: { 'application/json': ['.json'] }
+                        }]
+                    });
+                }
+
+                // Sobrescreve diretamente sem gerar cópias (1), (2)
+                const writable = await exportFileHandle.createWritable();
+                await writable.write(dataString);
+                await writable.close();
+
+                addLog("Backup atualizado diretamente no arquivo selecionado.");
+                showToast("Arquivo atualizado com sucesso!");
+                return;
+            } catch (err) {
+                if (err.name === 'AbortError') return;
+                console.warn('Fallback para download padrão:', err);
+            }
         }
 
-        const exportPayload = {
-            exportMeta: {
-                fileId: fileId,
-                exportedAt: new Date().toISOString()
-            },
-            debts: state.debts,
-            logs: state.logs,
-            theme: state.theme
-        };
-
-        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportPayload, null, 2));
+        // Fallback para navegadores/dispositivos sem suporte
+        const blob = new Blob([dataString], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
         const downloadAnchor = document.createElement('a');
-        downloadAnchor.setAttribute("href", dataStr);
-        downloadAnchor.setAttribute("download", fileId);
+        downloadAnchor.href = url;
+        downloadAnchor.download = 'DividaZero_Dados.json';
         document.body.appendChild(downloadAnchor);
         downloadAnchor.click();
         downloadAnchor.remove();
-        
-        addLog("Backup dos dados exportado com sucesso.");
-        showToast("Backup exportado com sucesso!");
+        URL.revokeObjectURL(url);
+
+        addLog("Backup dos dados exportado.");
+        showToast("Dados exportados!");
     });
 
     dom.menuItemImport.addEventListener('click', () => {
@@ -725,11 +744,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (importedData.debts && Array.isArray(importedData.debts)) {
                     state.debts = importedData.debts;
                     state.logs = importedData.logs || [];
-                    
-                    if (importedData.exportMeta && importedData.exportMeta.fileId) {
-                        localStorage.setItem('dz_export_file_id', importedData.exportMeta.fileId);
-                    }
-
                     saveData();
                     renderDebts();
                     showToast("Dados importados com sucesso!");
