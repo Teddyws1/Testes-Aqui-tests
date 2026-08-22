@@ -1,9 +1,18 @@
-// Variável global para manter o arquivo único sincronizado e permitir sobrescrever
+//////////////////////////////////////
+//
+// - PARTE 1: ESTADO GLOBAL, DOM E RENDERIZAÇÃO
+//
+//////////////////////////////////////
+
 let exportFileHandle = null;
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    // [-021St] Estado Global
+    //////////////////////////////////////
+    //
+    // - ESTADO GLOBAL
+    //
+    //////////////////////////////////////
     const state = {
         debts: JSON.parse(localStorage.getItem('dz_debts')) || [],
         logs: JSON.parse(localStorage.getItem('dz_logs')) || [],
@@ -28,7 +37,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // [-022Dm] Mapeamento dos Elementos do DOM
+    //////////////////////////////////////
+    //
+    // - MAPEAMENTO DO DOM
+    //
+    //////////////////////////////////////
     const dom = {
         appContainer: document.getElementById('app-container'),
         debtsContainer: document.getElementById('debts-container'),
@@ -104,7 +117,11 @@ document.addEventListener('DOMContentLoaded', () => {
         btnCopyDevContact: document.getElementById('btn-copy-dev-contact')
     };
 
-    // Gera ID no formato: 000-JG
+    //////////////////////////////////////
+    //
+    // - FUNÇÕES UTILITÁRIAS E LOGS
+    //
+    //////////////////////////////////////
     function generateRandomID() {
         const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         const numbers = "0123456789";
@@ -141,16 +158,39 @@ document.addEventListener('DOMContentLoaded', () => {
         return val.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     }
 
-    function updateMonthDisplay() {
-        const monthNames = [
-            "janeiro", "fevereiro", "março", "abril", "maio", "junho",
-            "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"
-        ];
-        const month = monthNames[state.currentDate.getMonth()];
-        const year = state.currentDate.getFullYear();
-        dom.currentMonthDisplay.textContent = `${month} / ${year}`;
-    }
-
+//////////////////////////////////////
+//
+// -402IV mês do ano 
+//
+/////////////////////////////////////
+function updateMonthDisplay() {
+    const monthNames = [
+        "janeiro",
+        "fevereiro",
+        "março",
+        "abril",
+        "maio",
+        "junho",
+        "julho",
+        "agosto",
+        "setembro",
+        "outubro",
+        "novembro",
+        "dezembro"
+    ];
+    
+    const month = monthNames[state.currentDate.getMonth()];
+    const monthNumber = state.currentDate.getMonth() + 1;
+    const year = state.currentDate.getFullYear();
+    
+    dom.currentMonthDisplay.textContent =
+        `${month} ${monthNumber} / ${year}`;
+}
+    //////////////////////////////////////
+    //
+    // - RENDERIZAÇÃO DE DÍVIDAS
+    //
+    //////////////////////////////////////
     function renderDebts() {
         updateMonthDisplay();
         dom.debtsContainer.innerHTML = '';
@@ -257,6 +297,17 @@ document.addEventListener('DOMContentLoaded', () => {
         dom.footerBalance.textContent = formatCurrency(pendingVal);
         dom.footerTotal.textContent = formatCurrency(totalVal);
     }
+//////////////////////////////////////
+//
+// - PARTE 2: MODAIS, EVENTOS E BACKUP/IMPORT
+//
+//////////////////////////////////////
+
+    //////////////////////////////////////
+    //
+    // - MANIPULAÇÃO DE MODAIS E INTERFAZ
+    //
+    //////////////////////////////////////
     function openEditModal(debt) {
         dom.editExpenseId.value = debt.id;
 
@@ -296,11 +347,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function openModal(modal) {
-        modal.classList.add('active');
+        if (modal) modal.classList.add('active');
     }
 
     function closeModal(modal) {
-        modal.classList.remove('active');
+        if (modal) modal.classList.remove('active');
     }
 
     function toggleSidebar(open) {
@@ -360,6 +411,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    //////////////////////////////////////
+    //
+    // - LISTENERS DE FORMULÁRIOS E BOTÕES
+    //
+    //////////////////////////////////////
     dom.sortOptions.forEach(option => {
         option.addEventListener('click', () => {
             dom.sortOptions.forEach(opt => opt.classList.remove('selected'));
@@ -430,6 +486,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         saveData();
     }
+
     dom.btnOpenSidebar.addEventListener('click', (e) => {
         e.stopPropagation();
         toggleSidebar(true);
@@ -490,7 +547,6 @@ document.addEventListener('DOMContentLoaded', () => {
         openModal(dom.modalUpdates);
     });
 
-    // SISTEMA DE CLEAN COM MODAL CUSTOMIZADO
     if (dom.menuItemClean) {
         dom.menuItemClean.addEventListener('click', () => {
             toggleSidebar(false);
@@ -682,14 +738,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // SISTEMA DE EXPORTAÇÃO (SOBRESCREVE O MESMO ARQUIVO NAS PRÓXIMAS EXPORTAÇÕES)
+    //////////////////////////////////////
+    //
+    // - SISTEMA DE EXPORTAÇÃO E IMPORTAÇÃO DE BACKUP
+    //
+    //////////////////////////////////////
     dom.menuItemExport.addEventListener('click', async () => {
+        toggleSidebar(false);
         const dataString = JSON.stringify(state, null, 2);
 
-        // Verifica suporte à File System Access API
         if ('showSaveFilePicker' in window) {
             try {
-                // Seleciona o arquivo na 1ª vez; nas próximas, reutiliza o mesmo arquivo
                 if (!exportFileHandle) {
                     exportFileHandle = await window.showSaveFilePicker({
                         suggestedName: 'DividaZero_Dados.json',
@@ -698,23 +757,30 @@ document.addEventListener('DOMContentLoaded', () => {
                             accept: { 'application/json': ['.json'] }
                         }]
                     });
+                } else {
+                    const options = { mode: 'readwrite' };
+                    if (await exportFileHandle.queryPermission(options) !== 'granted') {
+                        if (await exportFileHandle.requestPermission(options) !== 'granted') {
+                            exportFileHandle = null;
+                            return;
+                        }
+                    }
                 }
 
-                // Sobrescreve diretamente sem gerar cópias (1), (2)
                 const writable = await exportFileHandle.createWritable();
                 await writable.write(dataString);
                 await writable.close();
 
-                addLog("Backup atualizado diretamente no arquivo selecionado.");
+                addLog("Backup atualizado no mesmo arquivo.");
                 showToast("Arquivo atualizado com sucesso!");
                 return;
             } catch (err) {
+                exportFileHandle = null;
                 if (err.name === 'AbortError') return;
-                console.warn('Fallback para download padrão:', err);
+                console.warn('Fallback ativado:', err);
             }
         }
 
-        // Fallback para navegadores/dispositivos sem suporte
         const blob = new Blob([dataString], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
         const downloadAnchor = document.createElement('a');
@@ -730,6 +796,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     dom.menuItemImport.addEventListener('click', () => {
+        toggleSidebar(false);
         dom.importFileInput.click();
     });
 
@@ -754,6 +821,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } catch (err) {
                 showToast("Erro ao ler o arquivo JSON.", "error");
             }
+            dom.importFileInput.value = '';
         };
         reader.readAsText(file);
     });
@@ -769,7 +837,17 @@ document.addEventListener('DOMContentLoaded', () => {
     applyTheme(state.theme);
     renderDebts();
 });
+//////////////////////////////////////
+//
+// - PARTE 3: INSTALAÇÃO PWA, COMPARTILHAMENTO E RODAPÉ DRAWER
+//
+//////////////////////////////////////
 
+    //////////////////////////////////////
+    //
+    // - SUPORTE A PWA / INSTALAÇÃO DO APP
+    //
+    //////////////////////////////////////
 let deferredPrompt = null;
 const installApp = document.getElementById("installApp");
 
@@ -798,6 +876,11 @@ window.addEventListener("appinstalled", () => {
     }
 });
 
+    //////////////////////////////////////
+    //
+    // - COMPARTILHAMENTO DO SITE E REDES SOCIAIS
+    //
+    //////////////////////////////////////
 const DIVIDA_ZERO_URL = "https://teddyws1.github.io/DividaZero/";
 const DIVIDA_ZERO_TITLE = "DívidaZero - Gestão Inteligente de Dívidas";
 const DIVIDA_ZERO_MESSAGE = "Conheça o DívidaZero — Gestão Inteligente de Dívidas.";
@@ -890,6 +973,11 @@ document.addEventListener("keydown", (event) => {
     }
 });
 
+    //////////////////////////////////////
+    //
+    // - TOAST NOTIFICAÇÕES E DESENVOLVEDOR
+    //
+    //////////////////////////////////////
 const devContactInfo =
     "Teddy Machado\n" +
     "Desenvolvedor e Criador do DívidaZero\n" +
@@ -921,6 +1009,11 @@ function showToast(message, type = "success") {
     }, 2500);
 }
 
+    //////////////////////////////////////
+    //
+    // - INTERAÇÃO TOUCH DRAWER DO RODAPÉ
+    //
+    //////////////////////////////////////
 document.addEventListener("DOMContentLoaded", () => {
     const drawer = document.getElementById("footer-drawer");
     const handle = document.getElementById("footer-drag-handle");

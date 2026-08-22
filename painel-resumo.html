@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>DívidaZero - Resumo de Meses</title>
+    <!-- Ícones Ionicons -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    
+    <style>
+        /* =========================================================
+           DívidaZero - Estilos Painel Resumo (Grid & Fullscreen)
+           ========================================================= */
+        :root {
+            --bg-main: #0f172a;
+            --bg-card: #1e293b;
+            --border-color: #334155;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-orange: #f97316;
+            --primary-color: #3b82f6;
+            --success-color: #22c55e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+input, textarea, select {
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
+        }
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: calc(16px + env(safe-area-inset-top)) 20px calc(20px + env(safe-area-inset-bottom)) 20px;
+        }
+
+        /* Header Principal */
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 16px;
+        }
+
+        .page-header h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .icon-btn:hover {
+            background: var(--accent-orange);
+            border-color: var(--accent-orange);
+            color: #fff;
+        }
+
+        /* Conteúdo Principal */
+        #panel-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            max-width: 900px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* Card do Recorde (Fixo no Topo) */
+        .top-record-card {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            background: var(--bg-card);
+            background-image: linear-gradient(135deg, rgba(249, 115, 22, 0.22), rgba(234, 88, 12, 0.05));
+            border: 1px solid var(--accent-orange);
+            border-radius: 14px;
+            padding: 16px 20px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+        }
+
+        .top-record-header {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--accent-orange);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .top-record-body {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+        }
+
+        .top-record-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .top-record-value {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--accent-orange);
+        }
+
+        /* Gráfico Comparativo */
+        .chart-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 16px;
+        }
+
+        .chart-bar-item {
+            margin-bottom: 12px;
+        }
+
+        .chart-bar-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .chart-bar-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .chart-bar-track {
+            background: rgba(255, 255, 255, 0.06);
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .chart-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #f97316, #ea580c);
+            border-radius: 5px;
+            transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Container em Grade (3 colunas / 🔲🔲🔲) */
+        .months-list-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+        }
+
+        /* Card Bloco Quadrado */
+        .month-select-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            min-height: 110px;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .month-select-card:hover {
+            border-color: var(--accent-orange);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+        }
+
+        .month-select-card.is-record {
+            border-top: 4px solid var(--accent-orange);
+        }
+
+        .month-card-name {
+            font-weight: 700;
+            font-size: 0.95rem;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
+        }
+
+        .record-tag {
+            font-size: 0.65rem;
+            background: var(--accent-orange);
+            color: #ffffff;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 700;
+        }
+
+        /* Botão Voltar Interno */
+        .btn-back-nav {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            align-self: flex-start;
+            transition: all 0.2s ease;
+        }
+
+        .btn-back-nav:hover {
+            border-color: var(--accent-orange);
+            color: var(--accent-orange);
+        }
+
+        /* Detalhes do Mês */
+        .top-month-banner {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 18px;
+            text-align: center;
+        }
+
+        .top-month-total {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--accent-orange);
+            margin: 6px 0;
+        }
+
+        .top-month-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .top-stat-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 14px;
+        }
+
+        .top-stat-val.paid { color: var(--success-color); font-weight: 700; font-size: 1.2rem; }
+        .top-stat-val.pending { color: var(--accent-orange); font-weight: 700; font-size: 1.2rem; }
+
+        .top-company-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 14px;
+            background: var(--bg-card);
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            margin-top: 8px;
+            font-size: 0.9rem;
+        }
+
+        /* Responsividade para Telas Menores */
+        @media (max-width: 650px) {
+            .months-list-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 400px) {
+            .months-list-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="page-header">
+        <h1 id="page-title">
+            <ion-icon name="calendar-outline" style="color:var(--accent-orange);"></ion-icon>
+            Meses Registrados
+        </h1>
+        <button type="button" class="icon-btn" onclick="window.location.href='index.html'" title="Voltar para a página principal">
+            <ion-icon name="close-outline"></ion-icon>
+        </button>
+    </header>
+
+    <main id="panel-content"></main>
+
+    <script>
+        /* =========================================================
+           DívidaZero - Lógica do Painel em Grade
+           ========================================================= */
+        const safeFormatCurrency = (val) => 
+            val.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+        function getRegisteredDebts() {
+            const localData = localStorage.getItem('dz_debts') || localStorage.getItem('dividas') || localStorage.getItem('debts');
+            if (localData) {
+                try { return JSON.parse(localData); } catch (e) { console.error(e); }
+            }
+            return [];
+        }
+
+        function renderMonthsList() {
+            const allDebts = getRegisteredDebts();
+            const contentEl = document.getElementById('panel-content');
+            const titleEl = document.getElementById('page-title');
+
+            if (titleEl) {
+                titleEl.innerHTML = `<ion-icon name="calendar-outline" style="color:var(--accent-orange);"></ion-icon> Meses Registrados`;
+            }
+
+            const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+            const groupedMonths = {};
+
+            allDebts.forEach(debt => {
+                if (!debt.date) return;
+                const [year, month] = debt.date.split('-').map(Number);
+                const key = `${year}-${String(month).padStart(2, '0')}`;
+
+                if (!groupedMonths[key]) {
+                    groupedMonths[key] = { year, monthIndex: month - 1, total: 0, count: 0 };
+                }
+                groupedMonths[key].total += Number(debt.value) || 0;
+                groupedMonths[key].count += 1;
+            });
+
+            const keys = Object.keys(groupedMonths).sort((a, b) => b.localeCompare(a));
+
+            if (keys.length === 0) {
+                contentEl.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: var(--text-muted);">
+                        <ion-icon name="alert-circle-outline" style="font-size: 3rem; color: var(--accent-orange);"></ion-icon>
+                        <p style="margin-top: 12px; font-weight: 600; font-size: 1.1rem;">Nenhum mês registrado no sistema.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Maior mês acumulado
+            let highestMonth = null;
+            keys.forEach(key => {
+                const item = groupedMonths[key];
+                if (!highestMonth || item.total > highestMonth.total) {
+                    highestMonth = { ...item, key };
+                }
+            });
+
+            // Card FIXO no Topo
+            let topBannerHtml = '';
+            if (highestMonth) {
+                topBannerHtml = `
+                    <div class="top-record-card">
+                        <div class="top-record-header">
+                            <ion-icon name="trophy-outline"></ion-icon> Maior Mês Registrado (Recorde)
+                        </div>
+                        <div class="top-record-body">
+                            <div>
+                                <div class="top-record-title">
+                                    ${monthNames[highestMonth.monthIndex]} / ${highestMonth.year}
+                                </div>
+                                <small style="color: var(--text-muted);">${highestMonth.count} registro(s)</small>
+                            </div>
+                            <div class="top-record-value">
+                                ${safeFormatCurrency(highestMonth.total)}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Gráfico Comparativo
+            const maxVal = highestMonth ? highestMonth.total : 1;
+            const chartHtml = `
+                <div class="chart-container">
+                    <span style="font-size:0.8rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px;">Gráfico Comparativo</span>
+                    <div style="margin-top:12px;">
+                        ${keys.map(key => {
+                            const item = groupedMonths[key];
+                            const percent = Math.min(100, Math.round((item.total / maxVal) * 100));
+                            return `
+                                <div class="chart-bar-item">
+                                    <div class="chart-bar-header">
+                                        <span>${monthNames[item.monthIndex]} ${item.year}</span>
+                                        <strong>${safeFormatCurrency(item.total)}</strong>
+                                    </div>
+                                    <div class="chart-bar-track">
+                                        <div class="chart-bar-fill" style="width: ${percent}%;"></div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+
+            // Grade de Cards (🔲🔲🔲)
+            const listHtml = keys.map(key => {
+                const item = groupedMonths[key];
+                const isHighest = highestMonth && highestMonth.key === key;
+                return `
+                    <div class="month-select-card ${isHighest ? 'is-record' : ''}" data-key="${key}">
+                        <div class="month-card-name">
+                            <span>${monthNames[item.monthIndex]} ${item.year}</span>
+                            ${isHighest ? '<span class="record-tag">Maior</span>' : ''}
+                        </div>
+                        <div style="width: 100%; margin-top: 12px;">
+                            <div style="font-weight:700; color:var(--accent-orange); font-size:1.05rem;">${safeFormatCurrency(item.total)}</div>
+                            <small style="color:var(--text-muted); font-size:0.75rem;">${item.count} registro(s)</small>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            contentEl.innerHTML = topBannerHtml + chartHtml + `<div class="months-list-container">${listHtml}</div>`;
+
+            document.querySelectorAll('.month-select-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const key = card.getAttribute('data-key');
+                    renderMonthDetails(key);
+                });
+            });
+        }
+
+        function renderMonthDetails(key) {
+            const allDebts = getRegisteredDebts();
+            const contentEl = document.getElementById('panel-content');
+            const titleEl = document.getElementById('page-title');
+            const [targetYear, targetMonth] = key.split('-').map(Number);
+
+            const monthNames = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
+
+            if (titleEl) {
+                titleEl.innerHTML = `Resumo de ${monthNames[targetMonth - 1]}`;
+            }
+
+            const monthDebts = allDebts.filter(debt => {
+                if (!debt.date) return false;
+                const [year, month] = debt.date.split('-').map(Number);
+                return year === targetYear && month === targetMonth;
+            });
+
+            let totalValue = 0, totalPaid = 0, totalPending = 0;
+            let highestExpense = { value: 0, description: 'Nenhuma', company: 'Outros' };
+            const companiesMap = {};
+
+            monthDebts.forEach(debt => {
+                const val = Number(debt.value) || 0;
+                totalValue += val;
+
+                if (val > highestExpense.value) {
+                    highestExpense = { value: val, description: debt.description || 'Despesa', company: debt.company || 'Outros' };
+                }
+
+                if (debt.paid) totalPaid += val;
+                else totalPending += val;
+
+                const companyName = debt.company || debt.description || 'Outros';
+                companiesMap[companyName] = (companiesMap[companyName] || 0) + val;
+            });
+
+            const companiesHtml = Object.entries(companiesMap)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 3)
+                .map(([comp, val]) => `
+                    <div class="top-company-item">
+                        <span><ion-icon name="business-outline" style="color:var(--primary-color)"></ion-icon> ${comp}</span>
+                        <strong>${safeFormatCurrency(val)}</strong>
+                    </div>
+                `).join('');
+
+            contentEl.innerHTML = `
+                <button type="button" class="btn-back-nav" id="btn-back-to-months">
+                    <ion-icon name="arrow-back-outline"></ion-icon> Voltar aos Meses
+                </button>
+
+                <div class="top-month-banner">
+                    <span style="font-size:0.8rem; color:var(--text-muted); font-weight:600; text-transform:uppercase;">Total do Mês</span>
+                    <div class="top-month-total">${safeFormatCurrency(totalValue)}</div>
+                    <small style="color:var(--text-muted);">${monthDebts.length} dívida(s)</small>
+                </div>
+
+                <div class="top-stat-box" style="border-left: 4px solid var(--accent-orange);">
+                    <span style="font-size:0.75rem; color:var(--text-muted); font-weight:600;">Maior Gasto do Mês</span>
+                    <div style="color:var(--accent-orange); font-weight:700; font-size:1.2rem; margin-top:2px;">
+                        ${safeFormatCurrency(highestExpense.value)}
+                    </div>
+                    <small style="font-size:0.8rem; color:var(--text-muted);">${highestExpense.description} (${highestExpense.company})</small>
+                </div>
+
+                <div class="top-month-stats">
+                    <div class="top-stat-box">
+                        <span style="font-size:0.75rem; color:var(--text-muted); font-weight:600;">Total Pago</span>
+                        <div class="top-stat-val paid">${safeFormatCurrency(totalPaid)}</div>
+                    </div>
+                    <div class="top-stat-box">
+                        <span style="font-size:0.75rem; color:var(--text-muted); font-weight:600;">Total Pendente</span>
+                        <div class="top-stat-val pending">${safeFormatCurrency(totalPending)}</div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 14px;">
+                    <span style="font-size:0.85rem; font-weight:700; color:var(--text-muted);">Maiores Detalhamentos:</span>
+                    ${companiesHtml}
+                </div>
+            `;
+
+            document.getElementById('btn-back-to-months')?.addEventListener('click', renderMonthsList);
+        }
+
+        document.addEventListener('DOMContentLoaded', renderMonthsList);
+    </script>
+</body>
+</html>

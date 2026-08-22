@@ -1,5 +1,15 @@
 const systemUpdates = [
     {
+    version: "1.3.0",
+    status: "Estável",
+    date: "23/08/2026",
+    description: [
+        "novo sistema se apagar dívida."
+    
+    ],
+    url: "https://teddyws1.github.io/DividaZero/"
+},
+    {
     version: "1.2.2",
     status: "Estável",
     date: "20/08/2026",

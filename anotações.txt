@@ -6,7 +6,8 @@
 -294pq CICLO DO FOOTER — ARRASTE VERTICAL  
 -004n ids aleatórios
 -49kk Instalação PWA
-
+-402IV mês do ano 
+-41UV Botão no menu da página principal
 
 
 

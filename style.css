@@ -52,7 +52,7 @@
         /* 1.3 CABEÇALHO DO APLICATIVO (HEADER) [-006Hd] */
         .app-header {
             background-color: var(--header-bg);
-            color: #ffffff;
+            color: #FFFFFF;
             padding: 14px 18px;
             display: flex;
             align-items: center;
