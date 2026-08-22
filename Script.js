@@ -100,30 +100,23 @@ document.addEventListener('DOMContentLoaded', () => {
         btnCloseModalDeveloper: document.getElementById('btn-close-modal-developer'),
         btnCopyDevContact: document.getElementById('btn-copy-dev-contact')
     };
-//////////////////////////////////////
-//
-// -004n ids aleatórios 
-//
-/////////////////////////////////////
+
+    // Gera ID no formato: 000-JG
     function generateRandomID() {
-    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    const numbers = "0123456789";
-    let numPart = "";
-    let letterPart = "";
+        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        const numbers = "0123456789";
+        let numPart = "";
+        let letterPart = "";
 
-    // Gera 3 números
-    for (let i = 0; i < 3; i++) {
-        numPart += numbers.charAt(Math.floor(Math.random() * numbers.length));
+        for (let i = 0; i < 3; i++) {
+            numPart += numbers.charAt(Math.floor(Math.random() * numbers.length));
+        }
+        for (let i = 0; i < 2; i++) {
+            letterPart += letters.charAt(Math.floor(Math.random() * letters.length));
+        }
+
+        return `${numPart}-${letterPart}`;
     }
-
-    // Gera 2 letras maiúsculas
-    for (let i = 0; i < 2; i++) {
-        letterPart += letters.charAt(Math.floor(Math.random() * letters.length));
-    }
-
-    return `${numPart}-${letterPart}`;
-}
-
 
     function saveData() {
         localStorage.setItem('dz_debts', JSON.stringify(state.debts));
@@ -154,6 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const year = state.currentDate.getFullYear();
         dom.currentMonthDisplay.textContent = `${month} / ${year}`;
     }
+
     function renderDebts() {
         updateMonthDisplay();
         dom.debtsContainer.innerHTML = '';
@@ -260,7 +254,6 @@ document.addEventListener('DOMContentLoaded', () => {
         dom.footerBalance.textContent = formatCurrency(pendingVal);
         dom.footerTotal.textContent = formatCurrency(totalVal);
     }
-
     function openEditModal(debt) {
         dom.editExpenseId.value = debt.id;
 
@@ -419,7 +412,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // •049At APLICAR TEMA
     function applyTheme(theme) {
         state.theme = theme;
         if (theme === 'dark') {
@@ -495,7 +487,7 @@ document.addEventListener('DOMContentLoaded', () => {
         openModal(dom.modalUpdates);
     });
 
-    // SISTEMA DE CLEAN (EXCLUSÃO TOTAL DE DÍVIDAS)
+    // SISTEMA DE CLEAN COM MODAL CUSTOMIZADO
     if (dom.menuItemClean) {
         dom.menuItemClean.addEventListener('click', () => {
             toggleSidebar(false);
@@ -505,66 +497,42 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-      if (dom.menuItemClean) {
-    dom.menuItemClean.addEventListener('click', () => {
-        toggleSidebar(false);
-
-        if (state.debts.length === 0) {
-            showToast("Nenhuma dívida para apagar.", "error");
-            return;
-        }
-
-        // Cria o HTML do Modal dinamicamente via JS
-        const modalOverlay = document.createElement('div');
-        modalOverlay.className = 'custom-modal-overlay active';
-        modalOverlay.innerHTML = `
-            <div class="custom-modal-box">
-                <div class="custom-modal-icon">⚠️</div>
-                <h3 class="custom-modal-title">ATENÇÃO!</h3>
-                <p class="custom-modal-message">
-                    Tem certeza que deseja apagar <strong>TODAS</strong> as dívidas registradas?<br>
-                    Esta ação não poderá ser desfeita.
-                </p>
-                <div class="custom-modal-actions">
-                    <button id="btn-modal-cancel" class="btn-modal-secondary">Cancelar</button>
-                    <button id="btn-modal-confirm" class="btn-modal-danger">Apagar Tudo</button>
+            const modalOverlay = document.createElement('div');
+            modalOverlay.className = 'custom-modal-overlay active';
+            modalOverlay.innerHTML = `
+                <div class="custom-modal-box">
+                    <div class="custom-modal-icon">⚠️</div>
+                    <h3 class="custom-modal-title">ATENÇÃO!</h3>
+                    <p class="custom-modal-message">
+                        Tem certeza que deseja apagar <strong>TODAS</strong> as dívidas registradas?<br>
+                        Esta ação não poderá ser desfeita.
+                    </p>
+                    <div class="custom-modal-actions">
+                        <button id="btn-modal-cancel" class="btn-modal-secondary">Cancelar</button>
+                        <button id="btn-modal-confirm" class="btn-modal-danger">Apagar Tudo</button>
+                    </div>
                 </div>
-            </div>
-        `;
+            `;
 
-        document.body.appendChild(modalOverlay);
+            document.body.appendChild(modalOverlay);
 
-        // Ação de Confirmar
-        modalOverlay.querySelector('#btn-modal-confirm').addEventListener('click', () => {
-            const totalApagado = state.debts.length;
-            state.debts = [];
-            addLog(`Todas as dívidas foram apagadas (${totalApagado} registros removidos).`);
-            saveData();
-            renderDebts();
-            showToast("Todas as dívidas foram removidas!");
-            modalOverlay.remove();
-        });
-
-        // Ação de Cancelar
-        modalOverlay.querySelector('#btn-modal-cancel').addEventListener('click', () => {
-            modalOverlay.remove();
-        });
-
-        // Fechar ao clicar fora da caixa
-        modalOverlay.addEventListener('click', (e) => {
-            if (e.target === modalOverlay) modalOverlay.remove();
-        });
-    });
-}
-
-            if (confirmacao) {
+            modalOverlay.querySelector('#btn-modal-confirm').addEventListener('click', () => {
                 const totalApagado = state.debts.length;
                 state.debts = [];
                 addLog(`Todas as dívidas foram apagadas (${totalApagado} registros removidos).`);
                 saveData();
                 renderDebts();
                 showToast("Todas as dívidas foram removidas!");
-            }
+                modalOverlay.remove();
+            });
+
+            modalOverlay.querySelector('#btn-modal-cancel').addEventListener('click', () => {
+                modalOverlay.remove();
+            });
+
+            modalOverlay.addEventListener('click', (e) => {
+                if (e.target === modalOverlay) modalOverlay.remove();
+            });
         });
     }
 
@@ -681,24 +649,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 `https://teddyws1.github.io/DividaZero/`;
 
             if (navigator.share) {
-                // Compartilhamento nativo (celulares com suporte a menu do sistema)
                 navigator.share({
                     title: 'DívidaZero - Detalhes da Dívida',
                     text: shareText
                 }).catch(() => { });
             } else {
-                // Redirecionamento direto para o WhatsApp
                 const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`;
-                
-                // Abre o WhatsApp em uma nova aba
                 const opened = window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
 
-                // Fallback caso o navegador bloqueie pop-ups
                 if (!opened) {
                     navigator.clipboard.writeText(shareText).then(() => {
                         showToast("Detalhes copiados para a área de transferência!");
-                    }).catch(() => {
-           
                     });
                 }
             }
@@ -718,15 +679,35 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // EXPORTAÇÃO INTELIGENTE (Exporta a primeira vez com ID único e atualiza o estado)
     dom.menuItemExport.addEventListener('click', () => {
-        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state, null, 2));
+        let fileId = localStorage.getItem('dz_export_file_id');
+        
+        if (!fileId) {
+            fileId = `DividaZero_Backup_${new Date().toISOString().slice(0, 10)}.json`;
+            localStorage.setItem('dz_export_file_id', fileId);
+        }
+
+        const exportPayload = {
+            exportMeta: {
+                fileId: fileId,
+                exportedAt: new Date().toISOString()
+            },
+            debts: state.debts,
+            logs: state.logs,
+            theme: state.theme
+        };
+
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportPayload, null, 2));
         const downloadAnchor = document.createElement('a');
         downloadAnchor.setAttribute("href", dataStr);
-        downloadAnchor.setAttribute("download", `DividaZero_Backup_${new Date().toISOString().slice(0, 10)}.json`);
+        downloadAnchor.setAttribute("download", fileId);
         document.body.appendChild(downloadAnchor);
         downloadAnchor.click();
         downloadAnchor.remove();
+        
         addLog("Backup dos dados exportado com sucesso.");
+        showToast("Backup exportado com sucesso!");
     });
 
     dom.menuItemImport.addEventListener('click', () => {
@@ -744,15 +725,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (importedData.debts && Array.isArray(importedData.debts)) {
                     state.debts = importedData.debts;
                     state.logs = importedData.logs || [];
+                    
+                    if (importedData.exportMeta && importedData.exportMeta.fileId) {
+                        localStorage.setItem('dz_export_file_id', importedData.exportMeta.fileId);
+                    }
+
                     saveData();
                     renderDebts();
-                    alert('Dados importados com sucesso!');
+                    showToast("Dados importados com sucesso!");
                     addLog("Dados importados via arquivo JSON.");
                 } else {
-                    alert('Formato de arquivo JSON inválido.');
+                    showToast("Formato de arquivo JSON inválido.", "error");
                 }
             } catch (err) {
-                alert('Erro ao ler o arquivo JSON.');
+                showToast("Erro ao ler o arquivo JSON.", "error");
             }
         };
         reader.readAsText(file);
@@ -769,11 +755,6 @@ document.addEventListener('DOMContentLoaded', () => {
     applyTheme(state.theme);
     renderDebts();
 });
-//////////////////////////////////////
-//
-// -49kk Instalação PWA
-//
-/////////////////////////////////////
 
 let deferredPrompt = null;
 const installApp = document.getElementById("installApp");
@@ -803,7 +784,6 @@ window.addEventListener("appinstalled", () => {
     }
 });
 
-// Compartilhamento e utilitários
 const DIVIDA_ZERO_URL = "https://teddyws1.github.io/DividaZero/";
 const DIVIDA_ZERO_TITLE = "DívidaZero - Gestão Inteligente de Dívidas";
 const DIVIDA_ZERO_MESSAGE = "Conheça o DívidaZero — Gestão Inteligente de Dívidas.";
@@ -860,7 +840,7 @@ if (shareInstagram) {
                 });
             } else {
                 await navigator.clipboard.writeText(DIVIDA_ZERO_URL);
-                alert("Link do DívidaZero copiado!");
+                showToast("Link do DívidaZero copiado!");
             }
         } catch (error) {
             if (error.name !== "AbortError") {
@@ -927,7 +907,6 @@ function showToast(message, type = "success") {
     }, 2500);
 }
 
-// Drawer do Footer
 document.addEventListener("DOMContentLoaded", () => {
     const drawer = document.getElementById("footer-drawer");
     const handle = document.getElementById("footer-drag-handle");
