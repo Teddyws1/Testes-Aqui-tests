@@ -57,7 +57,7 @@
   --custom-overlay-bg: rgba(0, 0, 0, 0.6);
   --custom-modal-title: #e63946;
   --btn-secondary-bg: #e0e0e0;
-  
+
   /* Extras extraídos do miolo do código */
   --header-title-grad: #a7f3d0;
   --month-navigator-shadow: rgba(0, 0, 0, 0.1);
@@ -106,7 +106,7 @@
   --sidebar-item-active-bg: #0f172a;
   --custom-overlay-bg: rgba(0, 0, 0, 0.8);
   --btn-secondary-bg: #334155;
-  
+
   --header-title-grad: #a7f3d0;
   --month-navigator-shadow: rgba(0, 0, 0, 0.1);
   --social-insta-bg: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);

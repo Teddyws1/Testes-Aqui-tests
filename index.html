@@ -20,12 +20,17 @@
         href="https://i.postimg.cc/1XBThB5s/Picsart-26-08-16-10-16-48-167.jpg"
     >
 
-    <link rel="stylesheet" href="style.css?v=03">
-    <link rel="stylesheet" href="roots.css?v=03">
+    <link rel="stylesheet" href="style.css?v=04">
+    <link rel="stylesheet" href="roots.css?v=04">
 
- <link rel="stylesheet" href="responsivo.css?v=03">
+ <link rel="stylesheet" href="responsivo.css?v=04">
 
     <link rel="manifest" href="manifest.json">
+<!-- Favicon Principal (Aba do navegador e Android) -->
+    <link rel="icon" type="image/jpeg" href="https://i.postimg.cc/wxDZMkFH/Picsart-26-08-16-12-23-02-954.jpg">
+    
+    <!-- Apple Touch Icon (Para iPhones e iPads ao adicionar à tela de início) -->
+    <link rel="apple-touch-icon" href="https://i.postimg.cc/wxDZMkFH/Picsart-26-08-16-12-23-02-954.jpg">
 
     <meta name="theme-color" content="#0f172a">
     <meta name="mobile-web-app-capable" content="yes">
@@ -129,34 +134,20 @@
 
         <!-- [-009Mn] NAVEGADOR DE MESES -->
 
-        <nav class="month-navigator">
+   <nav class="month-navigator">
+    <button type="button" class="icon-btn" id="btn-prev-month" aria-label="Mês anterior">
+        <ion-icon name="chevron-back-outline"></ion-icon>
+    </button>
 
-            <button
-                type="button"
-                class="icon-btn"
-                id="btn-prev-month"
-                aria-label="Mês anterior"
-            >
-                <ion-icon name="chevron-back-outline"></ion-icon>
-            </button>
+    <div class="month-display" id="current-month-display">
+        agosto / 2026
+    </div>
 
-            <div
-                class="month-display"
-                id="current-month-display"
-            >
-                agosto / 2026
-            </div>
+    <button type="button" class="icon-btn" id="btn-next-month" aria-label="Próximo mês">
+        <ion-icon name="chevron-forward-outline"></ion-icon>
+    </button>
+</nav>
 
-            <button
-                type="button"
-                class="icon-btn"
-                id="btn-next-month"
-                aria-label="Próximo mês"
-            >
-                <ion-icon name="chevron-forward-outline"></ion-icon>
-            </button>
-
-        </nav>
 
 
         <!-- [-010Sb] BARRA DE PESQUISA -->
@@ -670,63 +661,11 @@
                         >
 
                             <option value="Outros">
-                                Outros / Geral
-                            </option>
-
-                            <option value="Vivo">
-                                Vivo
-                            </option>
-
-                            <option value="Claro">
-                                Claro
-                            </option>
-
-                            <option value="TIM">
-                                TIM
-                            </option>
-
-                            <option value="Nubank">
-                                Nubank
-                            </option>
-
-                            <option value="Itaú">
-                                Itaú
-                            </option>
-
-                            <option value="Bradesco">
-                                Bradesco
-                            </option>
-
-                            <option value="Santander">
-                                Santander
-                            </option>
-
-                            <option value="Caixa">
-                                Caixa
-                            </option>
-
-                            <option value="Energia (Enel/Equatorial)">
-                                Energia (Enel/Equatorial)
-                            </option>
-
-                            <option value="Água / Saneamento">
-                                Água / Saneamento
-                            </option>
-
-                            <option value="Internet / Fibra">
-                                Internet / Fibra
-                            </option>
-
-                            <option value="Supermercado">
-                                Supermercado
-                            </option>
-
-                            <option value="Aluguel / Condomínio">
-                                Aluguel / Condomínio
+                               Outras Origens
                             </option>
 
                             <option value="custom">
-                                + Digitar outra empresa...
+                            nova empresa...
                             </option>
 
                         </select>
@@ -1270,13 +1209,13 @@
 
     <!-- [-015Js] SCRIPTS -->
 
-<script src="Script.js?v=03" defer></script>
+<script src="Script.js?v=04" defer></script>
 
-<script src="versoes.js?v=03" defer></script>
+<script src="versoes.js?v=04" defer></script>
 
-<script src="js-das-versoes.js?v=03" defer></script>
+<script src="js-das-versoes.js?v=04" defer></script>
 
-<script src="style.js?v=03" defer></script>
+<script src="style.js?v=04" defer></script>
 
 </body>
 </html>

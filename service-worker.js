@@ -2,7 +2,7 @@
 // -003PC : SERVICE WORKER PWA
 // ////////////////////////////////////////
 
-const CACHE_NAME = "DívidaZero-03";
+const CACHE_NAME = "DívidaZero-04";
 
 const FILES_TO_CACHE = [
   "./",
@@ -10,7 +10,8 @@ const FILES_TO_CACHE = [
   "./style.css",
   "./roots.css",
   "./Script.js",
-  "./manifest.json"
+  "./manifest.json",
+  "./js-das-versoes.js"
 ];
 
 self.addEventListener("install", (event) => {

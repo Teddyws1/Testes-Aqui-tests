@@ -1,8 +1,20 @@
 const systemUpdates = [
+      {
+      version: "1.4.1",
+      status: "Estável",
+      date: "23/08/2026",
+      description: [
+          "novo sistema de animação para trocar de páginas",
+          "sistema de scrol ↔️",
+          "botão para Theme claro/escuro ",
+        "novo visual em algumas partes"
+      ],
+      url: "https://teddyws1.github.io/DividaZero/"
+  },
     {
-    version: "1.3.0",
+    version: "1.4.0",
     status: "Estável",
-    date: "23/08/2026",
+    date: "22/08/2026",
     description: [
   "novo sistema para exclusão de dívidas.",
 " novas aba de histórico.",
