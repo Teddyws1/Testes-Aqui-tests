@@ -154,9 +154,117 @@ document.addEventListener('DOMContentLoaded', () => {
         saveData();
     }
 
-    function formatCurrency(val) {
-        return val.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    }
+    // • 01A — Moeda automática pelo navegador
+function getBrowserCurrency() {
+    const locale = navigator.language || 'en-US';
+    
+    const currencyByRegion = {
+        BR: 'BRL',
+        US: 'USD',
+        CA: 'CAD',
+        MX: 'MXN',
+        AR: 'ARS',
+        CL: 'CLP',
+        CO: 'COP',
+        PE: 'PEN',
+        UY: 'UYU',
+        PY: 'PYG',
+        BO: 'BOB',
+        EC: 'USD',
+        VE: 'VES',
+        
+        GB: 'GBP',
+        PT: 'EUR',
+        ES: 'EUR',
+        FR: 'EUR',
+        DE: 'EUR',
+        IT: 'EUR',
+        IE: 'EUR',
+        NL: 'EUR',
+        BE: 'EUR',
+        AT: 'EUR',
+        GR: 'EUR',
+        CH: 'CHF',
+        NO: 'NOK',
+        SE: 'SEK',
+        DK: 'DKK',
+        PL: 'PLN',
+        CZ: 'CZK',
+        HU: 'HUF',
+        RO: 'RON',
+        BG: 'BGN',
+        RU: 'RUB',
+        UA: 'UAH',
+        TR: 'TRY',
+        
+        JP: 'JPY',
+        CN: 'CNY',
+        KR: 'KRW',
+        IN: 'INR',
+        ID: 'IDR',
+        MY: 'MYR',
+        TH: 'THB',
+        VN: 'VND',
+        PH: 'PHP',
+        SG: 'SGD',
+        HK: 'HKD',
+        TW: 'TWD',
+        
+        AU: 'AUD',
+        NZ: 'NZD',
+        
+        ZA: 'ZAR',
+        EG: 'EGP',
+        NG: 'NGN',
+        KE: 'KES',
+        MA: 'MAD',
+        SA: 'SAR',
+        AE: 'AED',
+        IL: 'ILS',
+        
+        // Outros
+        IS: 'ISK',
+        HR: 'EUR',
+        RS: 'RSD',
+        AL: 'ALL',
+        BA: 'BAM',
+        MK: 'MKD',
+        GE: 'GEL',
+        AM: 'AMD',
+        AZ: 'AZN',
+        KZ: 'KZT',
+        PK: 'PKR',
+        BD: 'BDT',
+        LK: 'LKR',
+        NP: 'NPR',
+        IQ: 'IQD',
+        IR: 'IRR',
+        QA: 'QAR',
+        KW: 'KWD',
+        BH: 'BHD',
+        OM: 'OMR'
+    };
+    
+    // Extrai o país do locale: pt-BR → BR
+    const parts = locale.split('-');
+    const region = parts.length > 1 ?
+        parts[parts.length - 1].toUpperCase() :
+        null;
+    
+    return currencyByRegion[region] || 'USD';
+}
+
+
+// • 02A — Formatação automática
+function formatCurrency(val) {
+    const locale = navigator.language || 'en-US';
+    const currency = getBrowserCurrency();
+    
+    return Number(val).toLocaleString(locale, {
+        style: 'currency',
+        currency
+    });
+}
 
 //////////////////////////////////////
 //
@@ -183,9 +291,12 @@ function updateMonthDisplay() {
     const monthNumber = state.currentDate.getMonth() + 1;
     const year = state.currentDate.getFullYear();
     
-    dom.currentMonthDisplay.textContent =
-        `${month} ${monthNumber} / ${year}`;
+    dom.currentMonthDisplay.innerHTML = `
+        <ion-icon name="calendar-number-outline"></ion-icon>
+        <span>${month} ${monthNumber} / ${year}</span>
+    `;
 }
+
     //////////////////////////////////////
     //
     // - RENDERIZAÇÃO DE DÍVIDAS
@@ -1123,3 +1234,189 @@ document.addEventListener("DOMContentLoaded", () => {
     currentPosition = drawerHeight;
     drawer.style.transform = `translateY(${drawerHeight}px)`;
 });
+
+/////////////////////////////////////
+//
+// -029LO sistema de Scroll entre páginas 
+//
+////////////////////////////////////
+let bookSwipeStartX = 0;
+let bookSwipeStartY = 0;
+let bookMouseIsDown = false;
+let bookMouseStartX = 0;
+let bookMouseStartY = 0;
+let bookIsSwiping = false;
+
+function isAnyModalOrSidebarOpen() {
+    const activeModal = document.querySelector(
+        '.modal.active, .modal.show, .modal[style*="display: block"]'
+    );
+
+    const activeSidebar = document.querySelector(
+        '.sidebar.active, .sidebar.open, .drawer.open'
+    );
+
+    const activeCard = document.querySelector(
+        '.debt-card.expanded, .card.open'
+    );
+
+    return (
+        activeModal !== null ||
+        activeSidebar !== null ||
+        activeCard !== null
+    );
+}
+
+// Toque (Mobile) - Otimizado para resposta imediata
+window.addEventListener(
+    'touchstart',
+    (e) => {
+        if (isAnyModalOrSidebarOpen()) return;
+
+        if (e.touches && e.touches.length === 1) {
+            bookSwipeStartX = e.touches[0].clientX;
+            bookSwipeStartY = e.touches[0].clientY;
+            bookIsSwiping = true;
+            document.body.style.transition = 'none';
+        }
+    },
+    { passive: true }
+);
+
+window.addEventListener(
+    'touchmove',
+    (e) => {
+        if (!bookIsSwiping) return;
+        if (!e.touches || e.touches.length === 0) return;
+
+        const currentX = e.touches[0].clientX;
+        const currentY = e.touches[0].clientY;
+
+        const diffX = bookSwipeStartX - currentX;
+        const diffY = Math.abs(bookSwipeStartY - currentY);
+
+        // Se o usuário inclinar muito para cima ou para baixo, cancela o swipe lateral
+        if (diffY > 80) {
+            bookIsSwiping = false;
+            document.body.style.transform = 'translateX(0)';
+            return;
+        }
+
+        // Acompanhamento leve e fluido do dedo na horizontal
+        document.body.style.transform = `translateX(${-diffX * 0.5}px)`;
+    },
+    { passive: true }
+);
+
+window.addEventListener(
+    'touchend',
+    (e) => {
+        if (isAnyModalOrSidebarOpen()) return;
+        if (!bookIsSwiping) return;
+
+        if (!e.changedTouches || e.changedTouches.length === 0) {
+            bookIsSwiping = false;
+            return;
+        }
+
+        const swipeEndX = e.changedTouches[0].clientX;
+        const diffX = bookSwipeStartX - swipeEndX;
+
+        // Reduzido para 90px para disparar a troca de aba mais rápido e sem esforço
+        const threshold = 90;
+
+        if (Math.abs(diffX) > threshold) {
+            triggerBookPageTurn(diffX > 0 ? 'next' : 'prev');
+        } else {
+            // Volta suavemente se arrastar pouco
+            document.body.style.transition = 'transform 0.2s ease';
+            document.body.style.transform = 'translateX(0)';
+        }
+
+        bookIsSwiping = false;
+    },
+    { passive: true }
+);
+
+// Mouse (PC)
+window.addEventListener(
+    'mousedown',
+    (e) => {
+        if (isAnyModalOrSidebarOpen()) return;
+        if (e.target.closest('button') || e.target.closest('input')) return;
+
+        bookMouseIsDown = true;
+        bookMouseStartX = e.clientX;
+        bookMouseStartY = e.clientY;
+        bookIsSwiping = true;
+        document.body.style.transition = 'none';
+    }
+);
+
+window.addEventListener(
+    'mousemove',
+    (e) => {
+        if (!bookMouseIsDown || !bookIsSwiping) return;
+
+        const diffX = bookMouseStartX - e.clientX;
+        const diffY = Math.abs(bookMouseStartY - e.clientY);
+
+        if (diffY > 80) {
+            bookIsSwiping = false;
+            document.body.style.transform = 'translateX(0)';
+            return;
+        }
+
+        document.body.style.transform = `translateX(${-diffX * 0.5}px)`;
+    }
+);
+
+window.addEventListener(
+    'mouseup',
+    (e) => {
+        if (!bookMouseIsDown) return;
+        if (isAnyModalOrSidebarOpen()) {
+            bookMouseIsDown = false;
+            return;
+        }
+
+        const diffX = bookMouseStartX - e.clientX;
+        const threshold = 90;
+
+        if (Math.abs(diffX) > threshold) {
+            triggerBookPageTurn(diffX > 0 ? 'next' : 'prev');
+        } else {
+            document.body.style.transition = 'transform 0.2s ease';
+            document.body.style.transform = 'translateX(0)';
+        }
+
+        bookMouseIsDown = false;
+        bookIsSwiping = false;
+    }
+);
+
+function triggerBookPageTurn(direction) {
+    if (isAnyModalOrSidebarOpen()) return;
+
+    document.body.style.transition = 'transform 0.25s ease-out';
+    
+    // Joga a tela rapidamente para fora na direção do arraste
+    if (direction === 'next') {
+        document.body.style.transform = 'translateX(-100vw)';
+    } else {
+        document.body.style.transform = 'translateX(100vw)';
+    }
+
+    // Tempo de resposta reduzido para 250ms (muito mais rápido e sem travamentos)
+    setTimeout(() => {
+        window.location.href = 'painel-resumo.html';
+    }, 250);
+}
+
+
+
+/////////////////////////////////////
+//
+// - fim do js 
+//
+////////////////////////////////////
