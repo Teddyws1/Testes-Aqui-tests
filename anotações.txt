@@ -9,11 +9,10 @@
 -402IV mês do ano 
 -41UV Botão no menu da página principal
 -029LO sistema de Scroll entre páginas
-
-
-
-
-
+-513TT barra de pesquisa
+-208JJ botao adicionar nova despesas
+-920wq botao sobre site
+-013HGF Registrar o Service Worker para funcionar em segundo plano
 
 
 
@@ -28,7 +27,7 @@
 ============== [versões] ===============
 versoes 
 versao atual
-v=04
+v=05
 img.
 
 https://i.postimg.cc/wxDZMkFH/Picsart-26-08-16-12-23-02-954.jpg

@@ -158,40 +158,30 @@ document.addEventListener('DOMContentLoaded', () => {
         return val.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     }
 
-//////////////////////////////////////
-//
-// -402IV mês do ano 
-//
-/////////////////////////////////////
-function updateMonthDisplay() {
-    const monthNames = [
-        "janeiro",
-        "fevereiro",
-        "março",
-        "abril",
-        "maio",
-        "junho",
-        "julho",
-        "agosto",
-        "setembro",
-        "outubro",
-        "novembro",
-        "dezembro"
-    ];
-    
-    const month = monthNames[state.currentDate.getMonth()];
-    const monthNumber = state.currentDate.getMonth() + 1;
-    const year = state.currentDate.getFullYear();
-    
-    dom.currentMonthDisplay.innerHTML = `
-        <ion-icon name="calendar-number-outline"></ion-icon>
-        <span>${month} ${monthNumber} / ${year}</span>
-    `;
-}
+    //////////////////////////////////////
+    //
+    // - MÊS DO ANO 
+    //
+    /////////////////////////////////////
+    function updateMonthDisplay() {
+        const monthNames = [
+            "janeiro", "fevereiro", "março", "abril", "maio", "junho",
+            "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"
+        ];
+        
+        const month = monthNames[state.currentDate.getMonth()];
+        const monthNumber = state.currentDate.getMonth() + 1;
+        const year = state.currentDate.getFullYear();
+        
+        dom.currentMonthDisplay.innerHTML = `
+            <ion-icon name="calendar-number-outline"></ion-icon>
+            <span>${month} ${monthNumber} / ${year}</span>
+        `;
+    }
 
     //////////////////////////////////////
     //
-    // - RENDERIZAÇÃO DE DÍVIDAS
+    // -513TT barra de pesquisa: RENDERIZAÇÃO E FILTRAGEM (TEXTO, ID, EMPRESA E VALORES)
     //
     //////////////////////////////////////
     function renderDebts() {
@@ -203,15 +193,25 @@ function updateMonthDisplay() {
 
         let mappedDebts = state.debts.map((d, index) => ({ ...d, originalIndex: index }));
 
+        // -513TT barra de pesquisa: Aplicação do filtro conectado com o input de busca
         let filteredDebts = mappedDebts.filter(debt => {
             const debtDate = new Date(debt.date + 'T00:00:00');
             const matchesDate = debtDate.getMonth() === currentMonth && debtDate.getFullYear() === currentYear;
 
-            const query = state.filterQuery.toLowerCase();
+            const query = state.filterQuery.toLowerCase().trim();
             const company = (debt.company || 'Outros').toLowerCase();
-            const matchesQuery = debt.description.toLowerCase().includes(query) ||
+            
+            // Tratamento otimizado para buscar valores por número ou texto formatado
+            const debtValueStr = debt.value.toString();
+            const debtValueFormatted = debt.value.toFixed(2).replace('.', ',');
+            const cleanQuery = query.replace('r$', '').replace(/\s+/g, '').replace('.', ',');
+
+            const matchesQuery = 
+                debt.description.toLowerCase().includes(query) ||
                 debt.id.toLowerCase().includes(query) ||
-                company.includes(query);
+                company.includes(query) ||
+                debtValueStr.includes(query) ||
+                debtValueFormatted.includes(cleanQuery);
 
             return matchesDate && matchesQuery;
         });
@@ -308,7 +308,7 @@ function updateMonthDisplay() {
 
     //////////////////////////////////////
     //
-    // - MANIPULAÇÃO DE MODAIS E INTERFAZ
+    // - MANIPULAÇÃO DE MODAIS E INTERFACE
     //
     //////////////////////////////////////
     function openEditModal(debt) {
@@ -617,6 +617,9 @@ function updateMonthDisplay() {
         renderDebts();
     });
 
+    //////////////////////////////////////
+    // -513TT barra de pesquisa: Listener do input que ativa o sistema de busca em tempo real
+    //////////////////////////////////////
     dom.searchInput.addEventListener('input', (e) => {
         state.filterQuery = e.target.value;
         renderDebts();
@@ -1129,7 +1132,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 /////////////////////////////////////
 //
-// -029LO sistema de Scroll entre páginas 
+// - SISTEMA DE SCROLL ENTRE PÁGINAS 
 //
 ////////////////////////////////////
 let bookSwipeStartX = 0;
@@ -1159,7 +1162,6 @@ function isAnyModalOrSidebarOpen() {
     );
 }
 
-// Toque (Mobile) - Otimizado para resposta imediata
 window.addEventListener(
     'touchstart',
     (e) => {
@@ -1187,14 +1189,12 @@ window.addEventListener(
         const diffX = bookSwipeStartX - currentX;
         const diffY = Math.abs(bookSwipeStartY - currentY);
 
-        // Se o usuário inclinar muito para cima ou para baixo, cancela o swipe lateral
         if (diffY > 80) {
             bookIsSwiping = false;
             document.body.style.transform = 'translateX(0)';
             return;
         }
 
-        // Acompanhamento leve e fluido do dedo na horizontal
         document.body.style.transform = `translateX(${-diffX * 0.5}px)`;
     },
     { passive: true }
@@ -1214,13 +1214,11 @@ window.addEventListener(
         const swipeEndX = e.changedTouches[0].clientX;
         const diffX = bookSwipeStartX - swipeEndX;
 
-        // Reduzido para 90px para disparar a troca de aba mais rápido e sem esforço
         const threshold = 90;
 
         if (Math.abs(diffX) > threshold) {
             triggerBookPageTurn(diffX > 0 ? 'next' : 'prev');
         } else {
-            // Volta suavemente se arrastar pouco
             document.body.style.transition = 'transform 0.2s ease';
             document.body.style.transform = 'translateX(0)';
         }
@@ -1230,7 +1228,6 @@ window.addEventListener(
     { passive: true }
 );
 
-// Mouse (PC)
 window.addEventListener(
     'mousedown',
     (e) => {
@@ -1292,23 +1289,50 @@ function triggerBookPageTurn(direction) {
 
     document.body.style.transition = 'transform 0.25s ease-out';
     
-    // Joga a tela rapidamente para fora na direção do arraste
     if (direction === 'next') {
         document.body.style.transform = 'translateX(-100vw)';
     } else {
         document.body.style.transform = 'translateX(100vw)';
     }
 
-    // Tempo de resposta reduzido para 250ms (muito mais rápido e sem travamentos)
     setTimeout(() => {
         window.location.href = 'painel-resumo.html';
     }, 250);
 }
 
+/////////////////////////////////////
+//
+// -013HGF Registrar o Service Worker para funcionar em segundo plano 
+//
+////////////////////////////////////
 
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+            .then(reg => {
+                console.log('Service Worker registrado com sucesso:', reg.scope);
+            })
+            .catch(err => {
+                console.warn('Falha ao registrar o Service Worker:', err);
+            });
+    });
+}
+
+function enviarNotificacaoBackground(titulo, mensagem) {
+    if ('serviceWorker' in navigator && Notification.permission === 'granted') {
+        navigator.serviceWorker.ready.then(registration => {
+            registration.showNotification(titulo, {
+                body: mensagem,
+                icon: 'favicon.ico',
+                badge: 'favicon.ico',
+                vibrate: [200, 100, 200]
+            });
+        });
+    }
+}
 
 /////////////////////////////////////
 //
-// - fim do js 
+// - FIM DO JS 
 //
 ////////////////////////////////////

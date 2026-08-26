@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<!-- 291TG-html-root -->
+<html lang="pt-BR">
+<head>
+    <!-- 291TG-head-config -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sobre o DívidaZero</title>
+    <!-- Ionicons -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <style>
+        /* 291TG-css-variaveis */
+        :root {
+          --accent-orange: #ea580c;
+          --color-titulo: #FFFFFF;
+          --primary-color: #059669;
+          --fubdo-do-theme: #0f172a;
+          --primary-dark: #047857;
+          --header-bg: #020617;
+          --bg-main: #090d16;
+          --bg-card: #1e293b;
+          --text-main: #f8fafc;
+          --text-muted: #94a3b8;
+          --border-color: #334155;
+          --shadow-color: rgba(0, 0, 0, 0.6);
+          
+          --text-white: #f8fafc;
+          --header-btn-bg: rgba(255, 255, 255, 0.05);
+          --header-btn-border: rgba(255, 255, 255, 0.1);
+          --header-btn-active: rgba(255, 255, 255, 0.2);
+          --tag-bg: rgba(5, 150, 105, 0.15);
+          --tag-border: rgba(5, 150, 105, 0.3);
+          --header-title-grad: #a7f3d0;
+          --github-bg: #24292f;
+          --github-hover-bg: #30363d;
+        }
+
+        /* 291TG-css-reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-user-select: text;
+            user-select: text;
+            touch-action: pan-x pan-y;
+        }
+
+        /* 291TG-css-interativos */
+        button, a, input, textarea {
+            touch-action: manipulation;
+        }
+
+        /* 291TG-css-body */
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            touch-action: pan-y;
+        }
+
+        /* 291TG-css-header */
+        header {
+            background-color: var(--header-bg);
+            color: var(--text-white);
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px var(--shadow-color);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        /* 291TG-css-header-title */
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+        }
+
+        .header-title ion-icon {
+            color: var(--primary-color);
+            font-size: 1.6rem;
+        }
+
+        /* 291TG-css-menu-item */
+        .menu-item {
+            text-decoration: none;
+            color: var(--text-white);
+            background-color: var(--header-btn-bg);
+            border: 1px solid var(--header-btn-border);
+            padding: 0.5rem 0.85rem;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+        }
+
+        .menu-item:hover {
+            background-color: var(--header-btn-active);
+            border-color: var(--primary-color);
+        }
+
+        /* 291TG-css-container */
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 1.5rem 1rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        /* 291TG-css-hero-card */
+        .hero-card {
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--fubdo-do-theme) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem 1.25rem;
+            box-shadow: 0 10px 25px -5px var(--shadow-color);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-orange));
+        }
+
+        .hero-card h1 {
+            color: var(--color-titulo);
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+            font-weight: 800;
+        }
+
+        .hero-card p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.6;
+            max-width: 700px;
+            margin: 0 auto 1.25rem auto;
+        }
+
+        /* 291TG-css-cta-btn */
+        .cta-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+
+        .cta-btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* 291TG-css-grid-section */
+        .grid-section {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.25rem;
+        }
+
+        @media (min-width: 768px) {
+            .grid-section {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .hero-card {
+                padding: 3rem 2rem;
+            }
+            .hero-card h1 {
+                font-size: 2.5rem;
+            }
+            header {
+                padding: 1.25rem 2rem;
+            }
+            .header-title {
+                font-size: 1.4rem;
+            }
+            .menu-item {
+                padding: 0.6rem 1.1rem;
+                font-size: 0.95rem;
+            }
+        }
+
+        /* 291TG-css-card */
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card h2 {
+            color: var(--color-titulo);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.6rem;
+        }
+
+        .card h2 ion-icon {
+            color: var(--primary-color);
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        /* 291TG-css-expandable */
+        .expandable-content {
+            max-height: 90px;
+            overflow: hidden;
+            position: relative;
+            transition: max-height 0.4s ease-in-out;
+        }
+
+        .expandable-content.expanded {
+            max-height: 1200px;
+        }
+
+        .expandable-content:not(.expanded)::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 35px;
+            background: linear-gradient(transparent, var(--bg-card));
+            pointer-events: none;
+        }
+
+        /* 291TG-css-toggle-btn */
+        .toggle-btn {
+            background: transparent;
+            border: none;
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            margin-top: 0.75rem;
+            padding: 0.2rem 0;
+            outline: none;
+            user-select: none;
+        }
+
+        .toggle-btn:hover {
+            color: var(--accent-orange);
+        }
+
+        /* 291TG-css-feature-list */
+        .feature-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-top: 0.5rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.65rem;
+            color: var(--text-muted);
+            font-size: 0.92rem;
+            line-height: 1.5;
+        }
+
+        .feature-item ion-icon {
+            color: var(--primary-color);
+            font-size: 1.15rem;
+            flex-shrink: 0;
+            margin-top: 0.1rem;
+        }
+
+        /* 291TG-css-tech-tags */
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .tech-tag {
+            background-color: var(--tag-bg);
+            border: 1px solid var(--tag-border);
+            color: var(--text-main);
+            padding: 0.35rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* 291TG-css-dev-card */
+        .dev-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 1.75rem 1.25rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .dev-card ion-icon {
+            font-size: 2.75rem;
+            color: var(--accent-orange);
+        }
+
+        /* 291TG-css-github-btn */
+        .github-btn {
+            background-color: var(--github-bg);
+            color: white;
+            border: 1px solid var(--border-color);
+            padding: 0.6rem 1.25rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background-color 0.2s ease;
+        }
+
+        .github-btn:hover {
+            background-color: var(--github-hover-bg);
+        }
+
+        /* 291TG-css-footer */
+        footer {
+            background-color: var(--header-bg);
+            color: var(--text-muted);
+            text-align: center;
+            padding: 1.25rem 1rem;
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: auto;
+        }
+
+        footer a {
+            color: var(--header-title-grad);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 291TG-html-header -->
+    <header>
+        <div class="header-title">
+            <ion-icon name="wallet-outline"></ion-icon>
+            <span>DívidaZero</span>
+        </div>
+        <!-- 291TG-btn-voltar -->
+        <a href="index.html" class="menu-item" id="291TG-btn-voltar-id">
+            <ion-icon name="arrow-back-outline"></ion-icon>
+            <span>volta</span>
+        </a>
+    </header>
+
+    <!-- 291TG-html-container -->
+    <div class="container" id="291TG-container-id">
+        
+        <!-- 291TG-hero-section -->
+        <div class="hero-card" id="291TG-hero-id">
+            <h1>💰 DívidaZero</h1>
+            <p>Sistema web desenvolvido para ajudar na organização, acompanhamento e controle de dívidas de forma simples e intuitiva.</p>
+            <!-- 291TG-cta-sistema -->
+            <a href="https://teddyws1.github.io/DividaZero/" class="cta-btn" id="291TG-cta-btn-id">
+                <span>DívidaZero — Abrir sistema</span>
+                <ion-icon name="open-outline"></ion-icon>
+            </a>
+        </div>
+
+        <!-- 291TG-card-objetivo -->
+        <div class="card" id="291TG-card-objetivo-id">
+            <h2>
+                <ion-icon name="flag-outline"></ion-icon> Objetivo do Projeto
+            </h2>
+            <div class="expandable-content" id="content-objetivo">
+                <p style="color: var(--text-muted); line-height: 1.6; font-size: 0.95rem;">
+                    Facilitar a visualização das dívidas e ajudar o usuário a acompanhar seu progresso até ficar livre delas. O DívidaZero transforma o controle financeiro em algo organizado e visual, permitindo alcançar o objetivo final: <strong>Dívida Zero</strong>. A proposta principal é eliminar o estresse gerado por anotações soltas, oferecendo um painel unificado com status claros de pagamentos, controle de valores e histórico detalhado para o seu dia a dia.
+                </p>
+            </div>
+            <!-- 291TG-btn-vermais-objetivo -->
+            <button class="toggle-btn" onclick="toggleSection('objetivo')" id="291TG-toggle-objetivo">
+                <span id="btn-text-objetivo">Ver mais</span>
+                <ion-icon name="chevron-down-outline" id="btn-icon-objetivo"></ion-icon>
+            </button>
+        </div>
+
+        <!-- 291TG-grid-section -->
+        <div class="grid-section" id="291TG-grid-id">
+            
+            <!-- 291TG-card-funcionalidades -->
+            <div class="card" id="291TG-card-func-id">
+                <h2>
+                    <ion-icon name="sparkles-outline"></ion-icon> Funcionalidades
+                </h2>
+                <div class="expandable-content" id="content-func">
+                    <ul class="feature-list">
+                        <li class="feature-item">
+                            <ion-icon name="card-outline"></ion-icon>
+                            <span>Cadastro e controle de dívidas</span>
+                        </li>
+                        <li class="feature-item">
+                            <ion-icon name="calculator-outline"></ion-icon>
+                            <span>Controlador de gastos diários</span>
+                        </li>
+                        <li class="feature-item">
+                            <ion-icon name="funnel-outline"></ion-icon>
+                            <span>Novo sistema de filtro na barra de pesquisa por VALORES</span>
+                        </li>
+                        <li class="feature-item">
+                            <ion-icon name="sparkles-outline"></ion-icon>
+                            <span>Novo sistema de animação para trocar de páginas</span>
+                        </li>
+                        <li class="feature-item">
+                            <ion-icon name="swap-horizontal-outline"></ion-icon>
+                            <span>Sistema de scroll horizontal e navegação fluida</span>
+                        </li>
+                        <li class="feature-item">
+                            <ion-icon name="trash-outline"></ion-icon>
+                            <span>Novo sistema para exclusão de dívidas</span>
+                        </li>
+                        <li class="feature-item">
+                            <ion-icon name="time-outline"></ion-icon>
+                            <span>Novas abas de histórico mensal</span>
+                        </li>
+                        <li class="feature-item">
+                            <ion-icon name="pie-chart-outline"></ion-icon>
+                            <span>Novo sistema de gráficos no estilo pizza</span>
+                        </li>
+                        <li class="feature-item">
+                            <ion-icon name="trending-up-outline"></ion-icon>
+                            <span>Exibe os maiores valores do mês atual e do mês anterior</span>
+                        </li>
+                        <li class="feature-item">
+                            <ion-icon name="phone-portrait-outline"></ion-icon>
+                            <span>Novo sistema de instalação PWA</span>
+                        </li>
+                        <li class="feature-item">
+                            <ion-icon name="share-social-outline"></ion-icon>
+                            <span>Modal de compartilhamento de dívidas</span>
+                        </li>
+                        <li class="feature-item">
+                            <ion-icon name="moon-outline"></ion-icon>
+                            <span>Modo claro e escuro integrado com botão rápido</span>
+                        </li>
+                        <li class="feature-item">
+                            <ion-icon name="person-outline"></ion-icon>
+                            <span>Modal do Desenvolvedor com atalho direto</span>
+                        </li>
+                        <li class="feature-item">
+                            <ion-icon name="save-outline"></ion-icon>
+                            <span>Armazenamento local seguro no navegador</span>
+                        </li>
+                    </ul>
+                </div>
+                <!-- 291TG-btn-vermais-func -->
+                <button class="toggle-btn" onclick="toggleSection('func')" id="291TG-toggle-func">
+                    <span id="btn-text-func">Ver mais</span>
+                    <ion-icon name="chevron-down-outline" id="btn-icon-func"></ion-icon>
+                </button>
+            </div>
+
+            <!-- 291TG-card-tecnologias -->
+            <div class="card" id="291TG-card-tech-id">
+                <h2>
+                    <ion-icon name="hardware-chip-outline"></ion-icon> Tecnologias e Compatibilidade
+                </h2>
+                <div class="expandable-content" id="content-tech">
+                    <div class="tech-tags">
+                        <span class="tech-tag">HTML5</span>
+                        <span class="tech-tag">CSS3</span>
+                        <span class="tech-tag">JavaScript</span>
+                        <span class="tech-tag">Ionicons</span>
+                        <span class="tech-tag">Local Storage</span>
+                        <span class="tech-tag">PWA</span>
+                    </div>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem; margin-top: 0.5rem;">Disponível em qualquer dispositivo:</p>
+                    <ul class="feature-list">
+                        <li class="feature-item">
+                            <ion-icon name="phone-portrait-outline"></ion-icon>
+                            <span>Celulares e Tablets</span>
+                        </li>
+                        <li class="feature-item">
+                            <ion-icon name="laptop-outline"></ion-icon>
+                            <span>Computadores e Navegadores Modernos</span>
+                        </li>
+                    </ul>
+                </div>
+                <!-- 291TG-btn-vermais-tech -->
+                <button class="toggle-btn" onclick="toggleSection('tech')" id="291TG-toggle-tech">
+                    <span id="btn-text-tech">Ver mais</span>
+                    <ion-icon name="chevron-down-outline" id="btn-icon-tech"></ion-icon>
+                </button>
+            </div>
+
+        </div>
+
+        <!-- 291TG-card-desenvolvedor -->
+        <div class="dev-card" id="291TG-dev-card-id">
+            <ion-icon name="person-circle-outline"></ion-icon>
+            <h2 style="border:none; margin:0; font-size: 1.25rem;">Desenvolvido por Teddyws1</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Acompanhe o repositório oficial no GitHub.</p>
+            <!-- 291TG-github-link -->
+            <a href="https://github.com/Teddyws1" target="_blank" class="github-btn" id="291TG-github-btn-id">
+                <ion-icon name="logo-github"></ion-icon>
+                <span>github.com/Teddyws1</span>
+            </a>
+        </div>
+
+    </div>
+
+    <!-- 291TG-html-footer -->
+    <footer id="291TG-footer-id">
+        <p>&copy; 2026 DívidaZero. Desenvolvido por <a href="https://github.com/Teddyws1" target="_blank">Teddyws1</a>.</p>
+    </footer>
+
+    <!-- 291TG-javascript-logica -->
+    <script>
+        /* 291TG-js-toggle-func */
+        function toggleSection(id) {
+            const content = document.getElementById('content-' + id);
+            const btnText = document.getElementById('btn-text-' + id);
+            const btnIcon = document.getElementById('btn-icon-' + id);
+
+            content.classList.toggle('expanded');
+
+            if (content.classList.contains('expanded')) {
+                btnText.textContent = 'Ver menos';
+                btnIcon.setAttribute('name', 'chevron-up-outline');
+            } else {
+                btnText.textContent = 'Ver mais';
+                btnIcon.setAttribute('name', 'chevron-down-outline');
+            }
+        }
+
+        /* 291TG-js-bloqueio-zoom */
+        document.addEventListener('gesturestart', function (e) {
+            e.preventDefault();
+        });
+    </script>
+</body>
+</html>
