@@ -1,118 +1,195 @@
 /* ========================================================
-   VARIÁVEIS DE TEMA E CONFIGURAÇÃO (:root e .theme-dark)
+   VARIÁVEIS DE TEMA E CONFIGURAÇÃO
    ======================================================== */
+
 :root {
-  --primary-color: #00a86b;
-  --primary-dark: #007a4d;
-  --header-bg: #0f172a;
+
+  --primary-color: #00A86B;
+  --primary-dark: #007A4D;
+  --header-bg: #0F172A;
   --accent-orange: #FFFFFF;
-  --color-titulo: #ea580c;
-  --accent-orange-hover: #ea580c;
-  --bg-main: #f1f5f9;
-  --bg-card: #ffffff;
-  --text-main: #0f172a;
-  --text-muted: #64748b;
-  --border-color: #e2e8f0;
-  --shadow-color: rgba(15, 23, 42, 0.08);
-  --danger-color: #ef4444;
-  --share-color: #2563eb;
-  --success-color: #10b981;
+  --color-titulo: #EA580C;
+  --accent-orange-hover: #EA580C;
+
+  --bg-main: #F1F5F9;
+  --bg-card: #FFFFFF;
+
+  --text-main: #0F172A;
+  --text-muted: #64748B;
+  --border-color: #E2E8F0;
+
+  --shadow-color: #0F172A14;
+
+  --danger-color: #EF4444;
+  --share-color: #2563EB;
+  --success-color: #10B981;
+
   --sidebar-width: 290px;
   --fubdo-do-theme: #F5F5F5;
-  
-  --text-white: #ffffff;
-  --header-btn-bg: rgba(255, 255, 255, 0.08);
-  --header-btn-border: rgba(255, 255, 255, 0.12);
-  --header-btn-active: rgba(255, 255, 255, 0.25);
-  --dropdown-shadow: rgba(0, 0, 0, 0.2);
-  --search-icon-color: #64748b;
+
+  --text-white: #FFFFFF;
+
+  --header-btn-bg: #FFFFFF14;
+  --header-btn-border: #FFFFFF1F;
+  --header-btn-active: #FFFFFF40;
+
+  --dropdown-shadow: #00000033;
+
+  --search-icon-color: #64748B;
   --empty-icon-opacity: 0.3;
-  --tag-bg: rgba(0, 168, 107, 0.12);
-  --tag-border: rgba(0, 168, 107, 0.25);
-  --pending-bg: #fef3c7;
-  --pending-color: #d97706;
-  --pending-border: #fde68a;
-  --paid-bg: #dcfce7;
-  --paid-color: #15803d;
-  --paid-border: #bbf7d0;
-  --footer-stats-bg: rgba(255, 255, 255, 0.05);
-  --footer-stats-border: rgba(255, 255, 255, 0.1);
-  --stat-label-color: #94a3b8;
-  --stat-paid-color: #4ade80;
-  --stat-pending-color: #fbbf24;
-  --stat-total-color: #38bdf8;
-  --footer-row-color: #cbd5e1;
-  --footer-dash-border: rgba(255, 255, 255, 0.15);
+
+  --tag-bg: #00A86B1F;
+  --tag-border: #00A86B40;
+
+  --pending-bg: #FEF3C7;
+  --pending-color: #D97706;
+  --pending-border: #FDE68A;
+
+  --paid-bg: #DCFCE7;
+  --paid-color: #15803D;
+  --paid-border: #BBF7D0;
+
+  --footer-stats-bg: #FFFFFF0D;
+  --footer-stats-border: #FFFFFF1A;
+
+  --stat-label-color: #94A3B8;
+  --stat-paid-color: #4ADE80;
+  --stat-pending-color: #FBBF24;
+  --stat-total-color: #38BDF8;
+
+  --footer-row-color: #CBD5E1;
+  --footer-dash-border: #FFFFFF26;
+
   --sidebar-item-border: #334155;
-  --sidebar-item-hover-bg: #17233a;
-  --sidebar-item-active-bg: #1e293b;
-  --sidebar-item-focus-shadow: rgba(59, 130, 246, 0.20);
-  --modal-overlay-bg: rgba(15, 23, 42, 0.65);
-  --modal-shadow: rgba(0, 0, 0, 0.3);
-  --btn-primary-shadow: rgba(249, 115, 22, 0.3);
-  --github-bg: #24292f;
-  --github-border: #3d444d;
-  --github-hover-bg: #30363d;
-  --toast-shadow: rgba(0, 0, 0, 0.25);
-  --custom-overlay-bg: rgba(0, 0, 0, 0.6);
-  --custom-modal-title: #e63946;
-  --btn-secondary-bg: #e0e0e0;
-  
-  /* Extras extraídos do miolo do código */
-  --header-title-grad: #a7f3d0;
-  --month-navigator-shadow: rgba(0, 0, 0, 0.1);
-  --social-insta-bg: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
-  --social-insta-shadow: rgba(225, 48, 108, 0.3);
-  --share-icon-shadow: rgba(0, 168, 107, 0.25);
-  --whatsapp-bg: #25d366;
-  --facebook-bg: #1877f2;
-  --toast-success-icon: #4ade80;
+  --sidebar-item-hover-bg: #17233A;
+  --sidebar-item-active-bg: #1E293B;
+
+  --sidebar-item-focus-shadow: #3B82F633;
+
+  --modal-overlay-bg: #0F172AA6;
+  --modal-shadow: #0000004D;
+  --accent-orange:#097E53;
+  --btn-primary-shadow: #007A4D;
+  --btn-primary-shadow-hover: #EA580C;
+
+  --github-bg: #24292F;
+  --github-border: #3D444D;
+  --github-hover-bg: #30363D;
+
+  --toast-shadow: #00000040;
+
+  --custom-overlay-bg: #00000099;
+
+  --custom-modal-title: #E63946;
+  --btn-secondary-bg: #E0E0E0;
+
+
+  /* Extras */
+
+  --header-title-grad: #A7F3D0;
+
+  --month-navigator-shadow: #0000001A;
+
+  --social-insta-bg:
+    linear-gradient(
+      45deg,
+      #F09433 0%,
+      #E6683C 25%,
+      #DC2743 50%,
+      #CC2366 75%,
+      #BC1888 100%
+    );
+
+  --social-insta-shadow: #E1306C4D;
+
+  --share-icon-shadow: #00A86B40;
+
+  --whatsapp-bg: #25D366;
+  --facebook-bg: #1877F2;
+
+  --toast-success-icon: #4ADE80;
 }
 
+
+/* ========================================================
+   TEMA ESCURO
+   ======================================================== */
+
 .theme-dark {
-  --accent-orange: #ea580c;
+
+  --accent-orange: #EA580C;
   --color-titulo: #FFFFFF;
   --primary-color: #059669;
-  --fubdo-do-theme: #0f172a;
   --primary-dark: #047857;
+  --fubdo-do-theme: #0F172A;
   --header-bg: #020617;
-  --bg-main: #090d16;
-  --bg-card: #1e293b;
-  --text-main: #f8fafc;
-  --text-muted: #94a3b8;
+  --bg-main: #090D16;
+  --bg-card: #1E293B;
+  --text-main: #F8FAFC;
+  --text-muted: #94A3B8;
   --border-color: #334155;
-  --shadow-color: rgba(0, 0, 0, 0.6);
-  
-  --text-white: #f8fafc;
-  --header-btn-bg: rgba(255, 255, 255, 0.05);
-  --header-btn-border: rgba(255, 255, 255, 0.1);
-  --header-btn-active: rgba(255, 255, 255, 0.2);
-  --dropdown-shadow: rgba(0, 0, 0, 0.5);
-  --search-icon-color: #94a3b8;
+
+  --shadow-color: #00000099;
+
+  --text-white: #F8FAFC;
+
+  --header-btn-bg: #FFFFFF0D;
+  --header-btn-border: #FFFFFF1A;
+  --header-btn-active: #FFFFFF33;
+  --btn-primary-shadow: #00000000;
+
+  --dropdown-shadow: #00000080;
+
+  --search-icon-color: #94A3B8;
   --empty-icon-opacity: 0.2;
-  --tag-bg: rgba(5, 150, 105, 0.15);
-  --tag-border: rgba(5, 150, 105, 0.3);
-  --pending-bg: rgba(217, 119, 6, 0.15);
-  --pending-color: #fbbf24;
-  --pending-border: rgba(217, 119, 6, 0.3);
-  --paid-bg: rgba(21, 128, 61, 0.15);
-  --paid-color: #4ade80;
-  --paid-border: rgba(21, 128, 61, 0.3);
-  --footer-stats-bg: rgba(0, 0, 0, 0.2);
-  --footer-stats-border: rgba(255, 255, 255, 0.08);
-  --stat-label-color: #94a3b8;
+
+  --tag-bg: #05966926;
+  --tag-border: #0596694D;
+
+  --pending-bg: #D9770626;
+  --pending-color: #FBBF24;
+  --pending-border: #D977064D;
+
+  --paid-bg: #15803D26;
+  --paid-color: #4ADE80;
+  --paid-border: #15803D4D;
+
+  --footer-stats-bg: #00000033;
+  --footer-stats-border: #FFFFFF14;
+
+  --stat-label-color: #94A3B8;
+
   --sidebar-item-border: #334155;
-  --sidebar-item-hover-bg: #1e293b;
-  --sidebar-item-active-bg: #0f172a;
-  --custom-overlay-bg: rgba(0, 0, 0, 0.8);
+  --sidebar-item-hover-bg: #1E293B;
+  --sidebar-item-active-bg: #0F172A;
+
+  --custom-overlay-bg: #000000CC;
+
   --btn-secondary-bg: #334155;
-  
-  --header-title-grad: #a7f3d0;
-  --month-navigator-shadow: rgba(0, 0, 0, 0.1);
-  --social-insta-bg: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
-  --social-insta-shadow: rgba(225, 48, 108, 0.3);
-  --share-icon-shadow: rgba(5, 150, 105, 0.25);
-  --whatsapp-bg: #25d366;
-  --facebook-bg: #1877f2;
-  --toast-success-icon: #4ade80;
+
+
+  /* Extras */
+
+  --header-title-grad: #A7F3D0;
+
+  --month-navigator-shadow: #0000001A;
+
+  --social-insta-bg:
+    linear-gradient(
+      45deg,
+      #F09433 0%,
+      #E6683C 25%,
+      #DC2743 50%,
+      #CC2366 75%,
+      #BC1888 100%
+    );
+
+  --social-insta-shadow: #E1306C4D;
+
+  --share-icon-shadow: #05966940;
+
+  --whatsapp-bg: #25D366;
+  --facebook-bg: #1877F2;
+
+  --toast-success-icon: #4ADE80;
 }

@@ -6,6 +6,38 @@
 
 let exportFileHandle = null;
 
+// Declarações Globais para acesso compartilhado entre as partes
+const devContactInfo =
+    "Teddy Machado\n" +
+    "Desenvolvedor e Criador do DívidaZero\n" +
+    "DívidaZero 2026™\n\n" +
+    "Instagram:\n" +
+    "https://www.instagram.com/teddy_machado007\n\n" +
+    "Mais projetos e códigos:\n" +
+    "https://github.com/Teddyws1";
+
+function showToast(message, type = "success") {
+    const oldToast = document.querySelector(".toast-message");
+    if (oldToast) oldToast.remove();
+
+    const toast = document.createElement("div");
+    toast.className = `toast-message ${type}`;
+    toast.innerHTML = `
+        <ion-icon name="${type === "success" ? "checkmark-circle-outline" : "alert-circle-outline"}"></ion-icon>
+        <span>${message}</span>
+    `;
+
+    document.body.appendChild(toast);
+    requestAnimationFrame(() => toast.classList.add("active"));
+
+    setTimeout(() => {
+        toast.classList.remove("active");
+        setTimeout(() => {
+            if (toast.parentNode) toast.remove();
+        }, 250);
+    }, 2500);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
 
     //////////////////////////////////////
@@ -13,14 +45,22 @@ document.addEventListener('DOMContentLoaded', () => {
     // - ESTADO GLOBAL
     //
     //////////////////////////////////////
+    const now = new Date();
     const state = {
         debts: JSON.parse(localStorage.getItem('dz_debts')) || [],
         logs: JSON.parse(localStorage.getItem('dz_logs')) || [],
-        currentDate: new Date(2026, 7, 1),
+        // Inicializa com o mês e ano do momento em que o script é executado
+        currentDate: new Date(now.getFullYear(), now.getMonth(), 1),
         filterQuery: '',
         sortOption: 'recent',
         theme: localStorage.getItem('dz_theme') || getSystemTheme()
     };
+
+    //////////////////////////////////////
+    //
+    // - APRIMORAMENTO: SISTEMA DE VIRADA AUTOMÁTICA DE MÊS
+    //
+    //////////////////////////////////////
 
     function getSystemTheme() {
         if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -39,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //////////////////////////////////////
     //
-    // - MAPEAMENTO DO DOM
+    // -0001ABC MAPEAMENTO DO DOM
     //
     //////////////////////////////////////
     const dom = {
@@ -79,6 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
         menuItemTheme: document.getElementById('menu-item-theme'),
         modalExpense: document.getElementById('modal-add-expense'),
         btnCloseModalExpense: document.getElementById('btn-close-modal-expense'),
+        cancelAddModalBtn: document.getElementById('cancelAddModalBtn'),
         formExpense: document.getElementById('form-expense'),
         expenseCompany: document.getElementById('expense-company'),
         customCompanyGroup: document.getElementById('custom-company-group'),
@@ -87,6 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
         expenseValue: document.getElementById('expense-value'),
         expenseDate: document.getElementById('expense-date'),
         charCounter: document.getElementById('char-counter'),
+        charWarning: document.getElementById('char-warning'),
 
         modalEditExpense: document.getElementById('modal-edit-expense'),
         btnCloseModalEdit: document.getElementById('btn-close-modal-edit'),
@@ -260,7 +302,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="debt-info">
                         <div class="debt-header-info">
                             <span class="debt-tag-id">ID: ${debt.id}</span>
-                            <span class="debt-company-badge"><ion-icon name="business-outline"></ion-icon>${companyName}</span>
+                <span class="debt-company-badge">
+    <ion-icon name="${
+        companyName.toLowerCase() === 'outros'
+            ? 'ellipsis-horizontal-circle-outline'
+            : 'business-outline'
+    }"></ion-icon>
+    ${companyName}
+</span>
                         </div>
                         <span class="debt-title">${debt.description}</span>
                         <div class="debt-date">
@@ -311,6 +360,52 @@ document.addEventListener('DOMContentLoaded', () => {
     // - MANIPULAÇÃO DE MODAIS E INTERFACE
     //
     //////////////////////////////////////
+    function updateCharCounterForInput(inputEl, counterEl, warningEl) {
+        if (!inputEl || !counterEl) return;
+        const currentLength = inputEl.value.length;
+        const maxLength = 50;
+        const percentage = Math.min((currentLength / maxLength) * 100, 100);
+        let color;
+        
+        if (currentLength <= 16) {
+            color = "#008754";
+        } else if (currentLength <= 24) {
+            color = "#f59e0b";
+        } else if (currentLength < 45) {
+            color = "#f97316";
+        } else {
+            color = "#ef4444";
+        }
+        
+        counterEl.textContent = `${currentLength}/${maxLength}`;
+        counterEl.style.setProperty("--char-progress", `${percentage}%`);
+        counterEl.style.setProperty("--char-color", color);
+        
+        if (warningEl) {
+            if (currentLength >= maxLength) {
+                warningEl.classList.add("active");
+            } else {
+                warningEl.classList.remove("active");
+            }
+        }
+    }
+
+    function clearAddModalForm() {
+        if (dom.expenseDescription) dom.expenseDescription.value = '';
+        if (dom.expenseValue) dom.expenseValue.value = '';
+        if (dom.expenseCompany) dom.expenseCompany.value = 'Outros';
+        if (dom.expenseCustomCompany) dom.expenseCustomCompany.value = '';
+        if (dom.customCompanyGroup) dom.customCompanyGroup.style.display = 'none';
+
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const dd = String(today.getDate()).padStart(2, '0');
+        if (dom.expenseDate) dom.expenseDate.value = `${yyyy}-${mm}-${dd}`;
+
+        updateCharCounterForInput(dom.expenseDescription, dom.charCounter, dom.charWarning);
+    }
+
     function openEditModal(debt) {
         dom.editExpenseId.value = debt.id;
 
@@ -335,7 +430,7 @@ document.addEventListener('DOMContentLoaded', () => {
             dom.editPaidFalse.checked = true;
         }
 
-        dom.editCharCounter.textContent = `${debt.description.length} caracteres`;
+        updateCharCounterForInput(dom.editExpenseDescription, dom.editCharCounter);
         openModal(dom.modalEditExpense);
     }
 
@@ -395,6 +490,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (event.target.classList.contains('modal-overlay')) {
+            if (event.target === dom.modalExpense) {
+                clearAddModalForm();
+            }
             closeModal(event.target);
         }
     }
@@ -406,6 +504,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key === 'Escape') {
             toggleSidebar(false);
             toggleSortDropdown(false);
+            if (dom.modalExpense && dom.modalExpense.classList.contains('active')) {
+                clearAddModalForm();
+            }
             closeModal(dom.modalExpense);
             closeModal(dom.modalEditExpense);
             closeModal(dom.modalHistory);
@@ -449,13 +550,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    dom.expenseDescription.addEventListener('input', (e) => {
-        dom.charCounter.textContent = `${e.target.value.length} caracteres`;
-    });
+    if (dom.expenseDescription) {
+        dom.expenseDescription.setAttribute('maxlength', '50');
+        dom.expenseDescription.addEventListener('input', (e) => {
+            updateCharCounterForInput(e.target, dom.charCounter, dom.charWarning);
+        });
+    }
 
-    dom.editExpenseDescription.addEventListener('input', (e) => {
-        dom.editCharCounter.textContent = `${e.target.value.length} caracteres`;
-    });
+    if (dom.editExpenseDescription) {
+        dom.editExpenseDescription.setAttribute('maxlength', '50');
+        dom.editExpenseDescription.addEventListener('input', (e) => {
+            updateCharCounterForInput(e.target, dom.editCharCounter);
+        });
+    }
 
     function renderHistory() {
         dom.historyListContainer.innerHTML = '';
@@ -503,19 +610,22 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     dom.btnOpenAddModal.addEventListener('click', () => {
-        const today = new Date();
-        const yyyy = today.getFullYear();
-        const mm = String(today.getMonth() + 1).padStart(2, '0');
-        const dd = String(today.getDate()).padStart(2, '0');
-        dom.expenseDate.value = `${yyyy}-${mm}-${dd}`;
-        dom.charCounter.textContent = '0 caracteres';
-        dom.customCompanyGroup.style.display = 'none';
-        dom.expenseCustomCompany.value = '';
-        dom.expenseCompany.value = 'Outros';
+        clearAddModalForm();
         openModal(dom.modalExpense);
     });
 
-    dom.btnCloseModalExpense.addEventListener('click', () => closeModal(dom.modalExpense));
+    if (dom.cancelAddModalBtn) {
+        dom.cancelAddModalBtn.addEventListener('click', () => {
+            clearAddModalForm();
+            closeModal(dom.modalExpense);
+        });
+    }
+
+    dom.btnCloseModalExpense.addEventListener('click', () => {
+        clearAddModalForm();
+        closeModal(dom.modalExpense);
+    });
+    
     dom.btnCloseModalEdit.addEventListener('click', () => closeModal(dom.modalEditExpense));
 
     dom.btnClearLogs.addEventListener('click', () => {
@@ -657,9 +767,7 @@ document.addEventListener('DOMContentLoaded', () => {
         addLog(`Nova dívida criada: [${company}] ${desc.substring(0, 25)}... (#${newDebt.id}) - ${formatCurrency(val)}`);
         saveData();
 
-        dom.expenseDescription.value = '';
-        dom.expenseValue.value = '';
-        dom.expenseCustomCompany.value = '';
+        clearAddModalForm();
         closeModal(dom.modalExpense);
 
         const createdDate = new Date(date + 'T00:00:00');
@@ -709,7 +817,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 `• Valor: ${formatCurrency(debt.value)}\n` +
                 `• Vencimento: ${formattedDate}\n` +
                 `• ID: #${debt.id}\n` +
-                `• Status: ${statusText}\n\n` +
+                `• Status de pagamento: ${statusText}\n\n` +
                 `🔗 Acesse o DívidaZero:\n` +
                 `https://teddyws1.github.io/DividaZero/`;
 
@@ -843,496 +951,3 @@ document.addEventListener('DOMContentLoaded', () => {
     applyTheme(state.theme);
     renderDebts();
 });
-//////////////////////////////////////
-//
-// - PARTE 3: INSTALAÇÃO PWA, COMPARTILHAMENTO E RODAPÉ DRAWER
-//
-//////////////////////////////////////
-
-    //////////////////////////////////////
-    //
-    // - SUPORTE A PWA / INSTALAÇÃO DO APP
-    //
-    //////////////////////////////////////
-let deferredPrompt = null;
-const installApp = document.getElementById("installApp");
-
-window.addEventListener("beforeinstallprompt", (event) => {
-    event.preventDefault();
-    deferredPrompt = event;
-    if (installApp) {
-        installApp.hidden = false;
-    }
-});
-
-if (installApp) {
-    installApp.addEventListener("click", async () => {
-        if (!deferredPrompt) return;
-        deferredPrompt.prompt();
-        await deferredPrompt.userChoice;
-        deferredPrompt = null;
-        installApp.hidden = true;
-    });
-}
-
-window.addEventListener("appinstalled", () => {
-    deferredPrompt = null;
-    if (installApp) {
-        installApp.hidden = true;
-    }
-});
-
-    //////////////////////////////////////
-    //
-    // - COMPARTILHAMENTO DO SITE E REDES SOCIAIS
-    //
-    //////////////////////////////////////
-const DIVIDA_ZERO_URL = "https://teddyws1.github.io/DividaZero/";
-const DIVIDA_ZERO_TITLE = "DívidaZero - Gestão Inteligente de Dívidas";
-const DIVIDA_ZERO_MESSAGE = "Conheça o DívidaZero — Gestão Inteligente de Dívidas.";
-
-const btnShareSite = document.getElementById("btn-share-site");
-const modalShareSite = document.getElementById("modal-share-site");
-const btnCloseModalShare = document.getElementById("btn-close-modal-share");
-
-const shareWhatsapp = document.getElementById("share-whatsapp");
-const shareFacebook = document.getElementById("share-facebook");
-const shareInstagram = document.getElementById("share-instagram");
-const shareCopyLink = document.getElementById("share-copy-link");
-
-function openShareModal() {
-    if (!modalShareSite) return;
-    modalShareSite.classList.add("active");
-}
-
-function closeShareModal() {
-    if (!modalShareSite) return;
-    modalShareSite.classList.remove("active");
-}
-
-if (btnShareSite) {
-    btnShareSite.addEventListener("click", () => openShareModal());
-}
-
-if (btnCloseModalShare) {
-    btnCloseModalShare.addEventListener("click", closeShareModal);
-}
-
-if (shareWhatsapp) {
-    shareWhatsapp.addEventListener("click", () => {
-        const message = encodeURIComponent(`${DIVIDA_ZERO_MESSAGE}\n\n${DIVIDA_ZERO_URL}`);
-        window.open(`https://wa.me/?text=${message}`, "_blank", "noopener,noreferrer");
-    });
-}
-
-if (shareFacebook) {
-    shareFacebook.addEventListener("click", () => {
-        const url = encodeURIComponent(DIVIDA_ZERO_URL);
-        window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, "_blank", "noopener,noreferrer");
-    });
-}
-
-if (shareInstagram) {
-    shareInstagram.addEventListener("click", async () => {
-        try {
-            if (navigator.share) {
-                await navigator.share({
-                    title: DIVIDA_ZERO_TITLE,
-                    text: DIVIDA_ZERO_MESSAGE,
-                    url: DIVIDA_ZERO_URL
-                });
-            } else {
-                await navigator.clipboard.writeText(DIVIDA_ZERO_URL);
-                showToast("Link do DívidaZero copiado!");
-            }
-        } catch (error) {
-            if (error.name !== "AbortError") {
-                console.error("Erro ao compartilhar:", error);
-            }
-        }
-    });
-}
-
-if (shareCopyLink) {
-    shareCopyLink.addEventListener("click", async () => {
-        try {
-            await navigator.clipboard.writeText(DIVIDA_ZERO_URL);
-            showToast("Link do DívidaZero copiado!");
-        } catch (error) {
-            console.error("Erro ao copiar o link:", error);
-            showToast("Não foi possível copiar o link.", "error");
-        }
-    });
-}
-
-if (modalShareSite) {
-    modalShareSite.addEventListener("click", (event) => {
-        if (event.target === modalShareSite) {
-            closeShareModal();
-        }
-    });
-}
-
-document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && modalShareSite && modalShareSite.classList.contains("active")) {
-        closeShareModal();
-    }
-});
-
-    //////////////////////////////////////
-    //
-    // - TOAST NOTIFICAÇÕES E DESENVOLVEDOR
-    //
-    //////////////////////////////////////
-const devContactInfo =
-    "Teddy Machado\n" +
-    "Desenvolvedor e Criador do DívidaZero\n" +
-    "DívidaZero 2026™\n\n" +
-    "Instagram:\n" +
-    "https://www.instagram.com/teddy_machado007\n\n" +
-    "Mais projetos e códigos:\n" +
-    "https://github.com/Teddyws1";
-
-function showToast(message, type = "success") {
-    const oldToast = document.querySelector(".toast-message");
-    if (oldToast) oldToast.remove();
-
-    const toast = document.createElement("div");
-    toast.className = `toast-message ${type}`;
-    toast.innerHTML = `
-        <ion-icon name="${type === "success" ? "checkmark-circle-outline" : "alert-circle-outline"}"></ion-icon>
-        <span>${message}</span>
-    `;
-
-    document.body.appendChild(toast);
-    requestAnimationFrame(() => toast.classList.add("active"));
-
-    setTimeout(() => {
-        toast.classList.remove("active");
-        setTimeout(() => {
-            if (toast.parentNode) toast.remove();
-        }, 250);
-    }, 2500);
-}
-
-    //////////////////////////////////////
-    //
-    // - INTERAÇÃO TOUCH DRAWER DO RODAPÉ
-    //
-    //////////////////////////////////////
-document.addEventListener("DOMContentLoaded", () => {
-    const drawer = document.getElementById("footer-drawer");
-    const handle = document.getElementById("footer-drag-handle");
-    if (!drawer || !handle) return;
-
-    let startY = 0;
-    let startPosition = 0;
-    let currentPosition = 0;
-    let drawerHeight = 0;
-    let dragging = false;
-    let closedByDrag = false;
-
-    function isBlocked() {
-        const modal = document.querySelector(".modal-overlay.active, .modal.active, .image-modal-overlay.active");
-        const sidebar = document.querySelector("#sidebar.active, .sidebar.active");
-        return !!modal || !!sidebar;
-    }
-
-    function closeFooterInstant() {
-        updateHeight();
-        currentPosition = drawerHeight;
-        drawer.style.transition = "none";
-        drawer.style.transform = `translateY(${drawerHeight}px)`;
-        closedByDrag = true;
-        dragging = false;
-    }
-
-    function updateHeight() {
-        drawerHeight = drawer.offsetHeight;
-    }
-
-    function setPosition(position) {
-        currentPosition = Math.max(0, Math.min(drawerHeight, position));
-        drawer.style.transform = `translateY(${currentPosition}px)`;
-    }
-
-    function startDrag(event) {
-        if (event.touches.length !== 1) return;
-        if (isBlocked()) {
-            closeFooterInstant();
-            return;
-        }
-        updateHeight();
-        startY = event.touches[0].clientY;
-        startPosition = currentPosition;
-        closedByDrag = false;
-        dragging = true;
-        drawer.style.transition = "none";
-    }
-
-    function moveDrag(event) {
-        if (!dragging) return;
-        if (isBlocked()) {
-            closeFooterInstant();
-            return;
-        }
-
-        const fingerY = event.touches[0].clientY;
-        const difference = fingerY - startY;
-
-        if (difference >= 5) {
-            closeFooterInstant();
-            return;
-        }
-
-        setPosition(startPosition + difference);
-    }
-
-    function endDrag() {
-        if (!dragging) return;
-        dragging = false;
-
-        if (closedByDrag) return;
-        if (isBlocked()) {
-            closeFooterInstant();
-            return;
-        }
-
-        drawer.style.transition = "transform 0.12s ease-out";
-        setPosition(currentPosition);
-    }
-
-    handle.addEventListener("touchstart", startDrag, { passive: true });
-    handle.addEventListener("touchmove", moveDrag, { passive: true });
-    handle.addEventListener("touchend", endDrag, { passive: true });
-    handle.addEventListener("touchcancel", endDrag, { passive: true });
-
-    const observer = new MutationObserver(() => {
-        if (isBlocked()) closeFooterInstant();
-    });
-
-    observer.observe(document.body, {
-        subtree: true,
-        attributes: true,
-        attributeFilter: ["class"]
-    });
-
-    window.addEventListener("resize", () => {
-        updateHeight();
-        if (currentPosition > drawerHeight) {
-            currentPosition = drawerHeight;
-            drawer.style.transform = `translateY(${drawerHeight}px)`;
-        }
-    });
-
-    updateHeight();
-    currentPosition = drawerHeight;
-    drawer.style.transform = `translateY(${drawerHeight}px)`;
-});
-
-/////////////////////////////////////
-//
-// - SISTEMA DE SCROLL ENTRE PÁGINAS 
-//
-////////////////////////////////////
-let bookSwipeStartX = 0;
-let bookSwipeStartY = 0;
-let bookMouseIsDown = false;
-let bookMouseStartX = 0;
-let bookMouseStartY = 0;
-let bookIsSwiping = false;
-
-function isAnyModalOrSidebarOpen() {
-    const activeModal = document.querySelector(
-        '.modal.active, .modal.show, .modal[style*="display: block"]'
-    );
-
-    const activeSidebar = document.querySelector(
-        '.sidebar.active, .sidebar.open, .drawer.open'
-    );
-
-    const activeCard = document.querySelector(
-        '.debt-card.expanded, .card.open'
-    );
-
-    return (
-        activeModal !== null ||
-        activeSidebar !== null ||
-        activeCard !== null
-    );
-}
-
-window.addEventListener(
-    'touchstart',
-    (e) => {
-        if (isAnyModalOrSidebarOpen()) return;
-
-        if (e.touches && e.touches.length === 1) {
-            bookSwipeStartX = e.touches[0].clientX;
-            bookSwipeStartY = e.touches[0].clientY;
-            bookIsSwiping = true;
-            document.body.style.transition = 'none';
-        }
-    },
-    { passive: true }
-);
-
-window.addEventListener(
-    'touchmove',
-    (e) => {
-        if (!bookIsSwiping) return;
-        if (!e.touches || e.touches.length === 0) return;
-
-        const currentX = e.touches[0].clientX;
-        const currentY = e.touches[0].clientY;
-
-        const diffX = bookSwipeStartX - currentX;
-        const diffY = Math.abs(bookSwipeStartY - currentY);
-
-        if (diffY > 80) {
-            bookIsSwiping = false;
-            document.body.style.transform = 'translateX(0)';
-            return;
-        }
-
-        document.body.style.transform = `translateX(${-diffX * 0.5}px)`;
-    },
-    { passive: true }
-);
-
-window.addEventListener(
-    'touchend',
-    (e) => {
-        if (isAnyModalOrSidebarOpen()) return;
-        if (!bookIsSwiping) return;
-
-        if (!e.changedTouches || e.changedTouches.length === 0) {
-            bookIsSwiping = false;
-            return;
-        }
-
-        const swipeEndX = e.changedTouches[0].clientX;
-        const diffX = bookSwipeStartX - swipeEndX;
-
-        const threshold = 90;
-
-        if (Math.abs(diffX) > threshold) {
-            triggerBookPageTurn(diffX > 0 ? 'next' : 'prev');
-        } else {
-            document.body.style.transition = 'transform 0.2s ease';
-            document.body.style.transform = 'translateX(0)';
-        }
-
-        bookIsSwiping = false;
-    },
-    { passive: true }
-);
-
-window.addEventListener(
-    'mousedown',
-    (e) => {
-        if (isAnyModalOrSidebarOpen()) return;
-        if (e.target.closest('button') || e.target.closest('input')) return;
-
-        bookMouseIsDown = true;
-        bookMouseStartX = e.clientX;
-        bookMouseStartY = e.clientY;
-        bookIsSwiping = true;
-        document.body.style.transition = 'none';
-    }
-);
-
-window.addEventListener(
-    'mousemove',
-    (e) => {
-        if (!bookMouseIsDown || !bookIsSwiping) return;
-
-        const diffX = bookMouseStartX - e.clientX;
-        const diffY = Math.abs(bookMouseStartY - e.clientY);
-
-        if (diffY > 80) {
-            bookIsSwiping = false;
-            document.body.style.transform = 'translateX(0)';
-            return;
-        }
-
-        document.body.style.transform = `translateX(${-diffX * 0.5}px)`;
-    }
-);
-
-window.addEventListener(
-    'mouseup',
-    (e) => {
-        if (!bookMouseIsDown) return;
-        if (isAnyModalOrSidebarOpen()) {
-            bookMouseIsDown = false;
-            return;
-        }
-
-        const diffX = bookMouseStartX - e.clientX;
-        const threshold = 90;
-
-        if (Math.abs(diffX) > threshold) {
-            triggerBookPageTurn(diffX > 0 ? 'next' : 'prev');
-        } else {
-            document.body.style.transition = 'transform 0.2s ease';
-            document.body.style.transform = 'translateX(0)';
-        }
-
-        bookMouseIsDown = false;
-        bookIsSwiping = false;
-    }
-);
-
-function triggerBookPageTurn(direction) {
-    if (isAnyModalOrSidebarOpen()) return;
-
-    document.body.style.transition = 'transform 0.25s ease-out';
-    
-    if (direction === 'next') {
-        document.body.style.transform = 'translateX(-100vw)';
-    } else {
-        document.body.style.transform = 'translateX(100vw)';
-    }
-
-    setTimeout(() => {
-        window.location.href = 'painel-resumo.html';
-    }, 250);
-}
-
-/////////////////////////////////////
-//
-// -013HGF Registrar o Service Worker para funcionar em segundo plano 
-//
-////////////////////////////////////
-
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js')
-            .then(reg => {
-                console.log('Service Worker registrado com sucesso:', reg.scope);
-            })
-            .catch(err => {
-                console.warn('Falha ao registrar o Service Worker:', err);
-            });
-    });
-}
-
-function enviarNotificacaoBackground(titulo, mensagem) {
-    if ('serviceWorker' in navigator && Notification.permission === 'granted') {
-        navigator.serviceWorker.ready.then(registration => {
-            registration.showNotification(titulo, {
-                body: mensagem,
-                icon: 'favicon.ico',
-                badge: 'favicon.ico',
-                vibrate: [200, 100, 200]
-            });
-        });
-    }
-}
-
-/////////////////////////////////////
-//
-// - FIM DO JS 
-//
-////////////////////////////////////

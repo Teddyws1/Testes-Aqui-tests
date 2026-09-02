@@ -1,0 +1,66 @@
+/*////////////////////////////////////
+//
+// -024BB editar-dividas
+//
+///////////////////////////////////*/
+#edit-modal-title {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    margin: 0;
+
+    color: #FFFFFF;
+
+    font-size: 18px;
+    font-weight: 800;
+
+    line-height: 1.2;
+    letter-spacing: 0.2px;
+}
+
+#edit-modal-title ion-icon {
+    width: 21px;
+    height: 21px;
+
+    font-size: 21px;
+
+    color: var(--primary-color);
+
+    flex-shrink: 0;
+
+    filter:
+        drop-shadow(
+            0 0 6px rgba(0, 184, 137, 0.3)
+        );
+}
+/*////////////////////////////////////
+//
+//-024BB botões da editar dividas
+//
+///////////////////////////////////*/
+.btn-atualizar-divida {
+    margin-top: 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    width: 100%;
+}
+
+.btn-atualizar-divida ion-icon {
+    width: 18px;
+    height: 18px;
+
+    font-size: 18px;
+
+    flex-shrink: 0;
+
+    color: currentColor;
+}
+
+.btn-atualizar-divida span {
+    line-height: 1;
+}

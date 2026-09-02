@@ -2,16 +2,36 @@
 // -003PC : SERVICE WORKER PWA
 // ////////////////////////////////////////
 
-const CACHE_NAME = "DívidaZero-05";
+const CACHE_NAME = "DívidaZero-07";
 
 const FILES_TO_CACHE = [
-  "./",
-  "./index.html",
-  "./style.css",
-  "./roots.css",
-  "./Script.js",
-  "./manifest.json",
-  "./js-das-versoes.js"
+
+
+//•HTML
+"./",
+"./index.html",
+"./painel-resumo.html",
+"./sobre_site.html",
+
+
+//•STYLE-CSS
+"./style.css",
+"./roots.css",
+"./responsivo.css",
+"./footer-arratavel.css",
+"./editar-dividas.css",
+"./nova-despesa.css",
+
+
+//•JAVA-SCRIPT 
+"./Script.js",
+"./painel-resumo.js",
+"./js-das-versoes.js",
+"./versoes.js",
+
+
+//•configuração 
+"./manifest.json"
 ];
 
 self.addEventListener("install", (event) => {

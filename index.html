@@ -20,12 +20,19 @@
         href="https://i.postimg.cc/1XBThB5s/Picsart-26-08-16-10-16-48-167.jpg"
     >
 
-    <link rel="stylesheet" href="style.css?v=05">
-    <link rel="stylesheet" href="roots.css?v=05">
+ <!-- • 01A — CSS PRINCIPAL -->
+<link rel="stylesheet" href="style.css?v=07">
 
- <link rel="stylesheet" href="responsivo.css?v=05">
+<link rel="stylesheet" href="roots.css?v=07">
 
-    <link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="responsivo.css?v=07">
+
+<link rel="stylesheet" href="footer-arratavel.css?v=07">
+
+<link rel="stylesheet" href="editar-dividas.css?v=07">
+<link rel="stylesheet" href="nova-despesa.css?v=07">
+
+<link rel="manifest" href="manifest.json">
 <!-- Favicon Principal (Aba do navegador e Android) -->
     <link rel="icon" type="image/jpeg" href="https://i.postimg.cc/wxDZMkFH/Picsart-26-08-16-12-23-02-954.jpg">
     
@@ -141,7 +148,7 @@
     </button>
 
     <div class="month-display" id="current-month-display">
-        agosto / 2026
+        setembro / 2026
     </div>
 
     <button type="button" class="icon-btn" id="btn-next-month" aria-label="Próximo mês">
@@ -195,7 +202,10 @@
 
 <!--- -294pq CICLO DO FOOTER — ARRASTE VERTICAL --->
     <footer class="app-footer">
-
+<h5 class="resumo-aba">
+    <ion-icon name="stats-chart-outline"></ion-icon>
+    Resumo rápido 
+</h5>
         <div class="stats-grid">
 
             <div class="stat-box">
@@ -236,43 +246,35 @@
                     0
                 </span>
             </div>
-
         </div>
 
-        <div class="footer-summary">
-
-            <div class="footer-row">
-                <span>Já Pago:</span>
-
-                <span
-                    id="footer-paid-value"
-                    style="color: #4ade80; font-weight: 700;"
-                >
-                    R$ 0,00
-                </span>
-            </div>
-
-            <div class="footer-row">
-                <span>Falta Pagar:</span>
-
-                <span
-                    id="footer-balance"
-                    style="color: #fbbf24; font-weight: 700;"
-                >
-                    R$ 0,00
-                </span>
-            </div>
-
-            <div class="footer-row total-bold">
-                <span>Total de Dívidas:</span>
-
-                <span id="footer-total">
-                    R$ 0,00
-                </span>
-            </div>
-
-        </div>
-
+<div class="footer-summary">
+    
+    <div class="footer-row">
+        <span class="japago">Já Pago:</span>
+        
+        <span id="footer-paid-value" class="footer-paid-value">
+            R$ 0,00
+        </span>
+    </div>
+    
+    <div class="footer-row">
+        <span class="falta-pagar">Falta Pagar:</span>
+        
+        <span id="footer-balance" class="footer-balance">
+            R$ 0,00
+        </span>
+    </div>
+    
+    <div class="footer-row total-bold">
+        <span class="total-dividas">Total de Dívidas:</span>
+        
+        <span id="footer-total" class="total-rs">
+            R$ 0,00
+        </span>
+    </div>
+    
+</div>
     </footer>
 
 </div>
@@ -443,10 +445,11 @@
                 >
                     <ion-icon name="arrow-back-outline"></ion-icon>
                 </button>
-
-                <h3>
-                    Nova Despesa
-                </h3>
+<!--- -039II nova despesa--->
+<h3 class="modal-title">
+    <ion-icon name="add-circle-outline"></ion-icon>
+    Nova Despesa
+</h3>
 
                 <div style="width: 24px;"></div>
 
@@ -565,55 +568,25 @@
                     </div>
 
 
-                    <div class="form-group">
+            
 
-                        <div
-                            class="radio-group"
-                            style="justify-content: center;"
-                        >
-
-                            <label class="radio-option">
-
-                                <input
-                                    type="radio"
-                                    name="repeat"
-                                    value="no"
-                                    checked
-                                >
-
-                                <span>
-                                    Não repetir
-                                </span>
-
-                            </label>
-
-
-                            <label class="radio-option">
-
-                                <input
-                                    type="radio"
-                                    name="repeat"
-                                    value="yes"
-                                >
-
-                                <span>
-                                    Repetir
-                                </span>
-
-                            </label>
-
-                        </div>
-
-                    </div>
-
-
-                    <button
-                        type="submit"
-                        class="btn-primary"
-                        style="margin-top: 15px;"
-                    >
-                        Salvar Dívida
-                    </button>
+<!-- -039II botão de salvar dívidas-->
+                <button
+    type="submit"
+    class="btn-primary"
+>
+    <ion-icon name="save-outline"></ion-icon>
+    <span>Salvar Dívida</span>
+</button>
+<!-- -039II  cancelar dívidas-->
+<button 
+    type="button" 
+    class="cancelar-dividas" 
+    id="cancelAddModalBtn"
+>
+    <ion-icon name="close-circle-outline"></ion-icon>
+    <span>Cancelar</span>
+</button>
 
                 </form>
 
@@ -643,10 +616,15 @@
                 >
                     <ion-icon name="arrow-back-outline"></ion-icon>
                 </button>
+<!--- -024BB editar-dividas--->
+               <h3 id="edit-modal-title">
+    <ion-icon
+        name="create-outline"
+        aria-hidden="true"
+    ></ion-icon>
 
-                <h3 id="edit-modal-title">
-                    Editar Dívida
-                </h3>
+    <span>Editar Dívida</span>
+</h3>
 
                 <div style="width: 24px;"></div>
 
@@ -819,13 +797,17 @@
                     </div>
 
 
-                    <button
-                        type="submit"
-                        class="btn-primary"
-                        style="margin-top: 15px;"
-                    >
-                        Atualizar Dívida
-                    </button>
+                   <button
+    type="submit"
+    class="btn-primary btn-atualizar-divida"
+>
+    <ion-icon
+        name="save-outline"
+        aria-hidden="true"
+    ></ion-icon>
+
+    <span>Atualizar Dívida</span>
+</button>
 
 
                     <button
@@ -846,9 +828,7 @@
                         <ion-icon name="trash-outline"></ion-icon>
                         <span>Excluir Dívida</span>
                     </button>
-
                 </form>
-
             </div>
 
         </div>
@@ -1224,15 +1204,13 @@
 
     <!-- [-015Js] SCRIPTS -->
 
-<script src="Script.js?v=05" defer></script>
+<script src="Script.js?v=07" defer></script>
 
-<script src="versoes.js?v=05" defer></script>
+<script src="versoes.js?v=07" defer></script>
 
-<script src="js-das-versoes.js?v=05" defer></script>
+<script src="js-das-versoes.js?v=07" defer></script>
 
-<script src="sw.js?v=05" defer></script>
-
-<script src="style.js?v=05" defer></script>
+<script src="style.js?v=07" defer></script>
 
 </body>
 </html>

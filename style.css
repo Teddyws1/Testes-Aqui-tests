@@ -9,6 +9,7 @@
     user-select: none;
     -webkit-touch-callout: none;
     touch-action: manipulation;
+
 }
 
 input, textarea, select {
@@ -559,59 +560,6 @@ body {
     border: 1px solid var(--paid-border);
 }
 
-/*////////////////////////////////////
-//
-// -294pq CICLO DO FOOTER — ARRASTE VERTICAL  
-//
-///////////////////////////////////*/
-.app-footer {
-    background-color: var(--header-bg);
-    color: var(--text-white);
-    padding: 14px 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    box-shadow: 0 -4px 15px var(--shadow-color);
-    border-top: 2px solid var(--primary-color);
-}
-
-/* •090Dr ÁREA ARRASTÁVEL */
-.footer-drawer {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 9;
-    transform: translateY(100%);
-    will-change: transform;
-    touch-action: none;
-}
-
-/* •091Al ALÇA */
-.footer-drag-handle {
-    position: absolute;
-    left: 50%;
-    top: -24px;
-    width: 85px;
-    height: 24px;
-    transform: translateX(-50%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--header-bg);
-    border: 2px solid var(--primary-color);
-    border-bottom: none;
-    border-radius: 12px 12px 0 0;
-    touch-action: none;
-}
-
-.footer-drag-handle span {
-    width: 40px;
-    height: 4px;
-    background: var(--primary-color);
-    border-radius: 20px;
-}
-
 /* •092Rs ESTATÍSTICAS */
 .stats-grid {
     display: grid;
@@ -678,8 +626,6 @@ body {
     border-top: 1px dashed var(--footer-dash-border);
     padding-top: 6px;
 }
-/*============[ fim ]=============*/
-
 .sidebar-overlay {
     position: fixed;
     top: 0;
@@ -1026,6 +972,7 @@ textarea.form-control {
 .btn-primary:active {
     background-color: var(--accent-orange-hover);
     transform: scale(0.98);
+    box-shadow: 0 4px 12px var(--btn-primary-shadow-hover);
 }
 
 .btn-share {
@@ -1521,7 +1468,151 @@ textarea.form-control {
     to { transform: scale(1); }
 }
 
+/*////////////////////////////////////
+//
+// -039II nova despesa 
+//
+///////////////////////////////////*/
+.modal-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.2px;
+}
 
+.modal-title ion-icon {
+    font-size: 23px;
+    flex-shrink: 0;
+}
+/*//////////////////////////////*/
+/*-039II botão de salvar dívidas*/
+/*//////////////////////////////*/
+.btn-primary {
+    width: 100%;
+    
+    margin-top: 15px;
+    padding: 12px 16px;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    
+    border: none;
+    border-radius: 8px;
+    
+    background: #008754;
+    color: #FFFFFF;
+    
+    font-size: 15px;
+    font-weight: 700;
+    
+    cursor: pointer;
+    
+    transition:
+        background 0.2s ease,
+        transform 0.15s ease;
+}
+
+.btn-primary ion-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+}
+.btn-primary:active {
+    transform: scale(0.98);
+}
+/*//////////////////////////////*/
+/*-039II cancelar dívidas*/
+/*//////////////////////////////*/
+.cancelar-dividas {
+    width: 100%;
+    
+    margin-top: 15px;
+    padding: 12px 16px;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    
+    border: none;
+    border-radius: 8px;
+    
+    background: #AE0A0A;
+    color: #FFFFFF;
+    
+    font-size: 15px;
+    font-weight: 700;
+    
+    cursor: pointer;
+    
+    transition:
+        background 0.2s ease,
+        transform 0.15s ease;
+}
+
+.cancelar-dividas ion-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.cancelar-dividas:active {
+    transform: scale(0.98);
+}
+
+/* Container da barra e do texto numérico */
+.char-progress-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 6px;
+}
+
+/* Trilho cinza da barra */
+.char-progress-bar {
+    flex: 1;
+    height: 6px;
+    background-color: rgba(150, 150, 150, 0.2);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+/* Preenchimento colorido dinâmico */
+.char-progress-fill {
+    height: 100%;
+    width: 0%;
+    background-color: #008754;
+    /* Cor inicial (Verde) */
+    border-radius: 3px;
+    transition: width 0.15s ease, background-color 0.2s ease;
+}
+
+/* Contador numérico */
+.char-counter-text {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-muted, #666);
+    min-width: 55px;
+    text-align: right;
+    user-select: none;
+}
+
+/* Mensagem de limite máximo */
+.char-warning-text {
+    display: none;
+    color: #ef4444;
+    font-size: 0.75rem;
+    margin-top: 4px;
+    font-weight: 500;
+}
+
+.char-warning-text.active {
+    display: block;
+}
 /*////////////////////////////////////
 //
 // - fim css

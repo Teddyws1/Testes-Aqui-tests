@@ -6,28 +6,26 @@
 -294pq CICLO DO FOOTER — ARRASTE VERTICAL  
 -004n ids aleatórios
 -49kk Instalação PWA
+-039II cancelar dívidas
 -402IV mês do ano 
 -41UV Botão no menu da página principal
--029LO sistema de Scroll entre páginas
 -513TT barra de pesquisa
+//=====
+-208JJ sistema de cadastras dividas
 -208JJ botao adicionar nova despesas
+//====//
 -920wq botao sobre site
--013HGF Registrar o Service Worker para funcionar em segundo plano
+-024BB editar-dividas
+-039II nova despesa
 
 
 
-
-
-
-
-
-
-
-
+-0001ABC MAPEAMENTO DO DOM
 ============== [versões] ===============
 versoes 
 versao atual
-v=05
+v=07
+DívidaZero = V  atualmente V07
 img.
 
 https://i.postimg.cc/wxDZMkFH/Picsart-26-08-16-12-23-02-954.jpg

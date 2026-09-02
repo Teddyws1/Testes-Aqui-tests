@@ -1,0 +1,293 @@
+/*////////////////////////////////////
+//
+// -294pq CICLO DO FOOTER — ARRASTE VERTICAL  
+//
+///////////////////////////////////*/
+.app-footer {
+    background-color: var(--header-bg);
+    color: var(--text-white);
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: 0 -4px 15px var(--shadow-color);
+    border-top: 2px solid var(--primary-color);
+}
+
+.resumo-aba {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+
+    width: fit-content;
+
+    margin: 0 auto 16px;
+    padding: 8px 15px;
+
+    color: #ffffff;
+
+    font-size: 16px;
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: 0.4px;
+
+    background: rgba(255, 255, 255, 0.025);
+
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 10px;
+
+    box-shadow:
+        0 4px 14px rgba(0, 0, 0, 0.16);
+
+    box-sizing: border-box;
+}
+
+
+/* Ícone */
+
+.resumo-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 27px;
+    height: 27px;
+
+    border-radius: 7px;
+
+    background: rgba(0, 184, 137, 0.10);
+
+    border: 1px solid rgba(0, 184, 137, 0.20);
+
+    box-shadow:
+        0 0 8px rgba(0, 184, 137, 0.08);
+
+    flex-shrink: 0;
+}
+
+
+.resumo-icon ion-icon {
+    width: 17px;
+    height: 17px;
+
+    font-size: 17px;
+
+    color: var(--primary-color);
+
+    filter:
+        drop-shadow(
+            0 0 5px rgba(0, 184, 137, 0.35)
+        );
+}
+
+
+/* Linha de destaque */
+
+.resumo-aba::after {
+    content: "";
+
+    position: absolute;
+
+    left: 50%;
+    bottom: -5px;
+
+    width: 28px;
+    height: 2px;
+
+    transform: translateX(-50%);
+
+    background: var(--primary-color);
+
+    border-radius: 999px;
+
+    box-shadow:
+        0 0 6px rgba(0, 184, 137, 0.35);
+}
+
+.resumo-aba ion-icon {
+    width: 19px;
+    height: 19px;
+
+    font-size: 19px;
+
+    color: var(--primary-color);
+
+    flex-shrink: 0;
+
+    filter: drop-shadow(
+        0 0 5px rgba(0, 184, 137, 0.25)
+    );
+}
+
+/* •090Dr ÁREA ARRASTÁVEL */
+.footer-drawer {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9;
+    transform: translateY(100%);
+    will-change: transform;
+    touch-action: none;
+}
+
+/* •091Al ALÇA */
+.footer-drag-handle {
+    position: absolute;
+    left: 50%;
+    top: -24px;
+    width: 85px;
+    height: 24px;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--header-bg);
+    border: 2px solid var(--primary-color);
+    border-bottom: none;
+    border-radius: 12px 12px 0 0;
+    touch-action: none;
+}
+
+.footer-drag-handle span {
+    width: 40px;
+    height: 4px;
+    background: var(--primary-color);
+    border-radius: 20px;
+}
+.footer-paid-value {
+    color: #35c51c;
+    font-weight: 700;
+    background: rgba(37, 181, 14, 0.10);
+    border: 1px solid rgba(37, 181, 14, 0.25);
+    padding: 4px 9px;
+    border-radius: 6px;
+    display: inline-block;
+}
+.footer-balance {
+    color: #d4c21a;
+    font-weight: 700;
+    background: rgba(189, 171, 11, 0.12);
+    border: 1px solid rgba(189, 171, 11, 0.28);
+    padding: 4px 9px;
+    border-radius: 6px;
+    display: inline-block;
+}
+.ja-pago {
+    color: #35c51c;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+}
+.japago{
+    color: #35c51c;
+    font-weight: 700;
+}
+
+.falta-pagar {
+    color: #d8b51c;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    text-shadow: 0 0 8px rgba(216, 181, 28, 0.18);
+}
+
+.total-dividas {
+    color: #FFFFFF;
+    font-weight: 800;
+    letter-spacing: 0.2px;
+}
+
+.total-rs {
+    color: #ffffff;
+    font-weight: 800;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 5px 10px;
+    border-radius: 7px;
+    display: inline-block;
+    letter-spacing: 0.2px;
+}
+/* Organização */
+.ja-pago,
+.falta-pagar,
+.total-dividas {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+
+
+/* Base dos ícones */
+.ja-pago ion-icon,
+.falta-pagar ion-icon,
+.total-dividas ion-icon {
+    width: 19px;
+    height: 19px;
+    font-size: 19px;
+    flex-shrink: 0;
+    transform-origin: center;
+}
+
+
+/* Já Pago */
+.ja-pago ion-icon {
+    color: #35c51c;
+    filter: drop-shadow(0 0 5px rgba(53, 197, 28, 0.25));
+    animation: iconPago 3s ease-in-out infinite;
+}
+
+@keyframes iconPago {
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.08);
+    }
+}
+
+
+/* Falta Pagar */
+.falta-pagar ion-icon {
+    color: #d8b51c;
+    filter: drop-shadow(0 0 5px rgba(216, 181, 28, 0.22));
+    animation: iconPendente 2.5s ease-in-out infinite;
+}
+
+@keyframes iconPendente {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-2px);
+    }
+}
+
+
+/* Total de Dívidas */
+.total-dividas ion-icon {
+    color: #FFFFFF;
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.18));
+    animation: iconTotal 4s ease-in-out infinite;
+}
+
+@keyframes iconTotal {
+    0%, 100% {
+        transform: rotate(0deg);
+    }
+
+    50% {
+        transform: rotate(-5deg);
+    }
+}
+
+
+/* Acessibilidade */
+@media (prefers-reduced-motion: reduce) {
+    .ja-pago ion-icon,
+    .falta-pagar ion-icon,
+    .total-dividas ion-icon {
+        animation: none;
+    }
+}
