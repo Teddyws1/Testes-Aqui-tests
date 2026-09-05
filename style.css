@@ -1552,18 +1552,7 @@ textarea.form-control {
     user-select: none;
 }
 
-/* Mensagem de limite máximo */
-.char-warning-text {
-    display: none;
-    color: #ef4444;
-    font-size: 0.75rem;
-    margin-top: 4px;
-    font-weight: 500;
-}
 
-.char-warning-text.active {
-    display: block;
-}
 /*////////////////////////////////////
 //
 // - fim css

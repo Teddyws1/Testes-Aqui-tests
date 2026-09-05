@@ -348,7 +348,6 @@ document.addEventListener('DOMContentLoaded', () => {
         dom.footerBalance.textContent = formatCurrency(pendingVal);
         dom.footerTotal.textContent = formatCurrency(totalVal);
     }
-
 //////////////////////////////////////
 //
 // - PARTE 2: MODAIS, EVENTOS E BACKUP/IMPORT
@@ -1132,6 +1131,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (closedByDrag) {
             return;
+
         }
 
 
