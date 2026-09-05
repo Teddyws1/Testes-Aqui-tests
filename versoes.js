@@ -1,7 +1,18 @@
 const systemUpdates = [
+
 {
-version: "1.6.2",
-status: "Estável",
+    version: "1.7.0",
+    status: "versão atual",
+    date: "04/09/2026",
+    description: [
+       "ajustes na internos",
+       "correção visual"
+    ],
+    url: "https://teddyws1.github.io/DividaZero/"
+},
+{
+version: "1.7.0",
+status: "versão atual",
 date: "04/09/2026",
 description: [
 "Sincronização Temporal Automática: o mês do sistema agora acompanha automaticamente o mês do aparelho",
@@ -10,7 +21,8 @@ description: [
 "Novo sistema de limite de caracteres de 0/50",
 "Nova função de cancelamento",
 "Ajustes visuais na interface",
-"Remoção de sistemas antigos que não estavam sendo utilizados"
+"Remoção de sistemas antigos que não estavam sendo utilizados",
+"footer com sistema aprimorando"
 ],
 url: "https://teddyws1.github.io/DividaZero/"
 },

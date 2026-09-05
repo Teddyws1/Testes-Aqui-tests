@@ -291,3 +291,78 @@
         animation: none;
     }
 }
+
+/*////////////////////////////////////
+//
+// - categorias stat-box
+//
+///////////////////////////////////*/
+
+
+
+/* •092Rs ESTATÍSTICAS */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    background: var(--footer-stats-bg);
+    padding: 8px;
+    border-radius: 10px;
+    border: 1px solid var(--footer-stats-border);
+}
+
+.stat-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.stat-box .stat-label {
+    font-size: 0.7rem;
+    color: var(--stat-label-color);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stat-box .stat-val {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-top: 2px;
+}
+
+.stat-val.paid-color {
+    color: var(--stat-paid-color);
+}
+
+.stat-val.pending-color {
+    color: var(--stat-pending-color);
+}
+
+.stat-val.total-color {
+    color: var(--stat-total-color);
+}
+
+/* •093Sm RESUMO */
+.footer-summary {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-top: 4px;
+}
+
+.footer-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    color: var(--footer-row-color);
+}
+
+.footer-row.total-bold {
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--text-white);
+    border-top: 1px dashed var(--footer-dash-border);
+    padding-top: 6px;
+}
