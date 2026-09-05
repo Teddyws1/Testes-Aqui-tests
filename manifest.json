@@ -1,6 +1,6 @@
 {
-    "name": "DívidaZero",
-    "short_name": "DívidaZero",
+    "name": "DívidaZero TESTES",
+    "short_name": "DívidaZero TESTES",
     "description": "Aplicativo web instalável.",
     "start_url": "./index.html",
 
@@ -11,7 +11,7 @@
     "theme_color": "#0f172a",
     "icons": [
         {
-            "src": "https://i.postimg.cc/wxDZMkFH/Picsart-26-08-16-12-23-02-954.jpg",
+            "src": "https://i.postimg.cc/Pf6LrWHF/Picsart-26-09-05-10-08-19-414.jpg",
             "sizes": "512x512",
             "type": "image/jpeg",
             "purpose": "any maskable"
