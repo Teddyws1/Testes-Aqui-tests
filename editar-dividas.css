@@ -7,14 +7,10 @@
     display: flex;
     align-items: center;
     gap: 9px;
-
     margin: 0;
-
-    color: #FFFFFF;
-
+    color: var(--text-colo-teditar-divida);
     font-size: 18px;
     font-weight: 800;
-
     line-height: 1.2;
     letter-spacing: 0.2px;
 }
@@ -22,17 +18,9 @@
 #edit-modal-title ion-icon {
     width: 21px;
     height: 21px;
-
     font-size: 21px;
-
-    color: var(--primary-color);
-
+    color: var(--icone-editar-divida) ;
     flex-shrink: 0;
-
-    filter:
-        drop-shadow(
-            0 0 6px rgba(0, 184, 137, 0.3)
-        );
 }
 /*////////////////////////////////////
 //
@@ -41,26 +29,83 @@
 ///////////////////////////////////*/
 .btn-atualizar-divida {
     margin-top: 15px;
-
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-
+    background: var(--fundo-editar-divida);
     width: 100%;
 }
 
 .btn-atualizar-divida ion-icon {
     width: 18px;
     height: 18px;
-
     font-size: 18px;
-
     flex-shrink: 0;
-
     color: currentColor;
 }
 
 .btn-atualizar-divida span {
     line-height: 1;
+}
+
+.botao-Atualizar-divida {
+    color: var(--color-Atualizar-divida);
+   
+}
+
+/*////////////////////////////////////
+//
+// botão de compartilhar dividas
+//
+///////////////////////////////////*/
+
+.btn-share {
+    background-color: var(--fundo-compartilha);
+    color: var(--color-compartilha-divida);
+    border: none;
+    padding: clamp(10px, 1.5vh, 14px);
+    border-radius: 10px;
+    font-size: clamp(0.9rem, 1.1vw, 1rem);
+    font-weight: 700;
+    cursor: pointer;
+    width: 100%;
+    min-height: 46px;
+    text-align: center;
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: transform 0.15s ease, opacity 0.2s ease;
+}
+
+/*////////////////////////////////////
+//
+// botão de excluir dividas
+//
+///////////////////////////////////*/
+.btn-danger {
+    background-color: var(--fundo-cancelar-divida);
+    color: var(--color-cancelar-divida);
+    border: none;
+    padding: clamp(10px, 1.5vh, 14px);
+    border-radius: 10px;
+    font-size: clamp(0.9rem, 1.1vw, 1rem);
+    font-weight: 700;
+    cursor: pointer;
+    width: 100%;
+    min-height: 46px;
+    text-align: center;
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: transform 0.15s ease, opacity 0.2s ease;
+}
+
+.btn-danger:active {
+    opacity: 0.9;
+    transform: scale(0.98);
 }

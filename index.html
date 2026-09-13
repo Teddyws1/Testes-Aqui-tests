@@ -30,7 +30,11 @@
 <link rel="stylesheet" href="footer-arratavel.css?v=09">
 
 <link rel="stylesheet" href="editar-dividas.css?v=09">
+
 <link rel="stylesheet" href="nova-despesa.css?v=09">
+
+<link rel="stylesheet" href="sidebar.css?v=09">
+
 
 <link rel="manifest" href="manifest.json">
 <!-- Favicon Principal (Aba do navegador e Android) -->
@@ -201,87 +205,160 @@
     </div>
 
 <!--- -294pq CICLO DO FOOTER — ARRASTE VERTICAL --->
-    <footer class="app-footer">
-<h5 class="resumo-aba">
-    <ion-icon name="stats-chart-outline"></ion-icon>
-    Resumo rápido 
-</h5>
-        <div class="stats-grid">
+<footer class="app-footer">
 
-            <div class="stat-box">
-                <span class="stat-label">
-                    Total Dívidas
-                </span>
+    <!-- •294Rf CABEÇALHO DO RESUMO -->
+    <div class="resumo-aba">
+        <ion-icon
+            name="stats-chart-outline"
+            aria-hidden="true"
+        ></ion-icon>
 
-                <span
-                    class="stat-val total-color"
-                    id="stat-count-total"
-                >
-                    0
-                </span>
-            </div>
+        <span>Resumo rápido</span>
+    </div>
 
-            <div class="stat-box">
-                <span class="stat-label">
-                    Pagas
-                </span>
 
-                <span
-                    class="stat-val paid-color"
-                    id="stat-count-paid"
-                >
-                    0
-                </span>
-            </div>
+    <!-- •092Rs ESTATÍSTICAS -->
+    <section
+        class="stats-grid"
+        aria-label="Estatísticas das dívidas"
+    >
 
-            <div class="stat-box">
-                <span class="stat-label">
-                    Para Pagar
-                </span>
+        <!-- Total -->
+        <div class="stat-box stat-total">
 
-                <span
-                    class="stat-val pending-color"
-                    id="stat-count-pending"
-                >
-                    0
-                </span>
-            </div>
+            <ion-icon
+                name="wallet-outline"
+                class="stat-icon"
+                aria-hidden="true"
+            ></ion-icon>
+
+            <span class="stat-label">
+                Total Dívidas
+            </span>
+
+            <span
+                class="stat-val total-color"
+                id="stat-count-total"
+            >
+                0
+            </span>
+
         </div>
 
-<div class="footer-summary">
-    
-    <div class="footer-row">
-        <span class="japago">Já Pago:</span>
-        
-        <span id="footer-paid-value" class="footer-paid-value">
-            R$ 0,00
-        </span>
-    </div>
-    
-    <div class="footer-row">
-        <span class="falta-pagar">Falta Pagar:</span>
-        
-        <span id="footer-balance" class="footer-balance">
-            R$ 0,00
-        </span>
-    </div>
-    
-    <div class="footer-row total-bold">
-        <span class="total-dividas">Total de Dívidas:</span>
-        
-        <span id="footer-total" class="total-rs">
-            R$ 0,00
-        </span>
-    </div>
-    
-</div>
-    </footer>
+
+        <!-- Pagas -->
+        <div class="stat-box stat-paid">
+
+            <ion-icon
+                name="checkmark-circle-outline"
+                class="stat-icon"
+                aria-hidden="true"
+            ></ion-icon>
+
+            <span class="stat-label">
+                Pagas
+            </span>
+
+            <span
+                class="stat-val paid-color"
+                id="stat-count-paid"
+            >
+                0
+            </span>
+
+        </div>
+
+
+        <!-- Pendentes -->
+        <div class="stat-box stat-pending">
+
+            <ion-icon
+                name="time-outline"
+                class="stat-icon"
+                aria-hidden="true"
+            ></ion-icon>
+
+            <span class="stat-label">
+                Para Pagar
+            </span>
+
+            <span
+                class="stat-val pending-color"
+                id="stat-count-pending"
+            >
+                0
+            </span>
+
+        </div>
+
+    </section>
+
+
+    <!-- •093Sm RESUMO FINANCEIRO -->
+    <section
+        class="footer-summary"
+        aria-label="Resumo financeiro"
+    >
+
+        <!-- Já pago -->
+        <div class="footer-row">
+
+            <span class="ja-pago">
+                <span>Já Pago</span>
+            </span>
+
+            <span
+                id="footer-paid-value"
+                class="footer-paid-value"
+            >
+                R$ 0,00
+            </span>
+
+        </div>
+
+
+        <!-- Falta pagar -->
+        <div class="footer-row">
+
+            <span class="falta-pagar">
+                <span>Falta Pagar</span>
+            </span>
+
+            <span
+                id="footer-balance"
+                class="footer-balance"
+            >
+                R$ 0,00
+            </span>
+
+        </div>
+
+
+        <!-- Total -->
+        <div class="footer-row total-bold">
+
+            <span class="total-dividas">
+            
+                <span>Total de Dívidas</span>
+            </span>
+
+            <span
+                id="footer-total"
+                class="total-rs"
+            >
+                R$ 0,00
+            </span>
+
+        </div>
+
+    </section>
+
+</footer>
 
 </div>
 
     </div>
-
-
     <!-- [-013Sb] ABA LATERAL -->
 
     <div
@@ -289,141 +366,90 @@
         id="sidebar-overlay"
     ></div>
 
-    <aside
-        class="sidebar"
-        id="sidebar"
-    >
+<aside class="sidebar" id="sidebar">
 
-        <div class="sidebar-header">
-            <!---420ka titulos--->
-            <ion-icon name="wallet-outline"></ion-icon>
-<h2>Dívida<span>Zero</span></h2>
+    <div class="sidebar-header">
+        <!---420ka titulos--->
+        <ion-icon name="wallet-outline"></ion-icon>
+        <h2>Dívida<span>Zero</span></h2>
+    </div>
 
+    <div class="sidebar-menu" id="configuracoes">
+
+        <!-- Grupo 1: Configurações Gerais -->
+        <div class="sidebar-section-title">
+            <h2>Configurações</h2>
         </div>
 
+        <button type="button" class="menu-item" id="menu-item-history">
+            <ion-icon name="time-outline"></ion-icon>
+            <span>Histórico de Atividades</span>
+        </button>
 
-        <div class="sidebar-menu">
-
-            <button
-                type="button"
-                class="menu-item"
-                id="menu-item-history"
-            >
-                <ion-icon name="time-outline"></ion-icon>
-
-                <span>
-                    Histórico de Atividades
-                </span>
-            </button>
-            <br>
-
-            <button
-                type="button"
-                class="menu-item"
-                id="menu-item-updates"
-            >
-                <ion-icon name="gift-outline"></ion-icon>
-
-                <span>
-                    Novidades & Atualizações
-                </span>
-            </button>
-            <br>
-            
-            <button
-                type="button"
-                class="menu-item"
-                id="menu-item-theme"
-            >
-                <ion-icon
-                    name="moon-outline"
-                    id="theme-icon"
-                ></ion-icon>
-
-                <span id="theme-text">
-                    Modo Escuro
-                </span>
-            </button>
-            <br>
-            <button type="button" class="menu-item" id="menu-item-clean">
-    <ion-icon name="trash-bin-outline"></ion-icon>
-    <span id="label-clean-dividas">Clean</span>
-</button>
-<br>
-<!-- -41UV Botão no menu da página principal -->
-<button type="button" class="menu-item" id="menu-item-top-month" onclick="window.location.href='painel-resumo.html'">
-    <ion-icon name="trending-down-outline"></ion-icon>
-    <span id="label-top-month">Meses Registrados</span>
-</button>
-            <br>
-            <button
-                type="button"
-                class="menu-item"
-                id="menu-item-export"
-            >
-                <ion-icon name="download-outline"></ion-icon>
-
-                <span>
-                    Exportar Dados (JSON)
-                </span>
-            </button>
-            <br>
+        <button type="button" class="menu-item" id="menu-item-updates">
+            <ion-icon name="gift-outline"></ion-icon>
+            <span>Novidades & Atualizações</span>
+        </button>
         
-            <button
-                type="button"
-                class="menu-item"
-                id="menu-item-import"
-            >
-                <ion-icon name="cloud-upload-outline"></ion-icon>
+        <button type="button" class="menu-item" id="menu-item-theme">
+            <ion-icon name="moon-outline" id="theme-icon"></ion-icon>
+            <span id="theme-text">Modo Escuro</span>
+        </button>
 
-                <span>
-                    Importar Dados (JSON)
-                </span>
+        <button type="button" class="menu-item" id="menu-item-clean">
+            <ion-icon name="trash-bin-outline"></ion-icon>
+            <span id="label-clean-dividas">Clean</span>
+        </button>
 
-                <input
-                    type="file"
-                    id="import-file-input"
-                    accept=".json"
-                    hidden
-                >
-            </button>
-            <br>
-<!--- -113wz Sobre o Desenvolvedor--->
-        
-            <button
-                type="button"
-                class="menu-item"
-                id="menu-item-developer"
-            >
-                <ion-icon name="code-slash-outline"></ion-icon>
+        <button type="button" class="menu-item" id="menu-item-top-month" onclick="window.location.href='painel-resumo.html'">
+            <ion-icon name="trending-down-outline"></ion-icon>
+            <span id="label-top-month">Meses Registrados</span>
+        </button>
 
-                <span>
-                    Sobre o Desenvolvedor
-                </span>
-            </button>
-<!--- -fim  Sobre o Desenvolvedor--->
-   <br>
-   <!--- -920wq botao sobre site --->
-   <a
-    href="sobre_site.html"
-    class="menu-item"
-    id="menu-item-about"
->
-    <ion-icon name="information-circle-outline"></ion-icon>
+        <div class="sidebar-divider"></div>
 
-    <span>
-        Sobre o site
-    </span>
-</a>
-
+        <!-- Grupo 2: Backup e Dados -->
+        <div class="sidebar-section-title">
+            <h2>Gerenciar Dados</h2>
         </div>
 
+        <button type="button" class="menu-item" id="menu-item-export">
+            <ion-icon name="download-outline"></ion-icon>
+            <span>Exportar Dados (JSON)</span>
+        </button>
+    
+        <button type="button" class="menu-item" id="menu-item-import">
+            <ion-icon name="cloud-upload-outline"></ion-icon>
+            <span>Importar Dados (JSON)</span>
+            <input type="file" id="import-file-input" accept=".json" hidden>
+        </button>
 
-        <div class="sidebar-footer">
-            desenvolvido por Teddy machado 2026™
+        <div class="sidebar-divider"></div>
+
+        <!-- Grupo 3: Informações (Sobre) -->
+        <div class="sidebar-section-title">
+            <h2>Sobre</h2>
         </div>
 
-    </aside>
+        <button type="button" class="menu-item" id="menu-item-developer">
+            <ion-icon name="code-slash-outline"></ion-icon>
+            <span>Sobre o Desenvolvedor</span>
+        </button>
+   
+        <a href="sobre_site.html" class="menu-item" id="menu-item-about">
+            <ion-icon name="information-circle-outline"></ion-icon>
+            <span>Sobre o site</span>
+        </a>
+
+    </div>
+
+    <div class="sidebar-footer">
+        desenvolvido por Teddy machado 2026™
+    </div>
+
+</aside>
+
+
 
 
     <!-- [-014Md] MODAL DE CADASTRO -->
@@ -512,7 +538,7 @@
                         <textarea
                             id="expense-description"
                             class="form-control"
-                            placeholder="Informe a descrição completa (suporta mais de 500 caracteres)..."
+                            placeholder="Informe a descrição completa (suporta 50 caracteres)..."
                             required
                             autocomplete="off"
                         ></textarea>
@@ -806,7 +832,7 @@
         aria-hidden="true"
     ></ion-icon>
 
-    <span>Atualizar Dívida</span>
+    <span class="botao-Atualizar-divida">Atualizar Dívida</span>
 </button>
 
 

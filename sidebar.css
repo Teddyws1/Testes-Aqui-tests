@@ -1,0 +1,283 @@
+/* ==========================================================================
+   ETAPA 6: SIDEBAR E OVERLAY
+   ========================================================================== */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -100% !important;
+    width: 280px;
+    max-width: 80vw;
+    height: 100vh;
+    height: 100dvh;
+    background-color: var(--fundo-sidebar);
+    color: var(--color-text-sidebar);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    z-index: 1000;
+    box-shadow: 2px 0 10px var(--modal-shadow);
+    overflow-y: auto;
+    visibility: hidden;
+    pointer-events: none;
+    transition: transform 0.3s ease-in-out, left 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+.sidebar.active {
+    left: 0 !important;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateX(0);
+}
+
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--modal-overlay-bg);
+    backdrop-filter: blur(2px);
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+.sidebar-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.sidebar-header ion-icon {
+    font-size: 1.8rem;
+    color: var(--success-color);
+}
+
+.sidebar-header h2 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--h2-color-divida);
+}
+.sidebar-header h2 span {
+    color: var(--h2-color-zero);
+}
+
+.sidebar-menu {
+    flex: 1;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.sidebar-section-title {
+    padding: 12px 12px 4px 12px;
+    width: 100%;
+}
+
+.sidebar-section-title h2 {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin: 0;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 12px 14px;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    color: var(--color-text-sidebar);
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    text-align: left;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.menu-item ion-icon {
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.menu-item:hover,
+.menu-item:focus {
+    background-color: var(--hover-fundo-sidebar);
+    color: var(--hover-color-text-sidebar);
+}
+
+.menu-item:hover ion-icon {
+    color: var(--success-color);
+}
+
+.sidebar-divider {
+    height: 1px;
+    background-color: var(--border-color);
+    margin: 8px 0;
+}
+
+.sidebar-footer {
+    padding: 16px 24px;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-align: center;
+    border-top: 1px solid var(--border-color);
+}
+
+/*////////////////////////////////////
+//
+// - AVISO LIMPAR HISTÓRICO
+//
+///////////////////////////////////*/
+
+.clear-logs-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    padding: 20px;
+    
+    background: #020617AD;
+    backdrop-filter: blur(6px);
+    
+    animation: clearLogsFadeIn 0.2s ease;
+}
+
+.clear-logs-modal {
+    width: min(100%, 360px);
+    
+    padding: 24px;
+    
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    
+    text-align: center;
+    
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+    
+    animation: clearLogsScaleIn 0.22s ease;
+}
+
+.clear-logs-icon {
+    width: 64px;
+    height: 64px;
+    
+    margin: 0 auto 18px;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    border: 2px solid #ef4444;
+    border-radius: 50%;
+    
+    background: rgba(239, 68, 68, 0.10);
+}
+
+.clear-logs-icon ion-icon {
+    font-size: 30px;
+    color: #ef4444;
+}
+
+.clear-logs-title {
+    margin: 0 0 10px;
+    
+    color: var(--text-color);
+    
+    font-size: 19px;
+    font-weight: 700;
+}
+
+.clear-logs-text {
+    margin: 0;
+    
+    color: var(--muted-color);
+    
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.clear-logs-buttons {
+    display: flex;
+    gap: 10px;
+    
+    margin-top: 24px;
+}
+
+.clear-logs-buttons button {
+    flex: 1;
+    
+    height: 46px;
+    
+    border-radius: 11px;
+    
+    font-size: 14px;
+    font-weight: 600;
+    
+    cursor: pointer;
+    
+    transition:
+        transform 0.15s ease,
+        opacity 0.15s ease;
+}
+
+.clear-logs-cancel {
+    border: 1px solid var(--border-color);
+    
+    background: transparent;
+    color: var(--text-color);
+}
+
+.clear-logs-confirm {
+    border: 0;
+    
+    background: #2563eb;
+    color: #ffffff;
+}
+
+.clear-logs-buttons button:active {
+    transform: scale(0.96);
+}
+
+@keyframes clearLogsFadeIn {
+    from {
+        opacity: 0;
+    }
+    
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes clearLogsScaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.94);
+    }
+    
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}

@@ -1,18 +1,33 @@
 const systemUpdates = [
-
 {
-    version: "1.7.0",
+    version: "2.0.0",
     status: "versão atual",
-    date: "04/09/2026",
+    date: "13/09/2026",
     description: [
-       "ajustes na internos",
-       "correção visual"
+        "melhorei na update dos arquivos salvamento das dívidas "
+    ],
+    url: "https://teddyws1.github.io/DividaZero/"
+}
+,
+{
+    version: "2.0.0",
+    status: "Estável",
+    date: "13/09/2026",
+    description: [
+ "Ajustes internos no sistema",
+"Correções visuais na interface",
+"Aprimoramento do sistema de salvamento de dívidas",
+"Novo sistema de gerenciamento de datas",
+"Novas cores visuais",
+"Melhorias no posicionamento dos elementos",
+"Melhorias nas posições dos elementos",
+"novo sistema de fixa aba resumo"
     ],
     url: "https://teddyws1.github.io/DividaZero/"
 },
 {
 version: "1.7.0",
-status: "versão atual",
+status: "Estável",
 date: "04/09/2026",
 description: [
 "Sincronização Temporal Automática: o mês do sistema agora acompanha automaticamente o mês do aparelho",

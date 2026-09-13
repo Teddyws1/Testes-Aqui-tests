@@ -1,195 +1,310 @@
 /* ========================================================
    VARIÁVEIS DE TEMA E CONFIGURAÇÃO
+   TEMA CLARO — DÍVIDAZERO
    ======================================================== */
 
 :root {
-
+  --border-radius-padrao-botoes: 16px;
   --primary-color: #00A86B;
   --primary-dark: #007A4D;
   --header-bg: #0F172A;
-  --accent-orange: #FFFFFF;
   --color-titulo: #EA580C;
-  --accent-orange-hover: #EA580C;
 
   --bg-main: #F1F5F9;
   --bg-card: #FFFFFF;
 
   --text-main: #0F172A;
   --text-muted: #64748B;
+--text-colo-teditar-divida: #FFFFFF;
+
   --border-color: #E2E8F0;
 
-  --shadow-color: #0F172A14;
+  --color-Atualizar-divida: #FFFFFF;
+  --icone-editar-divida: #00A86B;
+  --fundo-editar-divida: #10B981;
 
-  --danger-color: #EF4444;
+  --fundo-compartilha: #2563EB;
+  --color-compartilha-divida: #FFFFFF;
+
+  --fundo-cancelar-divida: #EF4444;
+  --tex-cancelar-divida: #FFFFFF;
+  --color-cancelar-divida: #FFFFFF;
+
+  --titulo-resumo-footer: #007A4D;
+  --fundo-titulo-footer: #DCFCE7;
+  --box-shadow-footer: 0 4px 12px rgba(0, 168, 107, 0.12);
+  --resumo-icon-titulo: #00A86B;
+  --filter-shadow-icone: rgba(0, 168, 107, 0.25);
+
+  --fundo-botao-abri-resume: #FFFFFF;
+  --border-botao-footer: #CBD5E1;
+  --footer-drag-handle: #94A3B8;
+
+  --fundo-footer: #FFFFFF;
+  --color-text-contagem: #0F172A;
+  --shadow-color-footer: rgba(15, 23, 42, 0.08);
+  --border-top-footer: #E2E8F0;
+
+  --resultado-valor-ja-pago: #15803D;
+  --fundo-resultado-valor-ja-pago: #DCFCE7;
+  --border-resultado-ja-pago: #86EFAC;
+  --color-ja-pago: #15803D;
+
+  --color-falta-pagar: #D97706;
+  --fundo-falta-pagar: #FEF3C7;
+  --border-falta-pagar: #FDE68A;
+
+  --color-total-divida: #007A4D;
+  --fundo-total-divida: #DCFCE7;
+  --border-total-divida: #BBF7D0;
+
+  --fundo-stats-grid: #F1F5F9;
+  --border-footer-stats-border: #E2E8F0;
+  --color-star-box: #0F172A;
+  --stat-label-color: #64748B;
+  --stat-paid-color: #4ADE80;
+  --stat-pending-color: #FBBF24;
+  --stat-total-color: #38BDF8;
+  --footer-dash-border: #CBD5E1;
+
+  --fundo-footer-lock: #FFFFFF;
+  --color-cadeado-aberto: #38BDF8;
+  --color-cadeado-fechado: #EF4444;
+
   --share-color: #2563EB;
   --success-color: #10B981;
+  --header-btn-border: rgba(255, 255, 255, 0.12);
+  --header-btn-active: rgba(255, 255, 255, 0.25);
+  --header-title-grad: #A7F3D0;
 
-  --sidebar-width: 290px;
-  --fubdo-do-theme: #F5F5F5;
-
-  --text-white: #FFFFFF;
-
-  --header-btn-bg: #FFFFFF14;
-  --header-btn-border: #FFFFFF1F;
-  --header-btn-active: #FFFFFF40;
-
-  --dropdown-shadow: #00000033;
+  --month-navigator-shadow: rgba(0, 0, 0, 0.1);
+  --dropdown-shadow: rgba(0, 0, 0, 0.2);
 
   --search-icon-color: #64748B;
   --empty-icon-opacity: 0.3;
 
-  --tag-bg: #00A86B1F;
-  --tag-border: #00A86B40;
+  --tag-bg: rgba(0, 168, 107, 0.12);
+  --tag-border: rgba(0, 168, 107, 0.25);
 
-  --pending-bg: #FEF3C7;
-  --pending-color: #D97706;
-  --pending-border: #FDE68A;
-
-  --paid-bg: #DCFCE7;
-  --paid-color: #15803D;
-  --paid-border: #BBF7D0;
-
-  --footer-stats-bg: #FFFFFF0D;
-  --footer-stats-border: #FFFFFF1A;
-
-  --stat-label-color: #94A3B8;
-  --stat-paid-color: #4ADE80;
-  --stat-pending-color: #FBBF24;
-  --stat-total-color: #38BDF8;
-
-  --footer-row-color: #CBD5E1;
-  --footer-dash-border: #FFFFFF26;
-
-  --sidebar-item-border: #334155;
-  --sidebar-item-hover-bg: #17233A;
-  --sidebar-item-active-bg: #1E293B;
-
-  --sidebar-item-focus-shadow: #3B82F633;
-
-  --modal-overlay-bg: #0F172AA6;
-  --modal-shadow: #0000004D;
-  --accent-orange:#FFFFFF;
-  --btn-primary-shadow: #007A4D;
-  --btn-primary-shadow-hover: #EA580C;
-
-  --github-bg: #24292F;
-  --github-border: #3D444D;
-  --github-hover-bg: #30363D;
-
-  --toast-shadow: #00000040;
-
-  --custom-overlay-bg: #00000099;
-
+  --modal-overlay-bg: rgba(0, 0, 0, 0.62);
+  --modal-shadow: rgba(0, 0, 0, 0.3);
+  --toast-shadow: rgba(0, 0, 0, 0.25);
+  --custom-overlay-bg: rgba(0, 0, 0, 0.6);
   --custom-modal-title: #E63946;
   --btn-secondary-bg: #E0E0E0;
 
-
-  /* Extras */
-
-  --header-title-grad: #A7F3D0;
-
-  --month-navigator-shadow: #0000001A;
-
-  --social-insta-bg:
-    linear-gradient(
-      45deg,
-      #F09433 0%,
-      #E6683C 25%,
-      #DC2743 50%,
-      #CC2366 75%,
-      #BC1888 100%
-    );
-
-  --social-insta-shadow: #E1306C4D;
-
-  --share-icon-shadow: #00A86B40;
-
-  --whatsapp-bg: #25D366;
-  --facebook-bg: #1877F2;
-
+  --github-bg: #24292F;
+  --github-border: #3D444D;
+  --social-insta-bg: linear-gradient(45deg, #F09433 0%, #E6683C 25%, #DC2743 50%, #CC2366 75%, #BC1888 100%);
+  --social-insta-shadow: rgba(225, 48, 108, 0.3);
   --toast-success-icon: #4ADE80;
+  /*////////////////////////////////////
+//
+// - nova despesa -claro
+//
+///////////////////////////////////*/
+
+--color-nova-despesa:#fff;
+
+/*////////////////////////////////////
+//
+// - botão de clean geral -claro
+//
+///////////////////////////////////*/
+--danger-color:#C21D1D;
+--color-botao-clean-geral:#fff;
+
+/*////////////////////////////////////
+//
+// - sidebar -claro
+//
+///////////////////////////////////*/
+--fundo-sidebar:#FFFFFF;
+--color-text-sidebar:#64748B;
+--hover-fundo-sidebar:#FFFFFF14;
+--hover-color-text-sidebar:#059669;
+--h2-color-zero:#07BD85;
+--h2-color-divida:#0F172A;
+
+/*////////////////////////////////////
+//
+// - AVISO LIMPAR HISTÓRICO -claro
+//
+///////////////////////////////////*/
+
+
+
+
+
+
+
+/*////////////////////////////////////
+//
+// - botões do hearder -claro
+//
+///////////////////////////////////*/
+--color-icones-do-botao-hearder:#FFFFFF;
+--fundo-icones-do-botao-hearder:#FFFFFF12;
+--titulo-hearder-minhas-despesas:#FFFFFFB5;
 }
 
 
 /* ========================================================
-   TEMA ESCURO
+   TEMA ESCURO — DÍVIDAZERO
    ======================================================== */
 
 .theme-dark {
-
-  --accent-orange: #EA580C;
-  --color-titulo: #FFFFFF;
   --primary-color: #059669;
   --primary-dark: #047857;
-  --fubdo-do-theme: #0F172A;
   --header-bg: #020617;
+  --color-titulo: #FFFFFF;
+
   --bg-main: #090D16;
   --bg-card: #1E293B;
+
   --text-main: #F8FAFC;
   --text-muted: #94A3B8;
+  --text-colo-teditar-divida: #F8FAFC;
+
   --border-color: #334155;
 
-  --shadow-color: #00000099;
+  --color-Atualizar-divida: #FFFFFF;
+  --icone-editar-divida: #059669;
+  --fundo-editar-divida: #059669;
 
-  --text-white: #F8FAFC;
+  --fundo-compartilha: #2563EB;
+  --color-compartilha-divida: #FFFFFF;
 
-  --header-btn-bg: #FFFFFF0D;
-  --header-btn-border: #FFFFFF1A;
-  --header-btn-active: #FFFFFF33;
-  --btn-primary-shadow: #00000000;
+  --fundo-cancelar-divida: #EF4444;
+  --tex-cancelar-divida: #FFFFFF;
+  --color-cancelar-divida: #FFFFFF;
 
-  --dropdown-shadow: #00000080;
+  --titulo-resumo-footer: #F8FAFC;
+  --fundo-titulo-footer: #1E293B;
+  --box-shadow-footer: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --resumo-icon-titulo: #059669;
+  --filter-shadow-icone: rgba(5, 150, 105, 0.25);
+
+  --fundo-botao-abri-resume: #1E293B;
+  --border-botao-footer: #334155;
+  --footer-drag-handle: #64748B;
+
+  --fundo-footer: #020617;
+  --color-text-contagem: #F8FAFC;
+  --shadow-color-footer: rgba(0, 0, 0, 0.5);
+  --border-top-footer: #334155;
+
+  --resultado-valor-ja-pago: #4ADE80;
+  --fundo-resultado-valor-ja-pago: rgba(21, 128, 61, 0.15);
+  --border-resultado-ja-pago: rgba(21, 128, 61, 0.3);
+  --color-ja-pago: #4ADE80;
+
+  --color-falta-pagar: #FBBF24;
+  --fundo-falta-pagar: rgba(217, 119, 6, 0.15);
+  --border-falta-pagar: rgba(217, 119, 6, 0.3);
+
+  --color-total-divida: #38BDF8;
+  --fundo-total-divida: rgba(30, 58, 138, 0.3);
+  --border-total-divida: rgba(56, 189, 248, 0.3);
+
+  --fundo-stats-grid: #1E293B;
+  --border-footer-stats-border: #334155;
+  --color-star-box: #F8FAFC;
+  --stat-label-color: #94A3B8;
+  --stat-paid-color: #4ADE80;
+  --stat-pending-color: #FBBF24;
+  --stat-total-color: #38BDF8;
+  --footer-dash-border: #334155;
+
+  --fundo-footer-lock: #1E293B;
+  --color-cadeado-aberto: #38BDF8;
+  --color-cadeado-fechado: #EF4444;
+
+  --share-color: #38BDF8;
+  --success-color: #34D399;
+  
+  
+/*////////////////////////////////////
+//
+// - AVISO LIMPAR HISTÓRICO.-escuro
+//
+///////////////////////////////////*/
+
+
+
+  /*////////////////////////////////////
+//
+// - botão de clean geral -escuro
+//
+///////////////////////////////////*/
+--danger-color:#C21D1D;
+--color-botao-clean-geral:#fff;
+ /*////////////////////////////////////
+//
+// - nova despesa -escuro
+//
+///////////////////////////////////*/
+  
+  --color-nova-despesa:#FFFFFF;
+  
+  
+/*////////////////////////////////////
+//
+// - sidebar -escuro
+//
+///////////////////////////////////*/
+--fundo-sidebar:#0F172A;
+--color-text-sidebar:#64748B;
+--hover-fundo-sidebar:#FFFFFF14;
+--hover-color-text-sidebar:#07BD85;
+--h2-color-zero:#07BD85;
+--h2-color-divida:#FFFFFF;
+/*////////////////////////////////////
+//
+// - botões do hearder -escuro
+//
+///////////////////////////////////*/
+--color-icones-do-botao-hearder:#FFFFFF;
+--fundo-icones-do-botao-hearder:#FFFFFF12;
+--titulo-hearder-minhas-despesas:#FFFFFFB5;
+
+/*////////////////////////////////////
+//
+// -config
+//
+///////////////////////////////////*/
+  --header-btn-border: rgba(255, 255, 255, 0.1);
+  --header-btn-active: rgba(255, 255, 255, 0.2);
+  --header-title-grad: #A7F3D0;
+
+  --month-navigator-shadow: rgba(0, 0, 0, 0.4);
+  --dropdown-shadow: rgba(0, 0, 0, 0.6);
 
   --search-icon-color: #94A3B8;
   --empty-icon-opacity: 0.2;
 
-  --tag-bg: #05966926;
-  --tag-border: #0596694D;
+  --tag-bg: rgba(5, 150, 105, 0.15);
+  --tag-border: rgba(5, 150, 105, 0.3);
 
-  --pending-bg: #D9770626;
+  --pending-bg: rgba(217, 119, 6, 0.15);
   --pending-color: #FBBF24;
-  --pending-border: #D977064D;
+  --pending-border: rgba(217, 119, 6, 0.3);
 
-  --paid-bg: #15803D26;
+  --paid-bg: rgba(21, 128, 61, 0.15);
   --paid-color: #4ADE80;
-  --paid-border: #15803D4D;
+  --paid-border: rgba(21, 128, 61, 0.3);
 
-  --footer-stats-bg: #00000033;
-  --footer-stats-border: #FFFFFF14;
-
-  --stat-label-color: #94A3B8;
-
-  --sidebar-item-border: #334155;
-  --sidebar-item-hover-bg: #1E293B;
-  --sidebar-item-active-bg: #0F172A;
-
-  --custom-overlay-bg: #000000CC;
-
+  --modal-overlay-bg: rgba(0, 0, 0, 0.8);
+  --modal-shadow: rgba(0, 0, 0, 0.5);
+  --toast-shadow: rgba(0, 0, 0, 0.4);
+  --custom-overlay-bg: rgba(0, 0, 0, 0.8);
+  --custom-modal-title: #E63946;
   --btn-secondary-bg: #334155;
 
 
-  /* Extras */
-
-  --header-title-grad: #A7F3D0;
-
-  --month-navigator-shadow: #0000001A;
-
-  --social-insta-bg:
-    linear-gradient(
-      45deg,
-      #F09433 0%,
-      #E6683C 25%,
-      #DC2743 50%,
-      #CC2366 75%,
-      #BC1888 100%
-    );
-
-  --social-insta-shadow: #E1306C4D;
-
-  --share-icon-shadow: #05966940;
-
-  --whatsapp-bg: #25D366;
-  --facebook-bg: #1877F2;
-
+  --github-bg: #24292F;
+  --github-border: #3D444D;
+  --social-insta-bg: linear-gradient(45deg, #F09433 0%, #E6683C 25%, #DC2743 50%, #CC2366 75%, #BC1888 100%);
+  --social-insta-shadow: rgba(225, 48, 108, 0.3);
   --toast-success-icon: #4ADE80;
 }

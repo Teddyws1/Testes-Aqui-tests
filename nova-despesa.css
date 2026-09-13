@@ -1,3 +1,228 @@
+/* ==========================================================================
+   ETAPA 7: MODAIS, FORMULÁRIOS E BOTÕES
+   ========================================================================== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    color: var(--color-nova-despesa);
+    background-color: var(--modal-overlay-bg);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(12px, 3vw, 32px);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+    cursor: pointer;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.modal-card {
+    background-color: var(--bg-card);
+    border-radius: 16px;
+    width: 100%;
+    max-width: clamp(300px, 90vw, 560px);
+    max-height: 90vh;
+    max-height: 90dvh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 20px 40px var(--modal-shadow);
+    transform: translateY(20px);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid var(--border-color);
+    cursor: default;
+}
+
+.modal-overlay.active .modal-card {
+    transform: translateY(0);
+}
+
+.modal-header {
+    background-color: var(--header-bg);
+    color: var(--text-white);
+    padding: clamp(14px, 2vh, 20px) clamp(16px, 2.5vw, 24px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2px solid var(--primary-color);
+}
+
+.modal-header h3 {
+    font-size: clamp(1.05rem, 1.4vw, 1.35rem);
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.modal-body {
+    padding: clamp(14px, 2.5vw, 26px);
+    overflow-y: auto;
+    max-height: calc(90vh - 65px);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(12px, 2vh, 18px);
+    -webkit-overflow-scrolling: touch;
+}
+
+.modal-body::-webkit-scrollbar {
+    width: 6px;
+}
+.modal-body::-webkit-scrollbar-track {
+    background: var(--bg-main);
+}
+.modal-body::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 4px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group label {
+    font-size: clamp(0.82rem, 1vw, 0.92rem);
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.form-control {
+    width: 100%;
+    padding: clamp(10px, 1.5vh, 14px);
+    border: none;
+    border-bottom: 2px solid var(--border-color);
+    background-color: transparent;
+    color: var(--text-main);
+    font-size: clamp(0.92rem, 1.1vw, 1.05rem);
+    outline: none;
+    min-height: 44px;
+    transition: border-color 0.2s ease;
+}
+
+.form-control:focus {
+    border-bottom-color: var(--primary-color);
+}
+
+select.form-control {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: clamp(10px, 1.5vh, 14px);
+}
+
+textarea.form-control {
+    resize: vertical;
+    min-height: 90px;
+    max-height: 250px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: clamp(10px, 1.5vh, 14px);
+}
+
+.char-counter {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-align: right;
+    margin-top: 2px;
+}
+
+.radio-group {
+    display: flex;
+    gap: clamp(14px, 3vw, 28px);
+    margin-top: 6px;
+    flex-wrap: wrap;
+}
+
+.radio-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: clamp(0.9rem, 1.1vw, 1rem);
+    font-weight: 500;
+    min-height: 40px;
+}
+
+.radio-option input[type="radio"] {
+    accent-color: var(--primary-color);
+    width: 18px;
+    height: 18px;
+}
+
+.btn-primary {
+    background-color: var(--success-color);
+    color: var(--text-white);
+    border: none;
+    padding: clamp(12px, 1.8vh, 16px);
+    border-radius: 10px;
+    font-size: clamp(0.92rem, 1.1vw, 1.05rem);
+    font-weight: 800;
+    cursor: pointer;
+    width: 100%;
+    min-height: 46px;
+    text-align: center;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 12px var(--btn-primary-shadow);
+}
+
+.btn-primary ion-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.btn-primary:active {
+    transform: scale(0.98);
+}
+
+.cancelar-dividas {
+    width: 100%;
+    margin-top: 15px;
+    padding: 12px 16px;
+    min-height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: none;
+    border-radius: 8px;
+    background: var(--fundo-cancelar-divida);
+    color: var(--tex-cancelar-divida);
+    font-size: clamp(0.92rem, 1.1vw, 1.02rem);
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.cancelar-dividas ion-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.cancelar-dividas:active {
+    transform: scale(0.98);
+}
+
+
 /*////////////////////////////////////
 //
 // -024CC nova-despesa
@@ -7,11 +232,7 @@
     display: flex;
     align-items: center;
     gap: 9px;
-
     margin: 0;
-
-    color: #FFFFFF;
-
     font-size: 18px;
     font-weight: 800;
 
@@ -25,7 +246,7 @@
 
     font-size: 21px;
 
-    color: var(--primary-color);
+    color: #FF0000;
 
     flex-shrink: 0;
 

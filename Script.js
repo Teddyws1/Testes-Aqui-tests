@@ -200,9 +200,9 @@ document.addEventListener('DOMContentLoaded', () => {
         return val.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     }
 
-    //////////////////////////////////////
+    //////////////////////////////////
     //
-    // - MÊS DO ANO 
+    // - MÊS DO ANO E DIA ATUAL DO DISPOSITIVO
     //
     /////////////////////////////////////
     function updateMonthDisplay() {
@@ -214,10 +214,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const month = monthNames[state.currentDate.getMonth()];
         const monthNumber = state.currentDate.getMonth() + 1;
         const year = state.currentDate.getFullYear();
+
+        const today = new Date();
+        const currentDay = String(today.getDate()).padStart(2, '0');
+        const currentMonthNum = String(today.getMonth() + 1).padStart(2, '0');
+        const currentYearNum = today.getFullYear();
+
+        const realTodayFormatted = `${currentDay}/${currentMonthNum}/${currentYearNum}`;
         
         dom.currentMonthDisplay.innerHTML = `
             <ion-icon name="calendar-number-outline"></ion-icon>
             <span>${month} ${monthNumber} / ${year}</span>
+       <small class="real-today">Hoje: ${realTodayFormatted}</small>
         `;
     }
     //////////////////////////////////////
@@ -619,14 +627,74 @@ document.addEventListener('DOMContentLoaded', () => {
     
     dom.btnCloseModalEdit.addEventListener('click', () => closeModal(dom.modalEditExpense));
 
-    dom.btnClearLogs.addEventListener('click', () => {
-        if (state.logs.length === 0) return;
-        if (confirm('Deseja limpar todo o histórico de ações?')) {
-            state.logs = [];
-            saveData();
-            renderHistory();
+   //-002HL : CONFIRMAÇÃO LIMPAR HISTÓRICO
+
+dom.btnClearLogs.addEventListener('click', () => {
+    if (state.logs.length === 0) return;
+
+    const overlay = document.createElement('div');
+    overlay.className = 'clear-logs-overlay';
+
+    const modal = document.createElement('div');
+    modal.className = 'clear-logs-modal';
+
+    const icon = document.createElement('div');
+    icon.className = 'clear-logs-icon';
+    icon.innerHTML = `
+        <ion-icon name="trash-outline"></ion-icon>
+    `;
+
+    const title = document.createElement('h3');
+    title.className = 'clear-logs-title';
+    title.textContent = 'Deseja limpar todo o histórico de ações?';
+
+    const text = document.createElement('p');
+    text.className = 'clear-logs-text';
+    text.textContent =
+        'Essa ação não pode ser desfeita e apagará permanentemente todo o histórico.';
+
+    const buttons = document.createElement('div');
+    buttons.className = 'clear-logs-buttons';
+
+    const cancelButton = document.createElement('button');
+    cancelButton.className = 'clear-logs-cancel';
+    cancelButton.type = 'button';
+    cancelButton.textContent = 'Cancelar';
+
+    const confirmButton = document.createElement('button');
+    confirmButton.className = 'clear-logs-confirm';
+    confirmButton.type = 'button';
+    confirmButton.textContent = 'OK';
+
+    buttons.appendChild(cancelButton);
+    buttons.appendChild(confirmButton);
+
+    modal.appendChild(icon);
+    modal.appendChild(title);
+    modal.appendChild(text);
+    modal.appendChild(buttons);
+
+    overlay.appendChild(modal);
+    document.body.appendChild(overlay);
+
+    cancelButton.addEventListener('click', () => {
+        overlay.remove();
+    });
+
+    confirmButton.addEventListener('click', () => {
+        state.logs = [];
+        saveData();
+        renderHistory();
+
+        overlay.remove();
+    });
+
+    overlay.addEventListener('click', (event) => {
+        if (event.target === overlay) {
+            overlay.remove();
         }
     });
+});;
 
     dom.menuItemDeveloper.addEventListener('click', () => {
         toggleSidebar(false);
@@ -842,7 +910,6 @@ document.addEventListener('DOMContentLoaded', () => {
             renderDebts();
         }
     });
-
     //////////////////////////////////////
     //
     // - SISTEMA DE EXPORTAÇÃO E IMPORTAÇÃO DE BACKUP
@@ -852,6 +919,8 @@ document.addEventListener('DOMContentLoaded', () => {
         toggleSidebar(false);
         const dataString = JSON.stringify(state, null, 2);
 
+        // Sistema inteligente: se o navegador suportar o File System Access API, 
+        // ele usa o arquivo já selecionado na primeira vez para sobrescrever sem pedir novo local.
         if ('showSaveFilePicker' in window) {
             try {
                 if (!exportFileHandle) {
@@ -886,6 +955,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
+        // Fallback clássico de download caso o navegador não suporte a API nativa
         const blob = new Blob([dataString], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
         const downloadAnchor = document.createElement('a');
@@ -941,303 +1011,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     applyTheme(state.theme);
     renderDebts();
-});
-//////////////////////////////////////
-//
-// -294pq CICLO DO FOOTER — ARRASTE VERTICAL  
-//
-/////////////////////////////////////
-
-// •108Fd FECHAMENTO INSTANTÂNEO AO ARRASTAR PARA BAIXO
-
-document.addEventListener("DOMContentLoaded", () => {
-
-    const drawer =
-        document.getElementById("footer-drawer");
-
-    const handle =
-        document.getElementById("footer-drag-handle");
-
-    if (!drawer || !handle) return;
-
-
-    let startY = 0;
-    let startPosition = 0;
-    let currentPosition = 0;
-
-    let drawerHeight = 0;
-    let dragging = false;
-    let closedByDrag = false;
-
-
-    // •109Bl VERIFICAR MODAL OU ABA LATERAL
-
-    function isBlocked() {
-
-        const modal =
-            document.querySelector(
-                ".modal-overlay.active, " +
-                ".modal.active, " +
-                ".image-modal-overlay.active"
-            );
-
-        const sidebar =
-            document.querySelector(
-                "#sidebar.active, " +
-                ".sidebar.active"
-            );
-
-        return !!modal || !!sidebar;
-    }
-
-
-    // •110Fc FECHAR FOOTER INSTANTANEAMENTE
-
-    function closeFooterInstant() {
-
-        updateHeight();
-
-        currentPosition = drawerHeight;
-
-        drawer.style.transition = "none";
-
-        drawer.style.transform =
-            `translateY(${drawerHeight}px)`;
-
-        closedByDrag = true;
-        dragging = false;
-
-    }
-
-
-    // •111Uh ATUALIZAR ALTURA
-
-    function updateHeight() {
-
-        drawerHeight =
-            drawer.offsetHeight;
-
-    }
-
-
-    // •112Ps DEFINIR POSIÇÃO
-
-    function setPosition(position) {
-
-        currentPosition =
-            Math.max(
-                0,
-                Math.min(
-                    drawerHeight,
-                    position
-                )
-            );
-
-        drawer.style.transform =
-            `translateY(${currentPosition}px)`;
-
-    }
-
-
-    // •113St INICIAR ARRASTE
-
-    function startDrag(event) {
-
-        if (event.touches.length !== 1) {
-            return;
-        }
-
-        if (isBlocked()) {
-
-            closeFooterInstant();
-
-            return;
-
-        }
-
-        updateHeight();
-
-        startY =
-            event.touches[0].clientY;
-
-        startPosition =
-            currentPosition;
-
-        closedByDrag = false;
-
-        dragging = true;
-
-        drawer.style.transition =
-            "none";
-
-    }
-
-
-    // •114Mv ACOMPANHAR MOVIMENTO
-
-    function moveDrag(event) {
-
-        if (!dragging) return;
-
-        if (isBlocked()) {
-
-            closeFooterInstant();
-
-            return;
-
-        }
-
-
-        const fingerY =
-            event.touches[0].clientY;
-
-        const difference =
-            fingerY - startY;
-
-
-        /*
-         * APENAS 5PX PARA BAIXO
-         * FECHA IMEDIATAMENTE.
-         */
-
-        if (difference >= 5) {
-
-            closeFooterInstant();
-
-            return;
-
-        }
-
-
-        /*
-         * Movimento normal para cima.
-         */
-
-        setPosition(
-            startPosition + difference
-        );
-
-    }
-
-
-    // •115Ed FINALIZAR ARRASTE
-
-    function endDrag() {
-
-        if (!dragging) return;
-
-        dragging = false;
-
-
-        if (closedByDrag) {
-            return;
-
-        }
-
-
-        if (isBlocked()) {
-
-            closeFooterInstant();
-
-            return;
-
-        }
-
-
-        drawer.style.transition =
-            "transform 0.12s ease-out";
-
-        setPosition(currentPosition);
-
-    }
-
-
-    // •116Ts EVENTOS DE TOQUE
-
-    handle.addEventListener(
-        "touchstart",
-        startDrag,
-        { passive: true }
-    );
-
-
-    handle.addEventListener(
-        "touchmove",
-        moveDrag,
-        { passive: true }
-    );
-
-
-    handle.addEventListener(
-        "touchend",
-        endDrag,
-        { passive: true }
-    );
-
-
-    handle.addEventListener(
-        "touchcancel",
-        endDrag,
-        { passive: true }
-    );
-
-
-    // •117Ob OBSERVAR MODAIS E SIDEBAR
-
-    const observer =
-        new MutationObserver(() => {
-
-            if (isBlocked()) {
-
-                closeFooterInstant();
-
-            }
-
-        });
-
-
-    observer.observe(
-        document.body,
-        {
-            subtree: true,
-            attributes: true,
-            attributeFilter: ["class"]
-        }
-    );
-
-
-    // •118Rs REDIMENSIONAMENTO
-
-    window.addEventListener(
-        "resize",
-        () => {
-
-            updateHeight();
-
-            if (currentPosition > drawerHeight) {
-
-                currentPosition =
-                    drawerHeight;
-
-                drawer.style.transform =
-                    `translateY(${drawerHeight}px)`;
-
-            }
-
-        }
-    );
-
-
-    // •119In INICIAR 100% ESCONDIDO
-
-    updateHeight();
-
-    currentPosition =
-        drawerHeight;
-
-    drawer.style.transform =
-        `translateY(${drawerHeight}px)`;
-
 });
 
 //////////////////////////////////////
