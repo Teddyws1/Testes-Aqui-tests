@@ -130,6 +130,10 @@ document.addEventListener('DOMContentLoaded', () => {
         charCounter: document.getElementById('char-counter'),
         charWarning: document.getElementById('char-warning'),
 
+        // Radios de seleção rápida de mês
+        radioQuickCurrent: document.getElementById('quick-month-current'),
+        radioQuickNext: document.getElementById('quick-month-next'),
+
         modalEditExpense: document.getElementById('modal-edit-expense'),
         btnCloseModalEdit: document.getElementById('btn-close-modal-edit'),
         formEditExpense: document.getElementById('form-edit-expense'),
@@ -225,9 +229,10 @@ document.addEventListener('DOMContentLoaded', () => {
         dom.currentMonthDisplay.innerHTML = `
             <ion-icon name="calendar-number-outline"></ion-icon>
             <span>${month} ${monthNumber} / ${year}</span>
-       <small class="real-today">Hoje: ${realTodayFormatted}</small>
+            <small class="real-today">Hoje: ${realTodayFormatted}</small>
         `;
     }
+
     //////////////////////////////////////
     //
     // -513TT barra de pesquisa: RENDERIZAÇÃO E FILTRAGEM (TEXTO, ID, EMPRESA E VALORES)
@@ -242,7 +247,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let mappedDebts = state.debts.map((d, index) => ({ ...d, originalIndex: index }));
 
-        // -513TT barra de pesquisa: Aplicação do filtro conectado com o input de busca
         let filteredDebts = mappedDebts.filter(debt => {
             const debtDate = new Date(debt.date + 'T00:00:00');
             const matchesDate = debtDate.getMonth() === currentMonth && debtDate.getFullYear() === currentYear;
@@ -250,7 +254,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const query = state.filterQuery.toLowerCase().trim();
             const company = (debt.company || 'Outros').toLowerCase();
             
-            // Tratamento otimizado para buscar valores por número ou texto formatado
             const debtValueStr = debt.value.toString();
             const debtValueFormatted = debt.value.toFixed(2).replace('.', ',');
             const cleanQuery = query.replace('r$', '').replace(/\s+/g, '').replace('.', ',');
@@ -309,14 +312,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="debt-info">
                         <div class="debt-header-info">
                             <span class="debt-tag-id">ID: ${debt.id}</span>
-                <span class="debt-company-badge">
-    <ion-icon name="${
-        companyName.toLowerCase() === 'outros'
-            ? 'ellipsis-horizontal-circle-outline'
-            : 'business-outline'
-    }"></ion-icon>
-    ${companyName}
-</span>
+                            <span class="debt-company-badge">
+                                <ion-icon name="${
+                                    companyName.toLowerCase() === 'outros'
+                                        ? 'ellipsis-horizontal-circle-outline'
+                                        : 'business-outline'
+                                }"></ion-icon>
+                                ${companyName}
+                            </span>
                         </div>
                         <span class="debt-title">${debt.description}</span>
                         <div class="debt-date">
@@ -326,8 +329,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="debt-values">
                         <span class="debt-amount">${formatCurrency(debt.value)}</span>
                         <span class="status-badge ${debt.paid ? 'status-paid' : 'status-pending'}" data-id="${debt.id}">
-                            <ion-icon name="${debt.paid ? 'checkmark-circle-outline' : 'time-outline'}"></ion-icon>
-                            ${debt.paid ? 'Pago' : 'Pendente'}
+                            <ion-icon 
+                                name="${debt.paid ? 'shield-checkmark-outline' : 'hourglass-outline'}"
+                                class="${debt.paid ? '' : 'spinning-icon'}">
+                            </ion-icon>
+                            ${debt.paid ? 'Quitado' : 'Em aberto'}
                         </span>
                     </div>
                 `;
@@ -358,15 +364,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 //////////////////////////////////////
 //
-// - PARTE 2: MODAIS, EVENTOS E BACKUP/IMPORT
+// - PARTE 2: MODAIS, EVENTOS E SELEÇÃO DE MÊS
 //
 //////////////////////////////////////
 
-    //////////////////////////////////////
-    //
-    // - MANIPULAÇÃO DE MODAIS E INTERFACE
-    //
-    //////////////////////////////////////
     function updateCharCounterForInput(inputEl, counterEl, warningEl) {
         if (!inputEl || !counterEl) return;
         const currentLength = inputEl.value.length;
@@ -410,7 +411,94 @@ document.addEventListener('DOMContentLoaded', () => {
         const dd = String(today.getDate()).padStart(2, '0');
         if (dom.expenseDate) dom.expenseDate.value = `${yyyy}-${mm}-${dd}`;
 
+        if (dom.radioQuickCurrent) dom.radioQuickCurrent.checked = true;
+
         updateCharCounterForInput(dom.expenseDescription, dom.charCounter, dom.charWarning);
+    }
+
+    //////////////////////////////////////
+    // - MINI MODAL DE SELEÇÃO DE DIA (MÊS QUE VEM)
+    //////////////////////////////////////
+    function openDaySelectorModal(targetYear, targetMonth, currentDay, onConfirm) {
+        const overlay = document.createElement('div');
+        overlay.className = 'custom-modal-overlay active';
+
+        const lastDayOfMonth = new Date(targetYear, targetMonth + 1, 0).getDate();
+        const defaultDay = Math.min(currentDay, lastDayOfMonth);
+
+        overlay.innerHTML = `
+            <div class="custom-modal-box">
+                <div class="custom-modal-icon"><ion-icon name="calendar-outline"></ion-icon></div>
+                <h3 class="custom-modal-title">Escolha o Dia de Vencimento</h3>
+                <p class="custom-modal-message">
+                    Informe o dia do próximo mês para o vencimento desta conta:
+                </p>
+                <div style="margin: 15px 0;">
+                    <input 
+                        type="number" 
+                        id="quick-day-input" 
+                        class="form-control" 
+                        min="1" 
+                        max="${lastDayOfMonth}" 
+                        value="${defaultDay}" 
+                        style="text-align: center; font-size: 1.2rem; width: 100px; margin: 0 auto;"
+                    >
+                </div>
+                <div class="custom-modal-actions">
+                    <button id="btn-day-cancel" class="btn-modal-secondary">Cancelar</button>
+                    <button id="btn-day-confirm" class="btn-modal-danger" style="background-color: var(--primary-color, #2563eb);">Confirmar</button>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(overlay);
+
+        const dayInput = overlay.querySelector('#quick-day-input');
+        dayInput.focus();
+
+        overlay.querySelector('#btn-day-confirm').addEventListener('click', () => {
+            let dayVal = parseInt(dayInput.value) || defaultDay;
+            dayVal = Math.max(1, Math.min(dayVal, lastDayOfMonth));
+            onConfirm(dayVal);
+            overlay.remove();
+        });
+
+        overlay.querySelector('#btn-day-cancel').addEventListener('click', () => {
+            if (dom.radioQuickCurrent) dom.radioQuickCurrent.checked = true;
+            overlay.remove();
+        });
+    }
+
+    // Gerenciador das opções rápidas de Mês Atual x Mês Que Vem
+    if (dom.radioQuickCurrent && dom.radioQuickNext) {
+        dom.radioQuickCurrent.addEventListener('change', () => {
+            if (dom.radioQuickCurrent.checked) {
+                const today = new Date();
+                const yyyy = today.getFullYear();
+                const mm = String(today.getMonth() + 1).padStart(2, '0');
+                const dd = String(today.getDate()).padStart(2, '0');
+                dom.expenseDate.value = `${yyyy}-${mm}-${dd}`;
+            }
+        });
+
+        dom.radioQuickNext.addEventListener('change', () => {
+            if (dom.radioQuickNext.checked) {
+                const today = new Date();
+                let nextMonth = today.getMonth() + 1;
+                let nextYear = today.getFullYear();
+
+                if (nextMonth > 11) {
+                    nextMonth = 0;
+                    nextYear++;
+                }
+
+                openDaySelectorModal(nextYear, nextMonth, today.getDate(), (selectedDay) => {
+                    const formattedMonth = String(nextMonth + 1).padStart(2, '0');
+                    const formattedDay = String(selectedDay).padStart(2, '0');
+                    dom.expenseDate.value = `${nextYear}-${formattedMonth}-${formattedDay}`;
+                });
+            }
+        });
     }
 
     function openEditModal(debt) {
@@ -627,74 +715,65 @@ document.addEventListener('DOMContentLoaded', () => {
     
     dom.btnCloseModalEdit.addEventListener('click', () => closeModal(dom.modalEditExpense));
 
-   //-002HL : CONFIRMAÇÃO LIMPAR HISTÓRICO
+    //-002HL : CONFIRMAÇÃO LIMPAR HISTÓRICO
+    dom.btnClearLogs.addEventListener('click', () => {
+        if (state.logs.length === 0) return;
 
-dom.btnClearLogs.addEventListener('click', () => {
-    if (state.logs.length === 0) return;
+        const overlay = document.createElement('div');
+        overlay.className = 'clear-logs-overlay';
 
-    const overlay = document.createElement('div');
-    overlay.className = 'clear-logs-overlay';
+        const modal = document.createElement('div');
+        modal.className = 'clear-logs-modal';
 
-    const modal = document.createElement('div');
-    modal.className = 'clear-logs-modal';
+        const icon = document.createElement('div');
+        icon.className = 'clear-logs-icon';
+        icon.innerHTML = `<ion-icon name="trash-outline"></ion-icon>`;
 
-    const icon = document.createElement('div');
-    icon.className = 'clear-logs-icon';
-    icon.innerHTML = `
-        <ion-icon name="trash-outline"></ion-icon>
-    `;
+        const title = document.createElement('h3');
+        title.className = 'clear-logs-title';
+        title.textContent = 'Deseja limpar todo o histórico de ações?';
 
-    const title = document.createElement('h3');
-    title.className = 'clear-logs-title';
-    title.textContent = 'Deseja limpar todo o histórico de ações?';
+        const text = document.createElement('p');
+        text.className = 'clear-logs-text';
+        text.textContent = 'Essa ação não pode ser desfeita e apagará permanentemente todo o histórico.';
 
-    const text = document.createElement('p');
-    text.className = 'clear-logs-text';
-    text.textContent =
-        'Essa ação não pode ser desfeita e apagará permanentemente todo o histórico.';
+        const buttons = document.createElement('div');
+        buttons.className = 'clear-logs-buttons';
 
-    const buttons = document.createElement('div');
-    buttons.className = 'clear-logs-buttons';
+        const cancelButton = document.createElement('button');
+        cancelButton.className = 'clear-logs-cancel';
+        cancelButton.type = 'button';
+        cancelButton.textContent = 'Cancelar';
 
-    const cancelButton = document.createElement('button');
-    cancelButton.className = 'clear-logs-cancel';
-    cancelButton.type = 'button';
-    cancelButton.textContent = 'Cancelar';
+        const confirmButton = document.createElement('button');
+        confirmButton.className = 'clear-logs-confirm';
+        confirmButton.type = 'button';
+        confirmButton.textContent = 'OK';
 
-    const confirmButton = document.createElement('button');
-    confirmButton.className = 'clear-logs-confirm';
-    confirmButton.type = 'button';
-    confirmButton.textContent = 'OK';
+        buttons.appendChild(cancelButton);
+        buttons.appendChild(confirmButton);
 
-    buttons.appendChild(cancelButton);
-    buttons.appendChild(confirmButton);
+        modal.appendChild(icon);
+        modal.appendChild(title);
+        modal.appendChild(text);
+        modal.appendChild(buttons);
 
-    modal.appendChild(icon);
-    modal.appendChild(title);
-    modal.appendChild(text);
-    modal.appendChild(buttons);
+        overlay.appendChild(modal);
+        document.body.appendChild(overlay);
 
-    overlay.appendChild(modal);
-    document.body.appendChild(overlay);
+        cancelButton.addEventListener('click', () => overlay.remove());
 
-    cancelButton.addEventListener('click', () => {
-        overlay.remove();
-    });
-
-    confirmButton.addEventListener('click', () => {
-        state.logs = [];
-        saveData();
-        renderHistory();
-
-        overlay.remove();
-    });
-
-    overlay.addEventListener('click', (event) => {
-        if (event.target === overlay) {
+        confirmButton.addEventListener('click', () => {
+            state.logs = [];
+            saveData();
+            renderHistory();
             overlay.remove();
-        }
+        });
+
+        overlay.addEventListener('click', (event) => {
+            if (event.target === overlay) overlay.remove();
+        });
     });
-});;
 
     dom.menuItemDeveloper.addEventListener('click', () => {
         toggleSidebar(false);
@@ -787,7 +866,7 @@ dom.btnClearLogs.addEventListener('click', () => {
     });
 
     //////////////////////////////////////
-    // -513TT barra de pesquisa: Listener do input que ativa o sistema de busca em tempo real
+    // -513TT barra de pesquisa: Listener do input
     //////////////////////////////////////
     dom.searchInput.addEventListener('input', (e) => {
         state.filterQuery = e.target.value;
@@ -910,6 +989,7 @@ dom.btnClearLogs.addEventListener('click', () => {
             renderDebts();
         }
     });
+
     //////////////////////////////////////
     //
     // - SISTEMA DE EXPORTAÇÃO E IMPORTAÇÃO DE BACKUP
@@ -919,8 +999,6 @@ dom.btnClearLogs.addEventListener('click', () => {
         toggleSidebar(false);
         const dataString = JSON.stringify(state, null, 2);
 
-        // Sistema inteligente: se o navegador suportar o File System Access API, 
-        // ele usa o arquivo já selecionado na primeira vez para sobrescrever sem pedir novo local.
         if ('showSaveFilePicker' in window) {
             try {
                 if (!exportFileHandle) {
@@ -955,7 +1033,6 @@ dom.btnClearLogs.addEventListener('click', () => {
             }
         }
 
-        // Fallback clássico de download caso o navegador não suporte a API nativa
         const blob = new Blob([dataString], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
         const downloadAnchor = document.createElement('a');

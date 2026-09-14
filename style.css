@@ -15,6 +15,16 @@ a {
     -webkit-tap-highlight-color: transparent;
     outline: none;
 }
+/* Impede a expansão e redimensionamento indesejado de inputs, textareas e selects */
+input, textarea, select {
+    resize: none !important;
+    box-sizing: border-box !important;
+    max-width: 100% !important;
+}
+
+textarea {
+    resize: none !important;
+}
 
 html {
   font-size: 16px;
@@ -913,6 +923,33 @@ html, body {
     margin-top: 2px;
     color: #FFFFFF;
 }
+
+/*////////////////////////////////////
+//
+// - animação do ícone hourglass dividas 
+//
+///////////////////////////////////*/
+@keyframes spin-and-pause {
+    0% {
+        transform: rotate(0deg);
+    }
+    /* Gira 360 graus até 50% do tempo (1s) */
+    50% {
+        transform: rotate(360deg);
+    }
+    /* Mantém a rotação em 360 graus até 100% do tempo (faz a pausa) */
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.spinning-icon {
+    /* Tempo total do ciclo: 1s girando + 1s parado = 2s */
+    animation: spin-and-pause 2s ease-in-out infinite;
+    display: inline-block;
+}
+
+
 
 /*////////////////////////////////////
 //

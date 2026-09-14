@@ -4,7 +4,10 @@ const systemUpdates = [
     status: "versão atual",
     date: "13/09/2026",
     description: [
-        "melhorei na update dos arquivos salvamento das dívidas "
+        "melhorei na update dos arquivos salvamento das dívidas ",
+        "melhoria no sistema do imputs",
+        "melhoria no status da dívidas ",
+        "novo sistema de mini modal de mês que vem"
     ],
     url: "https://teddyws1.github.io/DividaZero/"
 }
