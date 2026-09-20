@@ -1,0 +1,184 @@
+/* ==========================================================================
+   ETAPA 5: CONTEÚDO PRINCIPAL E CARDS DE DÍVIDAS
+   ========================================================================== */
+.main-content {
+    flex: 1;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: clamp(12px, 2.5vw, 24px) clamp(16px, 3vw, 40px);
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: clamp(12px, 1.5vw, 20px);
+    align-content: start;
+    -webkit-overflow-scrolling: touch;
+    box-sizing: border-box !important;
+}
+
+.empty-state {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: clamp(200px, 40vh, 400px);
+    color: var(--text-muted);
+    text-align: center;
+    gap: 16px;
+    padding: 20px;
+}
+
+.empty-state ion-icon {
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    opacity: var(--empty-icon-opacity);
+}
+
+.debt-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: clamp(12px, 1.8vw, 18px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    box-shadow: 0 4px 10px var(--shadow-color);
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    height: 100%;
+}
+
+@media (hover: hover) {
+    .debt-card:hover {
+        border-color: var(--primary-color);
+        box-shadow: 0 6px 14px var(--shadow-color);
+    }
+}
+
+.debt-card:active {
+    transform: translateY(1px) scale(0.99);
+}
+
+.debt-info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+    min-width: 0;
+}
+
+.debt-header-info {
+    display: flex;
+    align-items: center;
+    gap: clamp(6px, 1vw, 10px);
+    flex-wrap: wrap;
+}
+
+.debt-tag-id {
+    background-color: var(--tag-bg);
+    color: var(--primary-color);
+    font-size: clamp(0.72rem, 0.9vw, 0.85rem);
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 6px;
+    border: 1px solid var(--tag-border);
+    white-space: nowrap;
+}
+
+.debt-company-badge {
+    background-color: var(--bg-main);
+    color: var(--text-muted);
+    font-size: clamp(0.72rem, 0.9vw, 0.82rem);
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.debt-title {
+    font-size: clamp(0.95rem, 1.2vw, 1.15rem);
+    font-weight: 600;
+    color: var(--text-main);
+    word-break: break-word;
+    overflow-wrap: anywhere;
+}
+
+.debt-date {
+    font-size: clamp(0.8rem, 1vw, 0.92rem);
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.debt-values {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.debt-amount {
+    font-size: clamp(1rem, 1.4vw, 1.35rem);
+    font-weight: 800;
+    color: var(--text-main);
+    white-space: nowrap;
+}
+
+.status-badge {
+    font-size: clamp(0.72rem, 0.9vw, 0.85rem);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+    min-height: 30px;
+    transition: transform 0.15s ease, background-color 0.2s ease;
+}
+
+.status-badge:active {
+    transform: scale(0.95);
+}
+
+.status-pending {
+    background-color: var(--pending-bg);
+    color: var(--pending-color);
+    border: 1px solid var(--pending-border);
+}
+
+.status-paid {
+    background-color: var(--paid-bg);
+    color: var(--paid-color);
+    border: 1px solid var(--paid-border);
+}
+/*////////////////////////////////////
+//
+// - horário div
+//
+///////////////////////////////////*/
+.debt-time{
+    color: var(--color-horario-divs);
+   font-size: clamp(0.8rem, 1vw, 0.92rem);
+display: flex;
+align-items: center;
+gap: 4px;
+}
+
+/*///////////////////////////////////
+//
+//- fim css divss
+/////////////////////////////////*/

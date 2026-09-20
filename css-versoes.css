@@ -1,0 +1,32 @@
+.history-list, .updates-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.history-item, .update-item {
+    padding: clamp(12px, 1.8vw, 16px);
+    border-radius: 10px;
+    background-color: var(--bg-main);
+    border: 1px solid var(--border-color);
+}
+
+.update-version {
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 4px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.update-date {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: normal;
+}
+
+.update-desc {
+    font-size: 0.95rem;
+    color: var(--text-main);
+    line-height: 1.4;
+}

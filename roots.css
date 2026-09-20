@@ -106,6 +106,14 @@
 
 --color-nova-despesa:#fff;
 
+
+/*////////////////////////////////////
+//
+// - horário divs -claro
+//
+///////////////////////////////////*/
+--color-horario-divs:#64748B;
+
 /*////////////////////////////////////
 //
 // - botão de clean geral -claro
@@ -133,10 +141,13 @@
 ///////////////////////////////////*/
 
 
-
-
-
-
+/*///////////////////////////////
+//
+// -toast-message -escuro
+//
+//////////////////////////////*/
+--color-toast-message:#fff;
+--fundo-toast-message:#0F172A;
 
 /*////////////////////////////////////
 //
@@ -247,6 +258,14 @@
   
   --color-nova-despesa:#FFFFFF;
   
+/*///////////////////////////////
+//
+// -toast-message -escuro
+//
+//////////////////////////////*/
+  --color-toast-message:#fff;
+  --fundo-toast-message:#0F172A;
+  
   
 /*////////////////////////////////////
 //
@@ -267,6 +286,14 @@
 --color-icones-do-botao-hearder:#FFFFFF;
 --fundo-icones-do-botao-hearder:#FFFFFF12;
 --titulo-hearder-minhas-despesas:#FFFFFFB5;
+
+/*////////////////////////////////////
+//
+// - horário divs -escuro
+//
+///////////////////////////////////*/
+--color-horario-divs:#94A3B8;
+
 
 /*////////////////////////////////////
 //

@@ -1,13 +1,31 @@
 const systemUpdates = [
-{
-    version: "2.0.0",
+    {
+    version: "2.1.0",
     status: "versão atual",
-    date: "13/09/2026",
+    date: "26/09/2026",
     description: [
-        "melhorei na update dos arquivos salvamento das dívidas ",
-        "melhoria no sistema do imputs",
-        "melhoria no status da dívidas ",
-        "novo sistema de mini modal de mês que vem"
+        "Aprimoramentos no sistema de salvamento.",
+        "novo sistema de horários cadastrando ",
+        "ajuste interno"
+    ],
+    url: "https://teddyws1.github.io/DividaZero/"
+}
+,
+{
+    version: "2.1.0",
+    status: "versão atual",
+    date: "18/09/2026",
+    description: [
+   "Aprimoramento do sistema de salvamento e atualização das dívidas.",
+"Melhorias no sistema de campos de entrada (inputs).",
+"Aprimoramento do gerenciamento e da exibição dos status das dívidas.",
+"Novo mini modal para visualização e navegação do próximo mês.",
+"Novo sistema de formatação para números de grande escala, com abreviação automática de valores.",
+"Novo sistema de limpeza e normalização de valores.",
+"Melhorias na aba de resumo para uma visualização mais clara das informações.",
+"Novo sistema de abreviação exata para valores elevados, com opção de expandir o valor completo ao tocar.",
+"Novo visual para a aba de resumo.",
+"Novo sistema de limpeza e otimização dos dados utilizados na barra de pesquisa."
     ],
     url: "https://teddyws1.github.io/DividaZero/"
 }

@@ -386,239 +386,7 @@ header,
     font-size: clamp(0.9rem, 1.1vw, 1.1rem);
 }
 
-/* ==========================================================================
-   ETAPA 5: CONTEÚDO PRINCIPAL E CARDS DE DÍVIDAS
-   ========================================================================== */
-.main-content {
-    flex: 1;
-    width: 100% !important;
-    max-width: 100% !important;
-    padding: clamp(12px, 2.5vw, 24px) clamp(16px, 3vw, 40px);
-    overflow-y: auto;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: clamp(12px, 1.5vw, 20px);
-    align-content: start;
-    -webkit-overflow-scrolling: touch;
-    box-sizing: border-box !important;
-}
 
-.empty-state {
-    grid-column: 1 / -1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: clamp(200px, 40vh, 400px);
-    color: var(--text-muted);
-    text-align: center;
-    gap: 16px;
-    padding: 20px;
-}
-
-.empty-state ion-icon {
-    font-size: clamp(3rem, 6vw, 5.5rem);
-    opacity: var(--empty-icon-opacity);
-}
-
-.debt-card {
-    background-color: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: clamp(12px, 1.8vw, 18px);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-    width: 100%;
-    box-shadow: 0 4px 10px var(--shadow-color);
-    box-sizing: border-box;
-    cursor: pointer;
-    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-    height: 100%;
-}
-
-@media (hover: hover) {
-    .debt-card:hover {
-        border-color: var(--primary-color);
-        box-shadow: 0 6px 14px var(--shadow-color);
-    }
-}
-
-.debt-card:active {
-    transform: translateY(1px) scale(0.99);
-}
-
-.debt-info {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    flex: 1;
-    min-width: 0;
-}
-
-.debt-header-info {
-    display: flex;
-    align-items: center;
-    gap: clamp(6px, 1vw, 10px);
-    flex-wrap: wrap;
-}
-
-.debt-tag-id {
-    background-color: var(--tag-bg);
-    color: var(--primary-color);
-    font-size: clamp(0.72rem, 0.9vw, 0.85rem);
-    font-weight: 800;
-    padding: 2px 8px;
-    border-radius: 6px;
-    border: 1px solid var(--tag-border);
-    white-space: nowrap;
-}
-
-.debt-company-badge {
-    background-color: var(--bg-main);
-    color: var(--text-muted);
-    font-size: clamp(0.72rem, 0.9vw, 0.82rem);
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 6px;
-    border: 1px solid var(--border-color);
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    white-space: nowrap;
-    max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.debt-title {
-    font-size: clamp(0.95rem, 1.2vw, 1.15rem);
-    font-weight: 600;
-    color: var(--text-main);
-    word-break: break-word;
-    overflow-wrap: anywhere;
-}
-
-.debt-date {
-    font-size: clamp(0.8rem, 1vw, 0.92rem);
-    color: var(--text-muted);
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
-
-.debt-values {
-    text-align: right;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 6px;
-    flex-shrink: 0;
-}
-
-.debt-amount {
-    font-size: clamp(1rem, 1.4vw, 1.35rem);
-    font-weight: 800;
-    color: var(--text-main);
-    white-space: nowrap;
-}
-
-.status-badge {
-    font-size: clamp(0.72rem, 0.9vw, 0.85rem);
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-weight: 700;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    white-space: nowrap;
-    min-height: 30px;
-    transition: transform 0.15s ease, background-color 0.2s ease;
-}
-
-.status-badge:active {
-    transform: scale(0.95);
-}
-
-.status-pending {
-    background-color: var(--pending-bg);
-    color: var(--pending-color);
-    border: 1px solid var(--pending-border);
-}
-
-.status-paid {
-    background-color: var(--paid-bg);
-    color: var(--paid-color);
-    border: 1px solid var(--paid-border);
-}
-/*-001HL : BOTÃO LIMPAR HISTÓRICO */
-
-.btn-clear-logs {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    
-    width: 100%;
-    padding: 12px 16px;
-    
-    border: 1px solid var(--border-color);
-    border-radius: 10px;
-    
-    background: var(--card-bg);
-    color: var(--text-color);
-    
-    font-size: 14px;
-    font-weight: 600;
-    
-    cursor: pointer;
-    transition:
-        background 0.2s ease,
-        color 0.2s ease,
-        border-color 0.2s ease,
-        transform 0.2s ease;
-}
-
-/* Ícone do botão */
-
-.btn-clear-logs ion-icon {
-    font-size: 19px;
-    color: var(--muted-color);
-}
-
-/* Efeito ao passar o mouse */
-
-.btn-clear-logs:hover {
-    background: rgba(239, 68, 68, 0.08);
-    border-color: #EF4444;
-    color: #EF4444;
-}
-
-.btn-clear-logs:hover ion-icon {
-    color: #EF4444;
-}
-
-/* Efeito ao pressionar */
-
-.btn-clear-logs:active {
-    transform: scale(0.98);
-}
-
-/* Tema escuro */
-
-.theme-dark .btn-clear-logs {
-    background: var(--card-bg);
-    border-color: var(--border-color);
-}
-
-/* Tema claro */
-
-.theme-light .btn-clear-logs {
-    background: var(--card-bg);
-    border-color: var(--border-color);
-}
 /* ==========================================================================
    ETAPA 8: SEÇÃO DO DESENVOLVEDOR, COMPARTILHAMENTO E TOASTS
    ========================================================================== */
@@ -711,39 +479,6 @@ header,
     opacity: 0.9;
 }
 
-.history-list, .updates-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.history-item, .update-item {
-    padding: clamp(12px, 1.8vw, 16px);
-    border-radius: 10px;
-    background-color: var(--bg-main);
-    border: 1px solid var(--border-color);
-}
-
-.update-version {
-    font-weight: 700;
-    color: var(--primary-color);
-    margin-bottom: 4px;
-    display: flex;
-    justify-content: space-between;
-}
-
-.update-date {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    font-weight: normal;
-}
-
-.update-desc {
-    font-size: 0.95rem;
-    color: var(--text-main);
-    line-height: 1.4;
-}
-
 .toast-message {
     position: fixed;
     left: 50%;
@@ -754,11 +489,10 @@ header,
     gap: 10px;
     max-width: calc(100vw - 32px);
     padding: 14px 20px;
-    background-color: var(--header-bg);
-    color: var(--text-white);
+    background-color: var(--fundo-toast-message);
+    color: var(--color-toast-message);
     border: 1px solid var(--border-color);
-    border-radius: 12px;
-    box-shadow: 0 10px 30px var(--toast-shadow);
+    border-radius: 5px;
     font-size: clamp(0.85rem, 1vw, 0.95rem);
     font-weight: 600;
     line-height: 1.3;
@@ -947,6 +681,49 @@ html, body {
     /* Tempo total do ciclo: 1s girando + 1s parado = 2s */
     animation: spin-and-pause 2s ease-in-out infinite;
     display: inline-block;
+}
+
+/*////////////////////////////////////
+//
+// - botão de clean de valores 
+//
+///////////////////////////////////*/
+/* Container do Input */
+.input-with-clear {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.input-with-clear input {
+    width: 100%;
+    padding-right: 40px; /* Garante espaço para o botão X */
+}
+
+/* Botão X de Limpeza Rápida (Sem Efeito Hover) */
+.btn-clear-value {
+    position: absolute;
+    right: 10px;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 1.35rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border-radius: 50%;
+    transition: transform 0.1s ease, opacity 0.2s ease;
+    -webkit-tap-highlight-color: transparent; /* Remove o quadrado cinza de toque no mobile */
+}
+
+/* Feedback tátil rápido apenas ao pressionar/clicar */
+.btn-clear-value:active {
+    transform: scale(0.85);
+    opacity: 0.7;
 }
 
 

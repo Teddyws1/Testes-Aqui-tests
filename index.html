@@ -21,20 +21,23 @@
     >
 
  <!-- • 01A — CSS PRINCIPAL -->
-<link rel="stylesheet" href="style.css?v=09">
+<link rel="stylesheet" href="style.css?v=010">
 
-<link rel="stylesheet" href="roots.css?v=09">
+<link rel="stylesheet" href="roots.css?v=010">
 
-<link rel="stylesheet" href="responsivo.css?v=09">
+<link rel="stylesheet" href="responsivo.css?v=010">
 
-<link rel="stylesheet" href="footer-arratavel.css?v=09">
+<link rel="stylesheet" href="footer-arratavel.css?v=010">
 
-<link rel="stylesheet" href="editar-dividas.css?v=09">
+<link rel="stylesheet" href="editar-dividas.css?v=010">
 
-<link rel="stylesheet" href="nova-despesa.css?v=09">
+<link rel="stylesheet" href="nova-despesa.css?v=010">
 
-<link rel="stylesheet" href="sidebar.css?v=09">
+<link rel="stylesheet" href="css-versoes.css?v=010">
 
+<link rel="stylesheet" href="sidebar.css?v=010">
+
+<link rel="stylesheet" href="style-divs-principal.css?v=010">
 
 <link rel="manifest" href="manifest.json">
 <!-- Favicon Principal (Aba do navegador e Android) -->
@@ -176,7 +179,8 @@
     class="search-input"
     placeholder="Buscar por descrição, código ID ou empresa..."
 >
-
+        <!-- Botão de Limpar (Oculto por padrão) -->
+        <ion-icon name="close-outline" id="clear-search" class="clear-icon" style="display: none;"></ion-icon>
             </div>
 
         </div>
@@ -238,7 +242,7 @@
             </span>
 
             <span
-                class="stat-val total-color"
+                class="stat-val total-color animate-value"
                 id="stat-count-total"
             >
                 0
@@ -261,7 +265,7 @@
             </span>
 
             <span
-                class="stat-val paid-color"
+                class="stat-val paid-color animate-value"
                 id="stat-count-paid"
             >
                 0
@@ -284,7 +288,7 @@
             </span>
 
             <span
-                class="stat-val pending-color"
+                class="stat-val pending-color animate-value"
                 id="stat-count-pending"
             >
                 0
@@ -310,7 +314,7 @@
 
             <span
                 id="footer-paid-value"
-                class="footer-paid-value"
+                class="footer-paid-value animate-value"
             >
                 R$ 0,00
             </span>
@@ -327,7 +331,7 @@
 
             <span
                 id="footer-balance"
-                class="footer-balance"
+                class="footer-balance animate-value"
             >
                 R$ 0,00
             </span>
@@ -345,7 +349,7 @@
 
             <span
                 id="footer-total"
-                class="total-rs"
+                class="total-rs animate-value"
             >
                 R$ 0,00
             </span>
@@ -497,12 +501,8 @@
                             class="form-control"
                             required
                         >
-                            <option value="Outros">
-                        Outras Origens
-                       <option value="custom">
-                            Nova empresa...
-                            </option>
-
+                            <option value="Outros">Outras Origens</option>
+                            <option value="custom">Nova empresa...</option>
                         </select>
 
                     </div>
@@ -553,23 +553,33 @@
                     </div>
 
 
-                    <div class="form-group">
+        <div class="form-group">
+            <label>
+                Valor (R$)
+            </label>
 
-                        <label>
-                            Valor (R$)
-                        </label>
+            <div class="input-with-clear">
+                <input
+                    type="text"
+                    inputmode="numeric"
+                    id="expense-value"
+                    class="form-control animated-input"
+                    placeholder="R$ 0,00"
+                    required
+                    autocomplete="off"
+                >
+                <button
+                    type="button"
+                    class="btn-clear-value"
+                    id="btn-clear-value"
+                    title="Limpar valor"
+                    aria-label="Limpar valor"
+                >
+                    <ion-icon name="close-circle-outline"></ion-icon>
+                </button>
+            </div>
+        </div>
 
-                        <input
-                            type="number"
-                            step="0.01"
-                            id="expense-value"
-                            class="form-control"
-                            placeholder="Informe o valor"
-                            required
-                            autocomplete="off"
-                        >
-
-                    </div>
 
 
                     <div
@@ -768,14 +778,26 @@
                             Valor (R$)
                         </label>
 
-                        <input
-                            type="number"
-                            step="0.01"
-                            id="edit-expense-value"
-                            class="form-control"
-                            required
-                            autocomplete="off"
-                        >
+                        <div class="input-with-clear">
+                            <input
+                                type="text"
+                                inputmode="numeric"
+                                id="edit-expense-value"
+                                class="form-control animated-input"
+                                placeholder="R$ 0,00"
+                                required
+                                autocomplete="off"
+                            >
+                            <button
+                                type="button"
+                                class="btn-clear-value"
+                                id="btn-clear-edit-value"
+                                title="Limpar valor"
+                                aria-label="Limpar valor"
+                            >
+                                <ion-icon name="close-circle-outline"></ion-icon>
+                            </button>
+                        </div>
 
                     </div>
 
@@ -1256,13 +1278,13 @@
 
     <!-- [-015Js] SCRIPTS -->
 
-<script src="Script.js?v=09" defer></script>
+<script src="Script.js?v=010" defer></script>
 
-<script src="versoes.js?v=09" defer></script>
+<script src="versoes.js?v=010" defer></script>
 
-<script src="js-das-versoes.js?v=09" defer></script>
+<script src="js-das-versoes.js?v=010" defer></script>
 
-<script src="style.js?v=09" defer></script>
-<script src="footer-arrastavel.js?v=09" defer></script>
+<script src="style.js?v=010" defer></script>
+<script src="footer-arrastavel.js?v=010" defer></script>
 </body>
 </html>

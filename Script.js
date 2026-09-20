@@ -4,9 +4,10 @@
 //
 //////////////////////////////////////
 
+// Armazena a referência da pasta e do arquivo selecionados pelo utilizador
+let exportDirectoryHandle = null;
 let exportFileHandle = null;
 
-// Declarações Globais para acesso compartilhado entre as partes
 const devContactInfo =
     "Teddy Machado\n" +
     "Desenvolvedor e Criador do DívidaZero\n" +
@@ -38,29 +39,31 @@ function showToast(message, type = "success") {
     }, 2500);
 }
 
+//////////////////////////////////////
+// - GERENCIADOR GLOBAL DE SCROLL DO BODY
+//////////////////////////////////////
+function updateBodyScrollState() {
+    const activeModals = document.querySelectorAll('.custom-modal-overlay.active, .modal.active, .clear-logs-overlay');
+    const activeSidebar = document.querySelector('#sidebar.active');
+    
+    if (activeModals.length > 0 || activeSidebar) {
+        document.body.classList.add('no-scroll');
+    } else {
+        document.body.classList.remove('no-scroll');
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
 
-    //////////////////////////////////////
-    //
-    // - ESTADO GLOBAL
-    //
-    //////////////////////////////////////
     const now = new Date();
     const state = {
         debts: JSON.parse(localStorage.getItem('dz_debts')) || [],
         logs: JSON.parse(localStorage.getItem('dz_logs')) || [],
-        // Inicializa com o mês e ano do momento em que o script é executado
         currentDate: new Date(now.getFullYear(), now.getMonth(), 1),
         filterQuery: '',
         sortOption: 'recent',
         theme: localStorage.getItem('dz_theme') || getSystemTheme()
     };
-
-    //////////////////////////////////////
-    //
-    // - APRIMORAMENTO: SISTEMA DE VIRADA AUTOMÁTICA DE MÊS
-    //
-    //////////////////////////////////////
 
     function getSystemTheme() {
         if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -77,11 +80,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    //////////////////////////////////////
-    //
-    // -0001ABC MAPEAMENTO DO DOM
-    //
-    //////////////////////////////////////
     const dom = {
         appContainer: document.getElementById('app-container'),
         debtsContainer: document.getElementById('debts-container'),
@@ -130,7 +128,6 @@ document.addEventListener('DOMContentLoaded', () => {
         charCounter: document.getElementById('char-counter'),
         charWarning: document.getElementById('char-warning'),
 
-        // Radios de seleção rápida de mês
         radioQuickCurrent: document.getElementById('quick-month-current'),
         radioQuickNext: document.getElementById('quick-month-next'),
 
@@ -163,11 +160,6 @@ document.addEventListener('DOMContentLoaded', () => {
         btnCopyDevContact: document.getElementById('btn-copy-dev-contact')
     };
 
-    //////////////////////////////////////
-    //
-    // - FUNÇÕES UTILITÁRIAS E LOGS
-    //
-    //////////////////////////////////////
     function generateRandomID() {
         const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         const numbers = "0123456789";
@@ -201,14 +193,32 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function formatCurrency(val) {
+        if (val < 1e6) {
+            return val.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
+
+        const suffixes = [
+            { value: 1e15, singular: 'quatrilhão', plural: 'quatrilhões' },
+            { value: 1e12, singular: 'trilhão', plural: 'trilhões' },
+            { value: 1e9,  singular: 'bilhão',  plural: 'bilhões' },
+            { value: 1e6,  singular: 'milhão',  plural: 'milhões' }
+        ];
+
+        for (const scale of suffixes) {
+            if (val >= scale.value) {
+                const num = val / scale.value;
+                const formatted = num % 1 === 0 
+                    ? num.toFixed(0) 
+                    : num.toFixed(2).replace(/\.?0+$/, '').replace('.', ',');
+
+                const suffix = num >= 2 ? scale.plural : scale.singular;
+                return `${formatted} ${suffix}`;
+            }
+        }
+
         return val.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     }
 
-    //////////////////////////////////
-    //
-    // - MÊS DO ANO E DIA ATUAL DO DISPOSITIVO
-    //
-    /////////////////////////////////////
     function updateMonthDisplay() {
         const monthNames = [
             "janeiro", "fevereiro", "março", "abril", "maio", "junho",
@@ -233,11 +243,6 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
     }
 
-    //////////////////////////////////////
-    //
-    // -513TT barra de pesquisa: RENDERIZAÇÃO E FILTRAGEM (TEXTO, ID, EMPRESA E VALORES)
-    //
-    //////////////////////////////////////
     function renderDebts() {
         updateMonthDisplay();
         dom.debtsContainer.innerHTML = '';
@@ -305,6 +310,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const dateObj = new Date(debt.date + 'T00:00:00');
                 const formattedDate = dateObj.toLocaleDateString('pt-BR');
                 const companyName = debt.company || 'Outros';
+                const formattedTime = debt.createdAt || '--:--';
 
                 const card = document.createElement('div');
                 card.className = 'debt-card';
@@ -322,8 +328,13 @@ document.addEventListener('DOMContentLoaded', () => {
                             </span>
                         </div>
                         <span class="debt-title">${debt.description}</span>
-                        <div class="debt-date">
-                            <ion-icon name="calendar-outline"></ion-icon> ${formattedDate}
+                        <div class="debt-date-time">
+                            <span class="debt-date">
+                                <ion-icon name="calendar-outline"></ion-icon> ${formattedDate}
+                            </span>
+                            <span class="debt-time">
+                                <ion-icon name="time-outline"></ion-icon> ${formattedTime}
+                            </span>
                         </div>
                     </div>
                     <div class="debt-values">
@@ -364,7 +375,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 //////////////////////////////////////
 //
-// - PARTE 2: MODAIS, EVENTOS E SELEÇÃO DE MÊS
+// - PARTE 2: MODAIS, EVENTOS E SELEÇÃO DE PASTA INTELIGENTE
 //
 //////////////////////////////////////
 
@@ -405,6 +416,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (dom.expenseCustomCompany) dom.expenseCustomCompany.value = '';
         if (dom.customCompanyGroup) dom.customCompanyGroup.style.display = 'none';
 
+        const mainExpenseText = document.getElementById('expense-value-text');
+        if (mainExpenseText) mainExpenseText.textContent = '';
+
         const today = new Date();
         const yyyy = today.getFullYear();
         const mm = String(today.getMonth() + 1).padStart(2, '0');
@@ -416,9 +430,6 @@ document.addEventListener('DOMContentLoaded', () => {
         updateCharCounterForInput(dom.expenseDescription, dom.charCounter, dom.charWarning);
     }
 
-    //////////////////////////////////////
-    // - MINI MODAL DE SELEÇÃO DE DIA (MÊS QUE VEM)
-    //////////////////////////////////////
     function openDaySelectorModal(targetYear, targetMonth, currentDay, onConfirm) {
         const overlay = document.createElement('div');
         overlay.className = 'custom-modal-overlay active';
@@ -452,6 +463,7 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
 
         document.body.appendChild(overlay);
+        updateBodyScrollState();
 
         const dayInput = overlay.querySelector('#quick-day-input');
         dayInput.focus();
@@ -461,15 +473,16 @@ document.addEventListener('DOMContentLoaded', () => {
             dayVal = Math.max(1, Math.min(dayVal, lastDayOfMonth));
             onConfirm(dayVal);
             overlay.remove();
+            updateBodyScrollState();
         });
 
         overlay.querySelector('#btn-day-cancel').addEventListener('click', () => {
             if (dom.radioQuickCurrent) dom.radioQuickCurrent.checked = true;
             overlay.remove();
+            updateBodyScrollState();
         });
     }
 
-    // Gerenciador das opções rápidas de Mês Atual x Mês Que Vem
     if (dom.radioQuickCurrent && dom.radioQuickNext) {
         dom.radioQuickCurrent.addEventListener('change', () => {
             if (dom.radioQuickCurrent.checked) {
@@ -516,7 +529,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         dom.editExpenseDescription.value = debt.description;
-        dom.editExpenseValue.value = debt.value;
+        
+        if (dom.editExpenseValue) {
+            const initialCents = Math.round((debt.value || 0) * 100);
+            const formattedVal = (initialCents / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+            dom.editExpenseValue.value = formattedVal;
+            
+            const editExpenseText = document.getElementById('edit-expense-value-text');
+            if (editExpenseText) {
+                editExpenseText.textContent = getCurrencyExtenso(debt.value || 0);
+            }
+        }
+        
         dom.editExpenseDate.value = debt.date;
 
         if (debt.paid) {
@@ -540,11 +564,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function openModal(modal) {
-        if (modal) modal.classList.add('active');
+        if (modal) {
+            modal.classList.add('active');
+            updateBodyScrollState();
+        }
     }
 
     function closeModal(modal) {
-        if (modal) modal.classList.remove('active');
+        if (modal) {
+            modal.classList.remove('active');
+            updateBodyScrollState();
+        }
     }
 
     function toggleSidebar(open) {
@@ -555,6 +585,7 @@ document.addEventListener('DOMContentLoaded', () => {
             dom.sidebar.classList.remove('active');
             dom.sidebarOverlay.classList.remove('active');
         }
+        updateBodyScrollState();
     }
 
     function toggleSortDropdown(open) {
@@ -602,11 +633,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    //////////////////////////////////////
-    //
-    // - LISTENERS DE FORMULÁRIOS E BOTÕES
-    //
-    //////////////////////////////////////
     dom.sortOptions.forEach(option => {
         option.addEventListener('click', () => {
             dom.sortOptions.forEach(opt => opt.classList.remove('selected'));
@@ -715,7 +741,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     dom.btnCloseModalEdit.addEventListener('click', () => closeModal(dom.modalEditExpense));
 
-    //-002HL : CONFIRMAÇÃO LIMPAR HISTÓRICO
     dom.btnClearLogs.addEventListener('click', () => {
         if (state.logs.length === 0) return;
 
@@ -760,18 +785,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
         overlay.appendChild(modal);
         document.body.appendChild(overlay);
+        updateBodyScrollState();
 
-        cancelButton.addEventListener('click', () => overlay.remove());
+        cancelButton.addEventListener('click', () => {
+            overlay.remove();
+            updateBodyScrollState();
+        });
 
         confirmButton.addEventListener('click', () => {
             state.logs = [];
             saveData();
             renderHistory();
             overlay.remove();
+            updateBodyScrollState();
         });
 
         overlay.addEventListener('click', (event) => {
-            if (event.target === overlay) overlay.remove();
+            if (event.target === overlay) {
+                overlay.remove();
+                updateBodyScrollState();
+            }
         });
     });
 
@@ -825,6 +858,7 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
 
             document.body.appendChild(modalOverlay);
+            updateBodyScrollState();
 
             modalOverlay.querySelector('#btn-modal-confirm').addEventListener('click', () => {
                 const totalApagado = state.debts.length;
@@ -834,14 +868,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 renderDebts();
                 showToast("Todas as dívidas foram removidas!");
                 modalOverlay.remove();
+                updateBodyScrollState();
             });
 
             modalOverlay.querySelector('#btn-modal-cancel').addEventListener('click', () => {
                 modalOverlay.remove();
+                updateBodyScrollState();
             });
 
             modalOverlay.addEventListener('click', (e) => {
-                if (e.target === modalOverlay) modalOverlay.remove();
+                if (e.target === modalOverlay) {
+                    modalOverlay.remove();
+                    updateBodyScrollState();
+                }
             });
         });
     }
@@ -865,9 +904,6 @@ document.addEventListener('DOMContentLoaded', () => {
         renderDebts();
     });
 
-    //////////////////////////////////////
-    // -513TT barra de pesquisa: Listener do input
-    //////////////////////////////////////
     dom.searchInput.addEventListener('input', (e) => {
         state.filterQuery = e.target.value;
         renderDebts();
@@ -887,10 +923,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const desc = dom.expenseDescription.value.trim();
-        const val = parseFloat(dom.expenseValue.value);
+        const rawValue = dom.expenseValue.value.replace(/\D/g, '');
+        const val = rawValue ? parseFloat(rawValue) / 100 : 0;
         const date = dom.expenseDate.value;
 
-        if (!desc || isNaN(val) || !date) return;
+        if (!desc || val <= 0 || !date) return;
+
+        // Captura o horário exato em que a dívida foi criada (HH:mm)
+        const currentTime = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 
         const newDebt = {
             id: generateRandomID(),
@@ -898,7 +938,8 @@ document.addEventListener('DOMContentLoaded', () => {
             description: desc,
             value: val,
             date: date,
-            paid: false
+            paid: false,
+            createdAt: currentTime
         };
 
         state.debts.push(newDebt);
@@ -926,9 +967,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 company = dom.editExpenseCustomCompany.value.trim() || 'Outros';
             }
 
+            const rawEditValue = dom.editExpenseValue.value.replace(/\D/g, '');
+            const parsedVal = rawEditValue ? parseFloat(rawEditValue) / 100 : 0;
+
             debt.company = company;
             debt.description = dom.editExpenseDescription.value.trim();
-            debt.value = parseFloat(dom.editExpenseValue.value);
+            debt.value = parsedVal;
             debt.date = dom.editExpenseDate.value;
             debt.paid = dom.editPaidTrue.checked;
 
@@ -990,49 +1034,54 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    //////////////////////////////////////
-    //
-    // - SISTEMA DE EXPORTAÇÃO E IMPORTAÇÃO DE BACKUP
-    //
-    //////////////////////////////////////
+    // SISTEMA DE SELEÇÃO DE PASTA INTELIGENTE (VERIFICA SE DividaZero_Dados.json JÁ EXISTE)
     dom.menuItemExport.addEventListener('click', async () => {
         toggleSidebar(false);
         const dataString = JSON.stringify(state, null, 2);
 
-        if ('showSaveFilePicker' in window) {
+        // 1. TENTA USAR A API DE DIRETÓRIOS DO NAVEGADOR (FILE SYSTEM ACCESS API)
+        if ('showDirectoryPicker' in window) {
             try {
-                if (!exportFileHandle) {
-                    exportFileHandle = await window.showSaveFilePicker({
-                        suggestedName: 'DividaZero_Dados.json',
-                        types: [{
-                            description: 'Arquivo JSON',
-                            accept: { 'application/json': ['.json'] }
-                        }]
-                    });
+                // Se ainda não escolheu uma pasta nesta sessão, solicita ao utilizador para escolher uma
+                if (!exportDirectoryHandle) {
+                    exportDirectoryHandle = await window.showDirectoryPicker();
                 } else {
+                    // Verifica se a permissão para mexer na pasta continua concedida
                     const options = { mode: 'readwrite' };
-                    if (await exportFileHandle.queryPermission(options) !== 'granted') {
-                        if (await exportFileHandle.requestPermission(options) !== 'granted') {
-                            exportFileHandle = null;
+                    if (await exportDirectoryHandle.queryPermission(options) !== 'granted') {
+                        if (await exportDirectoryHandle.requestPermission(options) !== 'granted') {
+                            exportDirectoryHandle = null;
                             return;
                         }
                     }
                 }
 
+                // Procura na pasta escolhida se já existe o arquivo "DividaZero_Dados.json"
+                // create: false faz com que ele apenas procure sem criar nada por enquanto
+                try {
+                    exportFileHandle = await exportDirectoryHandle.getFileHandle('DividaZero_Dados.json', { create: false });
+                } catch (err) {
+                    // Se não existir, o navegador lança um erro, então criamos o arquivo novo na pasta
+                    exportFileHandle = await exportDirectoryHandle.getFileHandle('DividaZero_Dados.json', { create: true });
+                }
+
+                // Escreve os dados no arquivo encontrado ou recém-criado
                 const writable = await exportFileHandle.createWritable();
                 await writable.write(dataString);
                 await writable.close();
 
-                addLog("Backup atualizado no mesmo arquivo.");
-                showToast("Arquivo atualizado com sucesso!");
+                addLog("Backup atualizado na pasta selecionada.");
+                showToast("Arquivo DividaZero_Dados.json guardado/atualizado!");
                 return;
             } catch (err) {
+                exportDirectoryHandle = null;
                 exportFileHandle = null;
-                if (err.name === 'AbortError') return;
-                console.warn('Fallback ativado:', err);
+                if (err.name === 'AbortError') return; // Utilizador cancelou a caixa de diálogo
+                console.warn('Fallback de diretório ativado:', err);
             }
         }
 
+        // 2. FALLBACK UNIVERSAL (DOWNLOAD VIA BLOB CASO O BROWSER NÃO SUPORTE DIRETÓRIOS)
         const blob = new Blob([dataString], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
         const downloadAnchor = document.createElement('a');
@@ -1044,7 +1093,7 @@ document.addEventListener('DOMContentLoaded', () => {
         URL.revokeObjectURL(url);
 
         addLog("Backup dos dados exportado.");
-        showToast("Dados exportados!");
+        showToast("Backup gerado via download!");
     });
 
     dom.menuItemImport.addEventListener('click', () => {
@@ -1089,6 +1138,152 @@ document.addEventListener('DOMContentLoaded', () => {
     applyTheme(state.theme);
     renderDebts();
 });
+////////////////////////////////-----
+//
+// - PARTE 3: MÁSCARA MONETÁRIA E UTILITÁRIOS FINAIS
+//
+////////////////////////////////----
+
+function getCurrencyExtenso(val) {
+    if (val <= 0) return '';
+    if (val < 1e6) {
+        return val.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    const suffixes = [
+        { value: 1e15, singular: 'quatrilhão', plural: 'quatrilhões' },
+        { value: 1e12, singular: 'trilhão', plural: 'trilhões' },
+        { value: 1e9,  singular: 'bilhão',  plural: 'bilhões' },
+        { value: 1e6,  singular: 'milhão',  plural: 'milhões' }
+    ];
+
+    for (const scale of suffixes) {
+        if (val >= scale.value) {
+            const num = val / scale.value;
+            const formatted = num % 1 === 0 
+                ? num.toFixed(0) 
+                : num.toFixed(2).replace(/\.?0+$/, '').replace('.', ',');
+
+            const suffix = num >= 2 ? scale.plural : scale.singular;
+            return `${formatted} ${suffix}`;
+        }
+    }
+
+    return val.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+}
+
+function applyCurrencyMask(inputEl, displayEl = null) {
+    if (!inputEl) return;
+
+    const MAX_VALUE = 999999999999999.99; 
+
+    function updateDisplayText(val) {
+        if (displayEl) {
+            displayEl.textContent = val > 0 ? getCurrencyExtenso(val) : '';
+        }
+    }
+
+    inputEl.addEventListener('focus', (e) => {
+        if (!e.target.value) {
+            e.target.value = (0).toLocaleString('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            });
+            updateDisplayText(0);
+        }
+    });
+
+    inputEl.addEventListener('input', (e) => {
+        let digitsOnly = e.target.value.replace(/\D/g, '');
+
+        if (!digitsOnly) {
+            e.target.value = '';
+            updateDisplayText(0);
+            return;
+        }
+
+        let centsValue = parseFloat(digitsOnly) / 100;
+
+        if (centsValue > MAX_VALUE) {
+            digitsOnly = digitsOnly.slice(0, -1);
+            centsValue = parseFloat(digitsOnly) / 100;
+        }
+
+        e.target.value = centsValue.toLocaleString('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+        });
+
+        updateDisplayText(centsValue);
+    });
+
+    inputEl.addEventListener('blur', (e) => {
+        const digitsOnly = e.target.value.replace(/\D/g, '');
+        if (!digitsOnly || parseFloat(digitsOnly) === 0) {
+            e.target.value = '';
+            updateDisplayText(0);
+        }
+    });
+}
+
+const mainExpenseInput = document.getElementById('expense-value');
+const mainExpenseText = document.getElementById('expense-value-text');
+
+const editExpenseInput = document.getElementById('edit-expense-value');
+const editExpenseText = document.getElementById('edit-expense-value-text');
+
+applyCurrencyMask(mainExpenseInput, mainExpenseText);
+applyCurrencyMask(editExpenseInput, editExpenseText);
+
+document.addEventListener("DOMContentLoaded", () => {
+    const setupClearInput = (btnId, inputId) => {
+        const btn = document.getElementById(btnId);
+        const input = document.getElementById(inputId);
+
+        if (btn && input) {
+            btn.addEventListener("click", () => {
+                input.value = "";
+                input.focus();
+                input.dispatchEvent(new Event("input", { bubbles: true }));
+            });
+        }
+    };
+
+    setupClearInput("btn-clear-value", "expense-value");
+    setupClearInput("btn-clear-edit-value", "edit-expense-value");
+
+    const triggerValueAnimation = (element) => {
+        if (!element) return;
+        element.classList.remove("value-pulse");
+        void element.offsetWidth; 
+        element.classList.add("value-pulse");
+    };
+
+    const valueElements = document.querySelectorAll(".animate-value");
+    valueElements.forEach((el) => {
+        const observer = new MutationObserver(() => triggerValueAnimation(el));
+        observer.observe(el, { childList: true, characterData: true, subtree: true });
+    });
+});
+
+const searchInput = document.getElementById('search-input');
+const clearBtn = document.getElementById('clear-search');
+
+if (searchInput && clearBtn) {
+    searchInput.addEventListener('input', () => {
+        if (searchInput.value.trim() !== '') {
+            clearBtn.style.display = 'block'; 
+        } else {
+            clearBtn.style.display = 'none';  
+        }
+    });
+
+    clearBtn.addEventListener('click', () => {
+        searchInput.value = '';             
+        clearBtn.style.display = 'none';    
+        searchInput.focus();             
+    });
+}
 
 //////////////////////////////////////
 //

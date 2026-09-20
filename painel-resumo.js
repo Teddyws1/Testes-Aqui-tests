@@ -1,6 +1,55 @@
+/**
+ * Formatador compacto com truncamento exato:
+ * - Valores >= 1.000 cortam na segunda casa decimal sem arredondar (ex: 6.698,22 vira 6,69mil)
+ * - Valores < 1.000 ou desabreviados mostram o formato monetário completo (R$ ...)
+ */
+function formatCompactCurrency(value, fullDetail = false) {
+    const val = Number(value) || 0;
+    const absVal = Math.abs(val);
+    const sign = val < 0 ? '-' : '';
+
+    // Se clicar para desabreviar (mostrar completo) ou o valor é menor que 1.000
+    if (fullDetail || absVal < 1000) {
+        const formattedNum = absVal.toLocaleString('pt-BR', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+        return `${sign}R$ ${formattedNum}`;
+    }
+
+    // Escalas de grandeza
+    const units = [
+        { limit: 1e15, symbol: 'Quadrilhão', div: 1e15, showPrefix: true },
+        { limit: 1e12, symbol: 'Trilhão', div: 1e12, showPrefix: true },
+        { limit: 1e9,  symbol: 'Bilhão',  div: 1e9,  showPrefix: true },
+        { limit: 1e6,  symbol: 'Milhão',  div: 1e6,  showPrefix: true },
+        { limit: 1e3,  symbol: 'mil',     div: 1e3,  showPrefix: false }
+    ];
+
+    for (const unit of units) {
+        if (absVal >= unit.limit) {
+            const num = absVal / unit.div;
+            
+            // TRUNCAMENTO EXATO: Corta em 2 casas decimais sem arredondar para cima/baixo
+            const truncatedNum = Math.floor(num * 100) / 100;
+            let formattedNum = truncatedNum.toFixed(2).replace('.', ',');
+
+            const prefix = unit.showPrefix ? 'R$ ' : '';
+            const space = unit.symbol === 'mil' ? '' : ' ';
+            
+            return `${sign}${prefix}${formattedNum}${space}${unit.symbol}`;
+        }
+    }
+
+    const truncatedFallback = Math.floor(absVal * 100) / 100;
+    return `${sign}R$ ${truncatedFallback.toFixed(2).replace('.', ',')}`;
+}
+
+const safeFormatCurrency = (val, fullDetail = false) => formatCompactCurrency(val, fullDetail);
+
 document.addEventListener('DOMContentLoaded', () => {
 
-    // Sincronização do Estado de Tema com a sua estrutura global (dz_theme)[span_1](start_span)[span_1](end_span)
+    // Sincronização do Estado de Tema
     const state = {
         theme: localStorage.getItem('dz_theme') || getSystemTheme()
     };
@@ -46,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     applyTheme(state.theme);
 
-    // Bloqueios de segurança e anti-cópia[span_2](start_span)[span_2](end_span)
+    // Bloqueios de segurança e anti-cópia
     document.addEventListener('contextmenu', (e) => e.preventDefault());
     document.addEventListener('copy', (e) => e.preventDefault());
     document.addEventListener('cut', (e) => e.preventDefault());
@@ -69,9 +118,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }, { passive: false });
 
-    const safeFormatCurrency = (val) => 
-        val.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-
     function getRegisteredDebts() {
         const localData = localStorage.getItem('dz_debts') || localStorage.getItem('dividas') || localStorage.getItem('debts');
         if (localData) {
@@ -84,7 +130,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnBackHeader = document.getElementById('btn-back-to-months');
     const btnHome = document.getElementById('btn-home');
 
-    // Função base para voltar à página inicial (Livre de gestos para você customizar)
     function goToHomePage() {
         window.location.href = 'index.html'; 
     }
@@ -181,7 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             </div>
                             <small style="color: var(--text-muted);">${highestMonth.count} registro(s)</small>
                         </div>
-                        <div class="top-record-value">
+                        <div class="top-record-value clickable-val" data-raw="${highestMonth.total}" title="Clique para alternar o formato" style="cursor:pointer; user-select:none;">
                             ${safeFormatCurrency(highestMonth.total)}
                         </div>
                     </div>
@@ -208,7 +253,7 @@ document.addEventListener('DOMContentLoaded', () => {
             conicStops.push(`${color} ${startAngle}% ${cumulativePercent}%`);
 
             legendHtmlList.push(`
-                <div class="legend-item" data-target="${key}" data-month="${monthNames[item.monthIndex]}" data-value="${safeFormatCurrency(item.total)}" data-company="${item.mainCompany}">
+                <div class="legend-item" data-target="${key}" data-month="${monthNames[item.monthIndex]}" data-value="${safeFormatCurrency(item.total)}" data-raw="${item.total}" data-company="${item.mainCompany}">
                     <div class="legend-left">
                         <div class="legend-color-box" style="background-color: ${color};"></div>
                         <span>${monthNames[item.monthIndex]}</span>
@@ -258,7 +303,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                     </div>
                     <div style="width: 100%; margin-top: 8px;">
-                        <div style="font-weight:700; color:var(--accent-orange); font-size:1.05rem;">${safeFormatCurrency(item.total)}</div>
+                        <div class="clickable-val" data-raw="${item.total}" title="Clique para alternar o formato" style="font-weight:700; color:var(--accent-orange); font-size:1.05rem; cursor:pointer; user-select:none; display:inline-block;">
+                            ${safeFormatCurrency(item.total)}
+                        </div>
                         <div>${statusBadgeHtml}</div>
                     </div>
                 </div>
@@ -285,6 +332,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
             legendItem.addEventListener('mouseenter', handleInteraction);
             legendItem.addEventListener('click', handleInteraction);
+        });
+
+        // Alternância de formato ao clicar diretamente no valor
+        document.querySelectorAll('.clickable-val').forEach(valEl => {
+            valEl.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const rawVal = Number(valEl.getAttribute('data-raw'));
+                const isExpanded = valEl.getAttribute('data-expanded') === 'true';
+
+                if (isExpanded) {
+                    valEl.textContent = safeFormatCurrency(rawVal, false); 
+                    valEl.setAttribute('data-expanded', 'false');
+                } else {
+                    valEl.textContent = safeFormatCurrency(rawVal, true);  
+                    valEl.setAttribute('data-expanded', 'true');
+                }
+            });
         });
 
         document.querySelectorAll('.month-select-card').forEach(card => {
@@ -333,11 +397,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const itemsHtml = monthDebts.map((debt) => {
             const isPaid = debt.paid;
+            const rawVal = Number(debt.value) || 0;
             return `
-                <div class="debt-item-row">
+                <div class="debt-item-row" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
                     <div>
                         <div style="font-weight: 700; color: var(--text-main);">${debt.company || debt.description || 'Despesa'}</div>
-                        <small style="color: var(--text-muted);">${debt.description || ''} - ${safeFormatCurrency(debt.value)}</small>
+                        <small style="color: var(--text-muted);">${debt.description || ''} - 
+                            <span class="clickable-val" data-raw="${rawVal}" title="Clique para alternar o formato" style="cursor:pointer; user-select:none; font-weight:600;">${safeFormatCurrency(rawVal)}</span>
+                        </small>
                     </div>
                     <div class="status-indicator ${isPaid ? 'is-paid' : ''}">
                         <ion-icon name="${isPaid ? 'checkmark-circle' : 'time-outline'}"></ion-icon>
@@ -348,15 +415,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }).join('');
 
         contentEl.innerHTML = `
-            <div class="top-month-banner">
-                <span style="font-size:0.8rem; color:var(--text-muted); font-weight:600; text-transform:uppercase;">Total do Mês</span>
-                <div class="top-month-total">${safeFormatCurrency(totalValue)}</div>
+            <div class="top-month-banner" style="text-align:center;">
+                <span style="font-size:0.8rem; color:var(--text-muted); font-weight:600; text-transform:uppercase;">Total do Mês gasto</span>
+                <div class="top-month-total clickable-val" data-raw="${totalValue}" title="Clique para alternar o formato" style="cursor:pointer; user-select:none;">
+                    ${safeFormatCurrency(totalValue)}
+                </div>
                 <small style="color:var(--text-muted);">${monthDebts.length} dívida(s)</small>
             </div>
 
             <div class="top-stat-box" style="border-left: 4px solid var(--accent-orange);">
                 <span style="font-size:0.75rem; color:var(--text-muted); font-weight:600;">Maior Gasto do Mês</span>
-                <div style="color:var(--accent-orange); font-weight:700; font-size:1.2rem; margin-top:2px;">
+                <div class="clickable-val" data-raw="${highestExpense.value}" title="Clique para alternar o formato" style="color:var(--accent-orange); font-weight:700; font-size:1.2rem; margin-top:2px; cursor:pointer; user-select:none;">
                     ${safeFormatCurrency(highestExpense.value)}
                 </div>
                 <small style="font-size:0.8rem; color:var(--text-muted);">${highestExpense.description} (${highestExpense.company})</small>
@@ -365,11 +434,15 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="top-month-stats">
                 <div class="top-stat-box">
                     <span style="font-size:0.75rem; color:var(--text-muted); font-weight:600;">Total Pago</span>
-                    <div class="top-stat-val paid">${safeFormatCurrency(totalPaid)}</div>
+                    <div class="top-stat-val paid clickable-val" data-raw="${totalPaid}" title="Clique para alternar o formato" style="cursor:pointer; user-select:none;">
+                        ${safeFormatCurrency(totalPaid)}
+                    </div>
                 </div>
                 <div class="top-stat-box">
                     <span style="font-size:0.75rem; color:var(--text-muted); font-weight:600;">Total Pendente</span>
-                    <div class="top-stat-val pending">${safeFormatCurrency(totalPending)}</div>
+                    <div class="top-stat-val pending clickable-val" data-raw="${totalPending}" title="Clique para alternar o formato" style="cursor:pointer; user-select:none;">
+                        ${safeFormatCurrency(totalPending)}
+                    </div>
                 </div>
             </div>
 
@@ -378,6 +451,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 ${itemsHtml.length > 0 ? itemsHtml : '<p style="color:var(--text-muted); font-size:0.85rem; margin-top:6px;">Nenhuma dívida neste mês.</p>'}
             </div>
         `;
+
+        document.querySelectorAll('.clickable-val').forEach(valEl => {
+            valEl.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const rawVal = Number(valEl.getAttribute('data-raw'));
+                const isExpanded = valEl.getAttribute('data-expanded') === 'true';
+
+                if (isExpanded) {
+                    valEl.textContent = safeFormatCurrency(rawVal, false);
+                    valEl.setAttribute('data-expanded', 'false');
+                } else {
+                    valEl.textContent = safeFormatCurrency(rawVal, true);
+                    valEl.setAttribute('data-expanded', 'true');
+                }
+            });
+        });
     }
 
     if (btnBackHeader) {
@@ -396,22 +485,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     renderMonthsList();
 });
+
 /**
  * ============================================================================
  * SISTEMA DE GESTOS: ARRASTAR DA DIREITA PARA A ESQUERDA (SWIPE LEFT) PARA INDEX.HTML
  * ============================================================================
  */
 document.addEventListener('DOMContentLoaded', () => {
-    // Variáveis para rastrear a posição inicial do toque (Mobile) e do mouse (Desktop)
     let touchStartX = 0;
     let touchStartY = 0;
     let mouseIsDown = false;
     let mouseStartX = 0;
     let mouseStartY = 0;
 
-    // ----------------------------------------------------
-    // 1. SUPORTE PARA DISPOSITIVOS MÓVEIS (Touch Events)
-    // ----------------------------------------------------
     window.addEventListener('touchstart', (e) => {
         if (e.touches.length === 1) {
             touchStartX = e.touches[0].clientX;
@@ -425,11 +511,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const touchEndX = e.changedTouches[0].clientX;
         const touchEndY = e.changedTouches[0].clientY;
         
-        // Calcula a distância: Positivo se arrastou da DIREITA para a ESQUERDA
         const diffX = touchStartX - touchEndX; 
         const diffY = Math.abs(touchStartY - touchEndY);
 
-        // Se arrastou mais de 50px para a esquerda e manteve o alinhamento horizontal
         if (diffX > 50 && diffY < 100) {
             triggerIndexSwipeAction();
         }
@@ -438,11 +522,7 @@ document.addEventListener('DOMContentLoaded', () => {
         touchStartY = 0;
     }, { passive: true });
 
-    // ----------------------------------------------------
-    // 2. SUPORTE PARA COMPUTADOR (Mouse Click & Drag)
-    // ----------------------------------------------------
     window.addEventListener('mousedown', (e) => {
-        // Evita disparar se o usuário clicar em botões, links, inputs ou modais
         if (e.target.closest('button') || e.target.closest('a') || e.target.closest('input') || e.target.closest('.modal')) {
             return;
         }
@@ -457,7 +537,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const mouseEndX = e.clientX;
         const mouseEndY = e.clientY;
 
-        const diffX = mouseStartX - mouseEndX; // Positivo se arrastou da DIREITA para a ESQUERDA
+        const diffX = mouseStartX - mouseEndX;
         const diffY = Math.abs(mouseStartY - mouseEndY);
 
         if (diffX > 60 && diffY < 100) {
@@ -467,19 +547,12 @@ document.addEventListener('DOMContentLoaded', () => {
         mouseIsDown = false;
     });
 
-    // ----------------------------------------------------
-    // 3. AÇÃO DE TRANSIÇÃO DO INDEX.HTML
-    // ----------------------------------------------------
     function triggerIndexSwipeAction() {
-        // Evita múltiplos disparos se a animação já estiver ocorrendo
         if (document.body.classList.contains('slide-out-left')) return;
 
-        // Adiciona a classe que ativa a animação visual no CSS
         document.body.classList.add('slide-out-left');
 
-        // Aguarda a animação terminar (ex: 400ms) antes de mudar de página
         setTimeout(() => {
-            // Defina para qual página o index deve ir ao arrastar para a esquerda
             window.location.href = 'index.html'; 
         }, 400);
     }
